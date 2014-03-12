@@ -273,10 +273,10 @@ h6 {
 	font-size: 12px;
 }
 #nivo_slider_wrap, #nivo_slider_loading, #nivo_slider {
-	height: 440px;
+	height: 300px;
 }
 #nivo_slider_frame {
-	height: 439px;
+	height: 299px;
 }
 #nivo_slider_loading {
 	background-color: #ffffff;
@@ -298,7 +298,7 @@ ul.anythingBase li.panel, div.anythingSlider .anythingWindow {
 	background-color: #ffffff;
 }
 #anything_slider_wrap, #anything_slider_loading, #anything_slider {
-	height: 440px;
+	height: 464px;
 }
 #anything_slider p {
 	font-size: 12px;
@@ -330,7 +330,7 @@ ul.anythingBase li.panel, div.anythingSlider .anythingWindow {
 	color: #ffffff !important;
 }
 .caption_left, .caption_right {
-	height: 410px;
+	height: 434px;
 }
 .entry {
 	margin-bottom: 80px;
