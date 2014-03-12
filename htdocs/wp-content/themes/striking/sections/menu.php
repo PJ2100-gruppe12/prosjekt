@@ -18,12 +18,12 @@ function theme_section_menu(){
 	}else{
 		$excluded_pages_with_childs = theme_get_excluded_pages();
 		
-		$active_class = (is_front_page()) ? 'class="current_page_item"' : '';
-		
 		$output = '<nav id="navigation" class="jqueryslidemenu">';
 		$output .= '<ul id="menu-navigation" class="menu">';
-		$output .= '<li ' .$active_class. '><a href="' .get_bloginfo('url'). '">'.__('Home','striking_front').'</a></li>';
+		$output .= '<li><a href="' .get_bloginfo('url'). '"><div class="navbox"></div><div class="navtext">';
+		$output .= __('Home','striking_front');
 		$output .= wp_list_pages("sort_column=menu_order&exclude=$excluded_pages_with_childs&title_li=&echo=0&depth=4");
+		$output .= '</div></a></li>';
 		$output .= '</ul>';
 		$output .= '</nav>';
 		
