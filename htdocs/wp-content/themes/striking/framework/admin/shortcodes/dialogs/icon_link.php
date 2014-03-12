@@ -1,0 +1,76 @@
+<?php
+return array(
+	"title" => __("Icon Link", "striking_admin"),
+	"shortcode" => 'icon_link',
+	"type" => 'enclosing',
+	"options" => array(
+		array(
+			"name" => __("Style",'striking_admin'),
+			"id" => "style",
+			"default" => '',
+			"options" => array(
+				"globe" => 'globe',
+				"home" => 'home',
+				"email" => 'email',
+				"user" => 'user',
+				"multiuser" => 'multiuser',
+				"id" => 'id',
+				"addressbook" => 'addressbook',
+				"phone" => 'phone',
+				"cellphone" => 'cellphone',
+				"fax" => 'fax',
+				"link" => 'link',
+				"chain" => 'chain',
+				"calendar" => 'calendar',
+				"tag" => 'tag',
+				"download" => 'download',
+			),
+			"type" => "select",
+		),
+		array(
+			"name" => __("Color (optional)",'striking_admin'),
+			"id" => "color",
+			"default" => "",
+			"prompt" => __("Choose one..",'striking_admin'),
+			"options" => array(
+				"black" => 'Black',
+				"gray" => 'Gray',
+				"red" => 'Red',
+				"yellow" => 'Yellow',
+				"blue" => 'Blue',
+				"pink" => 'Pink',
+				"green" => 'Green',
+				"rosy" => 'Rosy',
+				"orange" => 'Orange',
+				"magenta" => 'Magenta',
+			),
+			"type" => "select",
+		),
+		array(
+			"name" => __("Href",'striking_admin'),
+			"id" => "href",
+			"default" => "",
+			"type" => "textarea"
+		),
+		array(
+			"name" => __("Target (optional)",'striking_admin'),
+			"id" => "target",
+			"default" => '',
+			"prompt" => __("Choose one..",'striking_admin'),
+			"options" => array(
+				"_blank" => __('Load in a new window','striking_admin'),
+				"_self" => __('Load in the same frame as it was clicked','striking_admin'),
+				"_parent" => __('Load in the parent frameset','striking_admin'),
+				"_top" => __('Load in the full body of the window','striking_admin'),
+			),
+			"type" => "select",
+		),
+		array(
+			"name" => __("Text",'striking_admin'),
+			"id" => "content",
+			"default" => "",
+			"type" => "textarea"
+		),
+	),
+	"custom" => '',
+);
