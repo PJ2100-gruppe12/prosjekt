@@ -67,7 +67,7 @@ class baseOptionsGenerator {
 			}
 		}
 		$class = $class?' class="'.$class.'"':'';
-		echo '<select'.$class.' name="' . $id . '" id="' . $id . '">';
+		echo '<select'.$class.' name="' . $id . '" id="' . $id . '" style="width:75%;height:auto">';
 		if(!is_null($prompt)){
 			echo '<option value="">'.$prompt.'</option>';
 		}
@@ -132,6 +132,9 @@ class baseOptionsGenerator {
 		if(empty($value)){
 			$value = array();
 		}
+		if(is_string($value)){
+			$value = array($value);
+		}
 		if ($chosen == true){
 			if($class){
 				$class .= ' chosen';
@@ -157,7 +160,7 @@ class baseOptionsGenerator {
 		}else{
 			$order = '';
 		}
-		echo '<select'.$class.$prompt.$order.' name="' . $id . '[]" id="' . $id . '" multiple="true" size="' . $size . '" style="height:auto" >';
+		echo '<select'.$class.$prompt.$order.' name="' . $id . '[]" id="' . $id . '" multiple="true" size="' . $size . '" style="width:60%;height:auto" >';
 		
 		foreach($options as $key => $option) {
 			if(is_array($option)){
@@ -202,8 +205,8 @@ class baseOptionsGenerator {
 			"value" => array(),
 			"class"=> "",
 			"options" => array(),
-			"enable_text" => __('Enabled','striking_admin'),
-			"disable_text" => __('Disabled','striking_admin'),
+			"enable_text" => __('Enabled','theme_admin'),
+			"disable_text" => __('Disabled','theme_admin'),
 		), $item));
 		if(empty($value) || !is_array($value)){
 			$value = array();
@@ -505,7 +508,7 @@ class baseOptionsGenerator {
 	 */
 	function upload($item) {
 		if(isset($item["name"])){
-			$item['uploader_title'] = sprintf( __( 'Select Image for %s' , 'striking_admin' ), $item["name"] );
+			$item['uploader_title'] = sprintf( __( 'Select Image for %s' , 'theme_admin' ), $item["name"] );
 		}
 
 		extract($this->option_atts(array(
@@ -513,10 +516,10 @@ class baseOptionsGenerator {
 			"default" => "",
 			"value" => "",
 			"imagewidth"=>'600',
-			"button" => __("Insert Image","striking_admin"),
-			'removebutton'=>__("Remove Image","striking_admin"),
-			"uploader_title" => __("Select Image","striking_admin"),
-			"uploader_button_text" => __("Select Image","striking_admin"),
+			"button" => __("Insert Image","theme_admin"),
+			'removebutton'=>__("Remove Image","theme_admin"),
+			"uploader_title" => __("Select Image","theme_admin"),
+			"uploader_button_text" => __("Select Image","theme_admin"),
 			"postid" => NULL,
 		), $item));
 
@@ -580,7 +583,7 @@ class baseOptionsGenerator {
 			"unit" => NULL,
 		), $item));
 		
-		echo '<div class="range-input-wrap" ><input name="' . $id . '" id="' . $id . '" type="range" value="'.$value;
+		echo '<div class="range-input-wrap" ><input name="' . $id . '" id="' . $id . '" type="text" value="'.$value;
 		
 		if (!is_null($min)) {
 			echo '" min="' . $min;
@@ -627,7 +630,7 @@ class baseOptionsGenerator {
 		}
 		echo '<div class="measurement-wrap" >';
 		echo '<input type="hidden" id="' . $id . '" name="' . $id . '" value="' . $value . '" />';
-		echo '<span class="range-input-wrap"><input name="' . $id . '_range" id="' . $id . '_range" type="range" value="'.$value_range;
+		echo '<span class="range-input-wrap"><input name="' . $id . '_range" id="' . $id . '_range" type="text" value="'.$value_range;
 		
 		if (!is_null($min)) {
 			echo '" min="' . $min;
@@ -707,31 +710,26 @@ class baseOptionsGenerator {
 			"default" => "",
 			"value" => "",
 		), $item));
-		
-		switch($value) {
-			case "true": 
-				$value = 'true';
-				break;
-			case "false":
-				$value = 'false';
-				break;
-			case "":
-				$value = 'default';
-				break;
+		if($value === ""){
+			$value = 'default';
+		}elseif($value === true){
+			$value = 'true';
+		}elseif($value === false){
+			$value = 'false';
 		}
 		echo '<select class="tri-toggle-button" name="' . $id . '" id="' . $id . '" >';
 		echo '<option value="true"';
-		if($value == 'true'){
+		if($value === 'true'){
 			echo 'selected="selected"';
 		}
 		echo '>On</option>';
 		echo '<option value="false"';
-		if($value == 'false'){
+		if($value === 'false'){
 			echo 'selected="selected"';
 		}
 		echo '>Off</option>';
 		echo '<option value="default"';
-		if($value == 'default'){
+		if($value === 'default'){
 			echo 'selected="selected"';
 		}
 		echo '>default</option>';
@@ -792,7 +790,7 @@ class baseOptionsGenerator {
 			"value" => "",
 		), $item));
 		global $wp_version;
-		if(version_compare($wp_version, "3.3", '<')){
+		if(version_compare($wp_version, "3.3", '>=')){
 			wp_editor($item['value'],$item['id']);
 		}else{
 			the_editor($value,$id);
@@ -803,6 +801,23 @@ class baseOptionsGenerator {
 	function get_select_target_options($type) {
 		$options = array();
 		switch($type){
+			case 'taxonomy':
+				$taxonomies = get_taxonomies();
+				foreach ( $taxonomies as $taxonomy ){
+					$tax = get_taxonomy($taxonomy);
+					$options[$taxonomy] = $tax->labels->name;
+				}
+				break;
+			case 'taxonomy_tag_cloud':
+				$taxonomies = get_taxonomies();
+				foreach ( $taxonomies as $taxonomy ){
+					$tax = get_taxonomy($taxonomy);
+					if(!$tax->show_tagcloud){
+						continue;
+					}
+					$options[$taxonomy] = $tax->labels->name;
+				}
+				break;
 			case 'nav_menu':
 				$menus = get_terms( 'nav_menu', array( 'hide_empty' => false ) );
 				foreach($menus as $key => $menu) {
@@ -956,7 +971,7 @@ class Walker_PageMultiSelect extends Walker {
 	 * @param int $depth Depth of page in reference to parent pages. Used for padding.
 	 * @param array $args Uses 'selected' argument for selected page to set selected HTML attribute for option element.
 	 */
-	function start_el(&$output, $page, $depth, $args) {
+	function start_el(&$output, $page, $depth, $args, $current_object_id = 0) {
 		$pad = str_repeat('&nbsp;', $depth * 3);
 		
 		$output .= "\t<option class=\"level-$depth\" value=\"$page->ID\"";

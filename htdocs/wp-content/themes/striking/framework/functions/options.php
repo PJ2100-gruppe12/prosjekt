@@ -1,91 +1,6 @@
 <?php
 global $options_page_factory, $theme_options;
 
-/**
- * Retrieve option value based on name of option.
- * 
- * If the option does not exist or does not have a value, then the return value will be false.
- * 
- * @param string $page page name
- * @param string $name option name
- */
-function theme_get_option($page, $name = NULL) {
-	global $theme_options;
-
-	if ($name == NULL) {
-		if (isset($theme_options[$page])) {
-			return $theme_options[$page];
-		} else {
-			return false;
-		}
-	} else {
-		if (isset($theme_options[$page][$name])) {
-			return $theme_options[$page][$name];
-		} else {
-			return false;
-		}
-	}
-}
-
-function theme_get_option_from_db($page, $name = NULL){
-	$options = get_option(THEME_SLUG . '_' . $page);
-
-	if($name == NULL){
-		return $options;
-	}else{
-		if(is_array($options) && isset($options[$name])){
-			return $options[$name];
-		}
-		return false;
-	}
-}
-
-function theme_get_inherit_option($post_id, $meta_name, $page, $option_name) {
-	$value = get_post_meta($post_id, $meta_name, true);
-
-	if($value === 'false'){
-		return false;
-	}
-	if($value===""|| $value == 'default'){
-		$value=theme_get_option($page, $option_name);
-	}
-	return $value;
-}
-
-function theme_set_option($page, $name, $value) {
-	global $theme_options;
-	$theme_options[$page][$name] = $value;
-	
-	update_option(THEME_SLUG . '_' . $page, $theme_options[$page]);
-}
-
-function theme_get_sidebar_default(){
-	if(theme_is_post_type('post')){
-		return theme_get_option('sidebar','single_post');
-	}
-	if(theme_is_post_type('portfolio')){
-		return theme_get_option('sidebar','single_portfolio');
-	}
-	if(theme_is_post_type('page')){
-		return theme_get_option('sidebar','single_page');
-	}
-	return '';
-}
-
-function theme_get_sidebar_options(){
-	$sidebars = theme_get_option_from_db('sidebar','sidebars');
-	if(!empty($sidebars)){
-		$sidebars_array = explode(',',$sidebars);
-		
-		$options = array();
-		foreach ($sidebars_array as $sidebar){
-			$options[$sidebar] = $sidebar;
-		}
-		return $options;
-	}else{
-		return array();
-	}
-}
 
 class Theme_Options_Page {
 	public $name;
@@ -106,6 +21,7 @@ class Theme_Options_Page {
 	public function __construct() {
 		add_action('admin_menu', array(&$this,'_add_menu_page'),10);
 	}
+
 
 	public function _add_menu_page(){
 		global $options_page_factory;

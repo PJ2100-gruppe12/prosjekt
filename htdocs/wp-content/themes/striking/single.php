@@ -1,8 +1,6 @@
 <?php
 /**
  * The Template for displaying all single posts.
- *
- * @package Striking
  */
 $post_id = get_queried_object_id();
 $blog_page = theme_get_option('blog','blog_page');

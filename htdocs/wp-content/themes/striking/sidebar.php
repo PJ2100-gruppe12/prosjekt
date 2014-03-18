@@ -1,8 +1,6 @@
 <?php
 /**
  * The template used for displaying the widgets in the certain widget area.
- *
- * @package Striking
  */
 
 wp_reset_query();

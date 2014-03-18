@@ -6,20 +6,19 @@ class sidebarGenerator {
 	
 	function sidebarGenerator(){
 		$this->sidebar_names = array(
-			'home'=>__('Homepage Widget Area','striking_admin'),
-			'page'=>__('Page Widget Area','striking_admin'),
-			'blog'=>__('Blog Widget Area','striking_admin'),
-			'portfolio' =>__('Portfolio Widget Area','striking_admin'),
+			'home'=>__('Homepage Widget Area','theme_admin'),
+			'page'=>__('Page Widget Area','theme_admin'),
+			'blog'=>__('Blog Widget Area','theme_admin'),
+			'portfolio' =>__('Portfolio Widget Area','theme_admin'),
 		);
 		$this->footer_sidebar_names = array(
-			__('First Footer Widget Area','striking_admin'),
-			__('Second Footer Widget Area','striking_admin'),
-			__('Third Footer Widget Area','striking_admin'),
-			__('Fourth Footer Widget Area','striking_admin'),
-			__('Fifth Footer Widget Area','striking_admin'),
-			__('Sixth Footer Widget Area','striking_admin'),
+			__('First Footer Widget Area','theme_admin'),
+			__('Second Footer Widget Area','theme_admin'),
+			__('Third Footer Widget Area','theme_admin'),
+			__('Fourth Footer Widget Area','theme_admin'),
+			__('Fifth Footer Widget Area','theme_admin'),
+			__('Sixth Footer Widget Area','theme_admin'),
 		);
-
 	}
 
 	function register_sidebar(){
@@ -46,22 +45,22 @@ class sidebarGenerator {
 			));
 		}
 		
-		$top_area_type = theme_get_option('general','top_area_type');
+		$top_area_type = theme_get_option_from_db('general','top_area_type');
 		if($top_area_type == 'widget'){
 			register_sidebar(array(
-				'name' =>  __('Header Widget Area','striking_admin'),
-				'description' => __('Header Widget Area','striking_admin'),
+				'name' =>  __('Header Widget Area','theme_admin'),
+				'description' => __('Header Widget Area','theme_admin'),
 				'before_widget' => '<section id="%1$s" class="widget %2$s">',
 				'after_widget' => '</section>',
 				'before_title' => '',
 				'after_title' => '',
 			));
 		}
-		$footer_right_area_type = theme_get_option('footer','footer_right_area_type');
+		$footer_right_area_type = theme_get_option_from_db('footer','footer_right_area_type');
 		if($footer_right_area_type == 'widget'){
 			register_sidebar(array(
-				'name' =>  __('Sub Footer Widget Area','striking_admin'),
-				'description' => __('Sub Footer Widget Area','striking_admin'),
+				'name' =>  __('Sub Footer Widget Area','theme_admin'),
+				'description' => __('Sub Footer Widget Area','theme_admin'),
 				'before_widget' => '<section id="%1$s" class="widget %2$s">',
 				'after_widget' => '</section>',
 				'before_title' => '',
@@ -70,7 +69,7 @@ class sidebarGenerator {
 		}
 		
 		//register custom sidebars
-		$custom_sidebars = theme_get_option('sidebar','sidebars');
+		$custom_sidebars = theme_get_option_from_db('sidebar','sidebars');
 		if(!empty($custom_sidebars)){
 			$custom_sidebar_names = explode(',',$custom_sidebars);
 			foreach ($custom_sidebar_names as $name){
@@ -103,9 +102,52 @@ class sidebarGenerator {
 		}elseif(is_singular('portfolio')){
 			$sidebar = $this->sidebar_names['portfolio'];
 		}
-		if(is_search() || is_archive()){
-			$sidebar = $this->sidebar_names['blog'];
+		if(is_archive()){
+			$custom = theme_get_option('sidebar','archive');
+			if(!empty($custom)){
+				$sidebar = $custom;
+			}else{
+				$sidebar = $this->sidebar_names['blog'];
+			}
 		}
+
+		if(is_search()){
+			$custom = theme_get_option('sidebar','search');
+			if(!empty($custom)){
+				$sidebar = $custom;
+			}else{
+				$sidebar = $this->sidebar_names['blog'];
+			}
+		}
+
+		if(is_category()){
+			$custom = theme_get_option('sidebar','category');
+			if(!empty($custom)){
+				$sidebar = $custom;
+			}
+		}
+
+		if(is_tag()){
+			$custom = theme_get_option('sidebar','tag');
+			if(!empty($custom)){
+				$sidebar = $custom;
+			}
+		}
+
+		if(is_author()){
+			$custom = theme_get_option('sidebar','author');
+			if(!empty($custom)){
+				$sidebar = $custom;
+			}
+		}
+
+		if(is_date()){
+			$custom = theme_get_option('sidebar','date');
+			if(!empty($custom)){
+				$sidebar = $custom;
+			}
+		}
+
 
 		if(theme_get_option('advanced', 'woocommerce')){
 			if(is_singular( array('product') )){
@@ -157,10 +199,6 @@ class sidebarGenerator {
 		$this->footer_sidebar_count++;
 	}
 }
-global $_sidebarGenerator;
-$_sidebarGenerator = new sidebarGenerator;
-
-add_action('widgets_init', array($_sidebarGenerator,'register_sidebar'));
 
 function sidebar_generator($function){
 	global $_sidebarGenerator;

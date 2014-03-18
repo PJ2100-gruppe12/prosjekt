@@ -5,8 +5,6 @@
  * The area of the page that contains both current comments
  * and the comment form. The actual display of comments is
  * handled by a callback to theme_comments().
- *
- * @package Striking
  */
 
 function theme_comments($comment, $args, $depth) {
@@ -16,13 +14,13 @@ function theme_comments($comment, $args, $depth) {
 			<div class="gravatar"><?php echo get_avatar($comment,$size='60',$default=''); ?></div>
 			<div class='comment_content'>
 				<div class="comment_meta">
-					<?php printf( '<cite class="comment_author">%s</cite>', get_comment_author_link()) ?><?php edit_comment_link(__('(Edit)', 'striking_front' ),'  ','') ?>
+					<?php printf( '<cite class="comment_author">%s</cite>', get_comment_author_link()) ?><?php edit_comment_link(__('(Edit)', 'theme_front' ),'  ','') ?>
 					<time class="comment_time"><?php echo get_comment_date(); ?></time>
 				</div>
 				<div class='comment_text'>
 					<?php comment_text() ?>
 <?php if ($comment->comment_approved == '0') : ?>
-					<span class="unapproved"><?php _e('Your comment is awaiting moderation.','striking_front') ?></span>
+					<span class="unapproved"><?php _e('Your comment is awaiting moderation.','theme_front') ?></span>
 <?php endif; ?>
 				</div>
 				<div class="reply">
@@ -34,9 +32,10 @@ function theme_comments($comment, $args, $depth) {
 }
 ?>
 
+<?php if ( comments_open() || have_comments()) :?>
 <section id="comments">
 <?php if ( post_password_required() ) : ?>
-	<p class="nopassword"><?php _e( 'This post is password protected. Enter the password to view any comments.', 'striking_front' ); ?></p>
+	<p class="nopassword"><?php _e( 'This post is password protected. Enter the password to view any comments.', 'theme_front' ); ?></p>
 </section><!-- #comments -->
 <?php
 		return;
@@ -44,7 +43,7 @@ function theme_comments($comment, $args, $depth) {
 	
 if ( have_comments() ) : ?>
 	<h3 id="comments_title"><?php
-	printf( _n( 'One Response to %2$s', '%1$s Responses to %2$s', get_comments_number(), 'striking_front' ),
+	printf( _n( 'One Response to %2$s', '%1$s Responses to %2$s', get_comments_number(), 'theme_front' ),
 	number_format_i18n( get_comments_number() ), '<em>' . get_the_title() . '</em>' );
 	?></h3>
 
@@ -69,7 +68,7 @@ if ( have_comments() ) : ?>
 	 * let's leave a little note, shall we?
 	 */
 	if ( ! comments_open() ) :
-	/*<p class="nocomments"><?php _e( 'Comments are closed.', 'striking_front' ); ?></p>*/
+	/*<p class="nocomments"><?php _e( 'Comments are closed.', 'theme_front' ); ?></p>*/
 ?>
 	
 <?php endif; // end ! comments_open() ?>
@@ -83,30 +82,31 @@ if ( have_comments() ) : ?>
 	$post_id = get_queried_object_id();
 	$fields =  array(
 		'author' => '<p><input type="text" name="author" class="text_input" id="author" value="'.esc_attr($comment_author).'" size="22" tabindex="1"'.$aria_req.' />' .
-		            '<label for="author">' . __('Name','striking_front') . ( $req ? '<span class="required">*</span>' : '' ).'</label></p>',
+		            '<label for="author">' . __('Name','theme_front') . ( $req ? '<span class="required">*</span>' : '' ).'</label></p>',
 		'email'  => '<p><input type="text" name="email" class="text_input" id="email" value="'.esc_attr($comment_author_email).'" size="22" tabindex="2"'.$aria_req.' />' .
-		            '<label for="email">' . __('Email','striking_front') . ( $req ? '<span class="required">*</span>' : '' ).'</label></p>',
+		            '<label for="email">' . __('Email','theme_front') . ( $req ? '<span class="required">*</span>' : '' ).'</label></p>',
 		'url'    => '<p><input type="text" name="url" class="text_input" id="url" value="'.esc_attr($comment_author_url).'" size="22" tabindex="3"'.$aria_req.' />' .
-		            '<label for="url">' . __('Website','striking_front') .'</label></p>',		      
+		            '<label for="url">' . __('Website','theme_front') .'</label></p>',		      
 	);
-	$required_text = sprintf( ' ' . __('Required fields are marked %s','striking_front'), '<span class="required">*</span>' );
+	$required_text = sprintf( ' ' . __('Required fields are marked %s','theme_front'), '<span class="required">*</span>' );
 	$comment_args = array(
 		'fields'               => apply_filters( 'comment_form_default_fields', $fields ),
 		'comment_field'        => '<p><textarea class="textarea" name="comment" id="comment" cols="70" rows="10" tabindex="4" aria-required="true"></textarea></p>',
-		'must_log_in'          => '<p class="must-log-in">' . sprintf( __('You must be <a href="%s">logged in</a> to post a comment','striking_front'), wp_login_url( apply_filters( 'the_permalink', get_permalink( $post_id ) ) ) ) . '</p>',
-		'logged_in_as'         => '<p class="logged-in-as">' . sprintf( __('Logged in as <a href="%1$s">%2$s</a>. <a href="%3$s" title="Log out of this account">Log out?</a>','striking_front'), admin_url( 'profile.php' ), $user_identity, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $post_id ) ) ) ) . '</p>',
-		'comment_notes_before' => '<p class="comment-notes">' . __('Your email address will not be published.','striking_front') . ( $req ? $required_text : '' ) . '</p>',
+		'must_log_in'          => '<p class="must-log-in">' . sprintf( __('You must be <a href="%s">logged in</a> to post a comment','theme_front'), wp_login_url( apply_filters( 'the_permalink', get_permalink( $post_id ) ) ) ) . '</p>',
+		'logged_in_as'         => '<p class="logged-in-as">' . sprintf( __('Logged in as <a href="%1$s">%2$s</a>. <a href="%3$s" title="Log out of this account">Log out?</a>','theme_front'), admin_url( 'profile.php' ), $user_identity, wp_logout_url( apply_filters( 'the_permalink', get_permalink( $post_id ) ) ) ) . '</p>',
+		'comment_notes_before' => '<p class="comment-notes">' . __('Your email address will not be published.','theme_front') . ( $req ? $required_text : '' ) . '</p>',
 		'comment_notes_after'  => '',
-		//'comment_notes_after'  => '<p class="form-allowed-tags">' . sprintf( __('You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes: %s','striking_front'), ' <code>' . allowed_tags() . '</code>' ) . '</p>',
+		//'comment_notes_after'  => '<p class="form-allowed-tags">' . sprintf( __('You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes: %s','theme_front'), ' <code>' . allowed_tags() . '</code>' ) . '</p>',
 		'id_form'              => 'commentform',
 		'id_submit'            => 'submit',
-		'title_reply'          => __('Leave a Reply','striking_front'),
-		'title_reply_to'       => __('Leave a Reply to %s','striking_front'),
-		'cancel_reply_link'    => __('Cancel reply','striking_front'),
-		'label_submit'         => __('Post Comment','striking_front'),
+		'title_reply'          => __('Leave a Reply','theme_front'),
+		'title_reply_to'       => __('Leave a Reply to %s','theme_front'),
+		'cancel_reply_link'    => __('Cancel reply','theme_front'),
+		'label_submit'         => __('Post Comment','theme_front'),
 	);
 	comment_form($comment_args); ?>
 
 <?php endif; ?>
 
 </section><!-- #comments -->
+<?php endif; // end ! comments_open() ?>

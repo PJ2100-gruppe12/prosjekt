@@ -31,8 +31,8 @@ class Theme_Widget_Social extends WP_Widget {
 	
 	
 	function Theme_Widget_Social() {
-		$widget_ops = array('classname' => 'widget_social', 'description' => __( 'Displays a list of Social Icon icons', 'striking_admin') );
-		$this->WP_Widget('social', THEME_SLUG.' - '.__('Social Icon', 'striking_admin'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_social', 'description' => __( 'Displays a list of Social Icon icons', 'theme_admin') );
+		$this->WP_Widget('social', THEME_SLUG.' - '.__('Social Icon', 'theme_admin'), $widget_ops);
 		
 		if ('widgets.php' == basename($_SERVER['PHP_SELF'])) {
 			add_action( 'admin_print_scripts', array(&$this, 'add_admin_script') );
@@ -134,10 +134,10 @@ class Theme_Widget_Social extends WP_Widget {
 			$$custom_icon = isset($instance[$custom_icon]) ? $instance[$custom_icon] : '';
 		}
 	?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'striking_admin'); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
-		<p><label for="<?php echo $this->get_field_id('alt'); ?>"><?php _e('Icon Alt Title:', 'striking_admin'); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('alt'); ?>" name="<?php echo $this->get_field_name('alt'); ?>" type="text" value="<?php echo $alt; ?>" /></p>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'theme_admin'); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
+		<p><label for="<?php echo $this->get_field_id('alt'); ?>"><?php _e('Icon Alt Title:', 'theme_admin'); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('alt'); ?>" name="<?php echo $this->get_field_name('alt'); ?>" type="text" value="<?php echo $alt; ?>" /></p>
 		<p>
-			<label for="<?php echo $this->get_field_id('package'); ?>"><?php _e( 'Icon Package:' , 'striking_admin'); ?></label>
+			<label for="<?php echo $this->get_field_id('package'); ?>"><?php _e( 'Icon Package:' , 'theme_admin'); ?></label>
 			<select name="<?php echo $this->get_field_name('package'); ?>" id="<?php echo $this->get_field_id('package'); ?>" class="widefat">
 				<?php foreach($this->packages as $name => $value):?>
 				<option value="<?php echo $name;?>"<?php selected($package,$name);?>><?php echo $value['name'];?></option>
@@ -145,16 +145,16 @@ class Theme_Widget_Social extends WP_Widget {
 			</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id('animation'); ?>"><?php _e( 'Icon Hover Animation:', 'striking_admin' ); ?></label>
+			<label for="<?php echo $this->get_field_id('animation'); ?>"><?php _e( 'Icon Hover Animation:', 'theme_admin' ); ?></label>
 			<select name="<?php echo $this->get_field_name('animation'); ?>" id="<?php echo $this->get_field_id('animation'); ?>" class="widefat">
-				<option value="fade"<?php selected($animation,'fade');?>><?php _e( 'Fade', 'striking_admin' ); ?></option>
-				<option value="scale"<?php selected($animation,'scale');?>><?php _e( 'Scale', 'striking_admin' ); ?></option>
-				<option value="bounce"<?php selected($animation,'bounce');?>><?php _e( 'Bounce', 'striking_admin' ); ?></option>
-				<option value="combo"<?php selected($animation,'combo');?>><?php _e( 'Combo', 'striking_admin' ); ?></option>
+				<option value="fade"<?php selected($animation,'fade');?>><?php _e( 'Fade', 'theme_admin' ); ?></option>
+				<option value="scale"<?php selected($animation,'scale');?>><?php _e( 'Scale', 'theme_admin' ); ?></option>
+				<option value="bounce"<?php selected($animation,'bounce');?>><?php _e( 'Bounce', 'theme_admin' ); ?></option>
+				<option value="combo"<?php selected($animation,'combo');?>><?php _e( 'Combo', 'theme_admin' ); ?></option>
 			</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id('enable_sites'); ?>"><?php _e( 'Enable Social Icon:', 'striking_admin' ); ?></label>
+			<label for="<?php echo $this->get_field_id('enable_sites'); ?>"><?php _e( 'Enable Social Icon:', 'theme_admin' ); ?></label>
 			<select name="<?php echo $this->get_field_name('enable_sites'); ?>[]" style="height:10em" id="<?php echo $this->get_field_id('enable_sites'); ?>" class="social_icon_select_sites widefat" multiple="multiple">
 				<?php foreach($this->sites as $site):?>
 				<option value="<?php echo $site;?>"<?php echo in_array($site, $enable_sites)? 'selected="selected"':'';?>><?php echo $site;?></option>
@@ -163,28 +163,28 @@ class Theme_Widget_Social extends WP_Widget {
 		</p>
 		
 		<p>
-			<em><?php _e("Note: Please input FULL URL <br/>(e.g. <code>http://www.example.com</code>)", 'striking_admin');?></em>
+			<em><?php _e("Note: Please input FULL URL <br/>(e.g. <code>http://www.example.com</code>)", 'theme_admin');?></em>
 		</p>
 		<div class="social_icon_wrap">
 		<?php foreach($this->sites as $site):?>
 		<p class="social_icon_<?php echo $site;?>" <?php if(!in_array($site, $enable_sites)):?>style="display:none"<?php endif;?>>
-			<label for="<?php echo $this->get_field_id( $site ); ?>"><?php echo $site.' '.__('URL:', 'striking_admin')?></label>
+			<label for="<?php echo $this->get_field_id( $site ); ?>"><?php echo $site.' '.__('URL:', 'theme_admin')?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( $site ); ?>" name="<?php echo $this->get_field_name( $site ); ?>" type="text" value="<?php echo $$site; ?>" />
 		</p>
 		<?php endforeach;?>
 		</div>
 
-		<p><label for="<?php echo $this->get_field_id('custom_count'); ?>"><?php _e('How many custom icons to add?', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('custom_count'); ?>"><?php _e('How many custom icons to add?', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('custom_count'); ?>" class="social_icon_custom_count" name="<?php echo $this->get_field_name('custom_count'); ?>" type="text" value="<?php echo $custom_count; ?>" size="3" /></p>
 
 		<div class="social_custom_icon_wrap">
 		<?php for($i=1;$i<=10;$i++): $custom_name='custom_'.$i.'_name';$custom_url='custom_'.$i.'_url'; $custom_icon='custom_'.$i.'_icon'; ?>
 			<div class="social_icon_custom_<?php echo $i;?>" <?php if($i>$custom_count):?>style="display:none"<?php endif;?>>
-				<p><label for="<?php echo $this->get_field_id( $custom_name ); ?>"><?php printf(__('Custom %s Name:', 'striking_admin'),$i);?></label>
+				<p><label for="<?php echo $this->get_field_id( $custom_name ); ?>"><?php printf(__('Custom %s Name:', 'theme_admin'),$i);?></label>
 				<input class="widefat" id="<?php echo $this->get_field_id( $custom_name ); ?>" name="<?php echo $this->get_field_name( $custom_name ); ?>" type="text" value="<?php echo $$custom_name; ?>" /></p>
-				<p><label for="<?php echo $this->get_field_id( $custom_url ); ?>"><?php printf(__('Custom %s URL:', 'striking_admin'),$i);?></label>
+				<p><label for="<?php echo $this->get_field_id( $custom_url ); ?>"><?php printf(__('Custom %s URL:', 'theme_admin'),$i);?></label>
 				<input class="widefat" id="<?php echo $this->get_field_id( $custom_url ); ?>" name="<?php echo $this->get_field_name( $custom_url ); ?>" type="text" value="<?php echo $$custom_url; ?>" /></p>
-				<p><label for="<?php echo $this->get_field_id( $custom_icon ); ?>"><?php printf(__('Custom %s Icon:', 'striking_admin'),$i);?></label>
+				<p><label for="<?php echo $this->get_field_id( $custom_icon ); ?>"><?php printf(__('Custom %s Icon:', 'theme_admin'),$i);?></label>
 				<input class="widefat" id="<?php echo $this->get_field_id( $custom_icon ); ?>" name="<?php echo $this->get_field_name( $custom_icon ); ?>" type="text" value="<?php echo $$custom_icon; ?>" /></p>
 			</div>
 

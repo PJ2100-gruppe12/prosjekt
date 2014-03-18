@@ -36,20 +36,20 @@ class Theme_admin {
 
 		$errors = array();
 		if(!theme_check_wp_version()){
-			$errors[] = sprintf(__('Wordpress version(%1$s) is too low. Please upgrade to 3.1','striking_admin'), $wp_version);
+			$errors[] = sprintf(__('Wordpress version(%1$s) is too low. Please upgrade to 3.1','theme_admin'), $wp_version);
 		}
 		if(!function_exists("imagecreatetruecolor")){
-			$errors[] = __('GD Library Error: imagecreatetruecolor does not exist - please contact your webhost and ask them to install the GD library','striking_admin');
+			$errors[] = __('GD Library Error: imagecreatetruecolor does not exist - please contact your webhost and ask them to install the GD library','theme_admin');
 		}
 		if(!is_writeable(THEME_CACHE_DIR)){
-			$errors[] = sprintf(__('The cache folder (%1$s) is not writeable.','striking_admin'), str_replace( WP_CONTENT_DIR, '', THEME_CACHE_DIR ));
+			$errors[] = sprintf(__('The cache folder (%1$s) is not writeable.','theme_admin'), str_replace( WP_CONTENT_DIR, '', THEME_CACHE_DIR ));
 		}
 		if(!is_writeable(THEME_CACHE_DIR.DIRECTORY_SEPARATOR.'images')){
-			$errors[] = sprintf(__('The image folder (%1$s) is not writeable.','striking_admin'), str_replace( WP_CONTENT_DIR, '', THEME_CACHE_DIR ).'/images');
+			$errors[] = sprintf(__('The image folder (%1$s) is not writeable.','theme_admin'), str_replace( WP_CONTENT_DIR, '', THEME_CACHE_DIR ).'/images');
 		}
 		if(!is_multisite()){
 			if(!is_writeable(THEME_CACHE_DIR.DIRECTORY_SEPARATOR.'skin.css')){
-				$errors[] = sprintf(__('The skin style file (%1$s) is not writeable.','striking_admin'), str_replace( WP_CONTENT_DIR, '', THEME_CACHE_DIR ).'/skin.css');
+				$errors[] = sprintf(__('The skin style file (%1$s) is not writeable.','theme_admin'), str_replace( WP_CONTENT_DIR, '', THEME_CACHE_DIR ).'/skin.css');
 			}
 		}
 		
@@ -61,7 +61,7 @@ class Theme_admin {
 			}
 			$str .= '</ul>';
 			echo "
-				<div id='theme-warning' class='error fade'><p><strong>".sprintf(__('%1$s Error Messages','striking_admin'), THEME_NAME)."</strong><br/>".$str."</p></div>
+				<div id='theme-warning' class='error fade'><p><strong>".sprintf(__('%1$s Error Messages','theme_admin'), THEME_NAME)."</strong><br/>".$str."</p></div>
 			";
 		}
 		
@@ -100,9 +100,8 @@ class Theme_admin {
 			'page_general' => 'Theme_Metabox_PageGeneral',
 			'slideshow' => 'Theme_Metabox_Slideshow',
 			'portfolio' => 'Theme_Metabox_Portfolio',
-			//'anything_slider' => 'Theme_Metabox_AnythingSlider',
-			// 'gallery' => 'Theme_Metabox_Gallery',
 			'single' => 'Theme_Metabox_Single',
+			'product' => 'Theme_Metabox_Product',
 		);
 
 		foreach($files as $file => $metabox_class){
@@ -119,9 +118,7 @@ class Theme_admin {
 	function after_theme_activated(){
 		if ('themes.php' == basename($_SERVER['PHP_SELF']) && isset($_GET['activated']) && $_GET['activated']=='true' ) {
 			if(is_multisite()){
-				if(!is_dir(THEME_CACHE_IMAGES_DIR)){
-					mkdir(THEME_CACHE_IMAGES_DIR);
-				}
+				theme_check_image_folder();
 			}
 			update_option(THEME_SLUG.'_version', THEME_VERSION);
 			theme_save_skin_style();

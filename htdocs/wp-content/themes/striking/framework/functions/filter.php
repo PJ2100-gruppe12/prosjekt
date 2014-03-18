@@ -1,4 +1,8 @@
 <?php
+if(theme_get_option('blog','excerpt_shortcode')){
+	add_filter('get_the_excerpt','do_shortcode');
+}
+
 function theme_more_link($more_link, $more_link_text) {
 	
 	$more_link = '[raw]' . $more_link . '[/raw]';
@@ -13,6 +17,17 @@ function theme_excerpt_more($excerpt) {
 	return str_replace('[...]', '...', $excerpt);
 }
 add_filter('wp_trim_excerpt', 'theme_excerpt_more');
+
+
+function theme_trim_excerpt($text, $raw_excerpt){
+	if($text == $raw_excerpt){
+		$excerpt_length = apply_filters('excerpt_length', 55);
+		$excerpt_more = apply_filters('excerpt_more', ' ' . '[&hellip;]');
+		$text = wp_trim_words( $text, $excerpt_length, $excerpt_more );
+	}
+	return $text;
+}
+add_filter('wp_trim_excerpt', 'theme_trim_excerpt', 10, 2);
 
 function theme_exclude_category_feed() {
 	$exclude_cats = theme_get_option('blog','exclude_categorys');
@@ -46,7 +61,7 @@ if( theme_get_option('advanced','show_post_thumbnail_on_feed')){
 	function theme_show_post_thumbnail_on_feeds($content) {
 		global $post;
 		if(has_post_thumbnail($post->ID)) {
-			$content = $content . '<div><a href="' . get_permalink($post->ID) . '">' . get_the_post_thumbnail($post->ID, 'thumbnail') . '</a></div>';
+			$content =  '<div><a href="' . get_permalink($post->ID) . '">' . get_the_post_thumbnail($post->ID, 'thumbnail') .'</a></div>'.  $content ;
 		}
 		return $content;
 	}
@@ -81,11 +96,10 @@ add_filter('widget_archives_args', 'theme_exclude_archives_widget');
 add_filter('widget_archives_dropdown_args', 'theme_exclude_archives_widget');
 
 function theme_exclude_archive_where($where,$args){
-
 	global $wpdb;
 
 	if(isset($args['exclude']) && !empty($args['exclude'])){
-		$where .= $wpdb->prepare(" AND ID NOT IN (SELECT DISTINCT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN ('" . join("', '", $args['exclude'] ) . "'))");
+		$where .= $wpdb->prepare(" AND ID NOT IN (SELECT DISTINCT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN ('%s'))", join("', '", $args['exclude'] ));
 	}
 	return $where;
 }
@@ -344,6 +358,13 @@ if(theme_get_option('advanced','no_colorbox')){
 	add_filter('body_class','theme_add_no_colorbox_body_class');
 	function theme_add_no_colorbox_body_class($classes) {
 		$classes[] = 'no_colorbox';
+		return $classes;
+	}
+}
+if(theme_get_option('general','enable_box_layout')){
+	add_filter('body_class','theme_add_box_layout_body_class');
+	function theme_add_box_layout_body_class($classes) {
+		$classes[] = 'box-layout';
 		return $classes;
 	}
 }

@@ -5,7 +5,7 @@ function theme_shortcode_divider() {
 add_shortcode('divider', 'theme_shortcode_divider');
 
 function theme_shortcode_divider_top() {
-	return '<div class="divider top"><a href="#">'.__('Top','striking_front').'</a></div>';
+	return '<div class="divider top"><a href="#">'.__('Top','theme_front').'</a></div>';
 }
 add_shortcode('divider_top', 'theme_shortcode_divider_top');
 
@@ -56,7 +56,7 @@ function theme_shortcode_advanced_divider($atts) {
 	}
 	if($top !== 'false'){
 		$top = ' top';
-		$top_text = '<a href="#">'.__('Top','striking_front').'</a>';
+		$top_text = '<a href="#">'.__('Top','theme_front').'</a>';
 	}else{
 		$top = '';
 		$top_text = '';

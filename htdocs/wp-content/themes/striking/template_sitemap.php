@@ -2,8 +2,6 @@
 /**
  * Template Name: Sitemap
  * Description: A Page Template for displaying sitemaps
- *
- * @package Striking
  */
 $post_id = get_queried_object_id();
 $layout = theme_get_inherit_option($post_id, '_layout', 'general','layout');
@@ -18,7 +16,7 @@ echo theme_generator('introduce',$post_id );?>
 			<div class="content">
 				<?php the_content(); ?>
 
-				<h2><?php _e('Pages','striking_front');?></h2>
+				<h2><?php _e('Pages','theme_front');?></h2>
 				<?php if (theme_get_option('general','enable_nav_menu') && has_nav_menu( 'primary-menu' ) ) {
 			wp_nav_menu( array( 
 				'theme_location' => 'primary-menu',
@@ -36,41 +34,41 @@ echo theme_generator('introduce',$post_id );?>
 			echo $output;
 		}
 ?>
-				<div class="divider top"><a href="#"><?php _e('Top','striking_front');?></a></div>
+				<div class="divider top"><a href="#"><?php _e('Top','theme_front');?></a></div>
 
 <?php 
 	$exclude_cats = theme_get_option('blog','exclude_categorys');
 ?>
-				<h2><?php _e( 'Category Archives','striking_front'); ?></h2>
+				<h2><?php _e( 'Category Archives','theme_front'); ?></h2>
 				<ul>
-					<?php wp_list_categories( array( 'exclude'=> implode(",",$exclude_cats), 'feed' => __( 'RSS', 'striking_front' ), 'show_count' => true, 'use_desc_for_title' => false, 'title_li' => false ) ); ?>
+					<?php wp_list_categories( array( 'exclude'=> implode(",",$exclude_cats), 'feed' => __( 'RSS', 'theme_front' ), 'show_count' => true, 'use_desc_for_title' => false, 'title_li' => false ) ); ?>
 				</ul>
-				<div class="divider top"><a href="#"><?php _e('Top','striking_front');?></a></div> 
+				<div class="divider top"><a href="#"><?php _e('Top','theme_front');?></a></div> 
 <?php 
 	$archive_query = new WP_Query( array('showposts' => 1000,'category__not_in' => $exclude_cats ));
 ?>
-				<h2><?php _e( 'Blog Posts','striking_front'); ?></h2>
+				<h2><?php _e( 'Blog Posts','theme_front'); ?></h2>
 				<ul>
 <?php while ($archive_query->have_posts()) : $archive_query->the_post(); ?>
-					<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf( __("Permanent Link to %s", 'striking_front'), get_the_title() ); ?>"><?php the_title(); ?></a> (<?php comments_number('0', '1', '%'); ?>)</li>
+					<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf( __("Permanent Link to %s", 'theme_front'), get_the_title() ); ?>"><?php the_title(); ?></a> (<?php comments_number('0', '1', '%'); ?>)</li>
 <?php endwhile; ?>
 				</ul>
-				<div class="divider top"><a href="#"><?php _e('Top','striking_front');?></a></div> 
+				<div class="divider top"><a href="#"><?php _e('Top','theme_front');?></a></div> 
 
 <?php 
 	$portfolio_query = new WP_Query( array('post_type' => 'portfolio','showposts' => 1000 ));
 	if($portfolio_query->have_posts()):
 ?>
-				<h2><?php _e( 'Portfolios','striking_front'); ?></h2>
+				<h2><?php _e( 'Portfolios','theme_front'); ?></h2>
 				<ul>
 <?php while ($portfolio_query->have_posts()) : $portfolio_query->the_post(); ?>
-					<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf( __("Permanent Link to %s", 'striking_front'), get_the_title() ); ?>"><?php the_title(); ?></a><?php if(theme_get_option('portfolio','enable_comment')):?> (<?php comments_number('0', '1', '%'); ?>)<?php endif;?></li>
+					<li><a href="<?php the_permalink() ?>" rel="bookmark" title="<?php printf( __("Permanent Link to %s", 'theme_front'), get_the_title() ); ?>"><?php the_title(); ?></a><?php if(theme_get_option('portfolio','enable_comment')):?> (<?php comments_number('0', '1', '%'); ?>)<?php endif;?></li>
 <?php endwhile; ?>
 				</ul>
 
-				<div class="divider top"><a href="#"><?php _e('Top','striking_front');?></a></div> 
+				<div class="divider top"><a href="#"><?php _e('Top','theme_front');?></a></div> 
 <?php endif;?>
-				<?php wp_reset_postdata();edit_post_link(__('Edit', 'striking_front'),'<footer><p class="entry_edit">','</p></footer>'); ?>
+				<?php wp_reset_postdata();edit_post_link(__('Edit', 'theme_front'),'<footer><p class="entry_edit">','</p></footer>'); ?>
 				<div class="clearboth"></div>
 			</div>
 <?php endwhile; ?>

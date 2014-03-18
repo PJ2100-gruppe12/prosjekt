@@ -5,14 +5,14 @@
 class Theme_Widget_Contact_Info extends WP_Widget {
 
 	function Theme_Widget_Contact_Info() {
-		$widget_ops = array('classname' => 'widget_contact_info', 'description' => __( 'Displays a list of contact info.', 'striking_admin') );
-		$this->WP_Widget('contact_info',THEME_SLUG.' - '. __('Contact Info', 'striking_admin'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_contact_info', 'description' => __( 'Displays a list of contact info.', 'theme_admin') );
+		$this->WP_Widget('contact_info',THEME_SLUG.' - '. __('Contact Info', 'theme_admin'), $widget_ops);
 		
 	}
 	
 	function widget( $args, $instance ) {
 		extract( $args );
-		$title = apply_filters('widget_title', empty($instance['title']) ? __('Contact Us', 'striking_front') : $instance['title'], $instance, $this->id_base);
+		$title = apply_filters('widget_title', empty($instance['title']) ? __('Contact Us', 'theme_front') : $instance['title'], $instance, $this->id_base);
 		$color = $instance['color'];
 		$text = $instance['text'];
 		$phone = $instance['phone'];
@@ -96,7 +96,7 @@ class Theme_Widget_Contact_Info extends WP_Widget {
 		$name = isset($instance['name']) ? esc_attr($instance['name']) : '';
 	?>
 		<p>
-			<label for="<?php echo $this->get_field_id('color'); ?>"><?php _e( 'Icons Color:', 'striking_admin' ); ?></label>
+			<label for="<?php echo $this->get_field_id('color'); ?>"><?php _e( 'Icons Color:', 'theme_admin' ); ?></label>
 			<select name="<?php echo $this->get_field_name('color'); ?>" id="<?php echo $this->get_field_id('color'); ?>" class="widefat">
 				<option value="default"<?php selected($color,'default');?>>Default</option>
 				<option value="black"<?php selected($color,'black');?>>Black</option>
@@ -111,40 +111,40 @@ class Theme_Widget_Contact_Info extends WP_Widget {
 			</select>
 		</p>
 
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('text'); ?>"><?php _e('Introduce text:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('text'); ?>"><?php _e('Introduce text:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('text'); ?>" name="<?php echo $this->get_field_name('text'); ?>" type="text" value="<?php echo $text; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('phone'); ?>"><?php _e('Phone:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('phone'); ?>"><?php _e('Phone:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('phone'); ?>" name="<?php echo $this->get_field_name('phone'); ?>" type="text" value="<?php echo $phone; ?>" /></p>
 
-		<p><label for="<?php echo $this->get_field_id('cellphone'); ?>"><?php _e('Cell phone:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('cellphone'); ?>"><?php _e('Cell phone:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('cellphone'); ?>" name="<?php echo $this->get_field_name('cellphone'); ?>" type="text" value="<?php echo $cellphone; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('fax'); ?>"><?php _e('Fax:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('fax'); ?>"><?php _e('Fax:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('fax'); ?>" name="<?php echo $this->get_field_name('fax'); ?>" type="text" value="<?php echo $fax; ?>" /></p>
 
-		<p><label for="<?php echo $this->get_field_id('email'); ?>"><?php _e('Email:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('email'); ?>"><?php _e('Email:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('email'); ?>" name="<?php echo $this->get_field_name('email'); ?>" type="text" value="<?php echo $email; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('link'); ?>"><?php _e('Link:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('link'); ?>"><?php _e('Link:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('link'); ?>" name="<?php echo $this->get_field_name('link'); ?>" type="text" value="<?php echo $link; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('address'); ?>"><?php _e('Address:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('address'); ?>"><?php _e('Address:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('address'); ?>" name="<?php echo $this->get_field_name('address'); ?>" type="text" value="<?php echo $address; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('city'); ?>"><?php _e('City:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('city'); ?>"><?php _e('City:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('city'); ?>" name="<?php echo $this->get_field_name('city'); ?>" type="text" value="<?php echo $city; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('state'); ?>"><?php _e('State:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('state'); ?>"><?php _e('State:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('state'); ?>" name="<?php echo $this->get_field_name('state'); ?>" type="text" value="<?php echo $state; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('zip'); ?>"><?php _e('Zip:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('zip'); ?>"><?php _e('Zip:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('zip'); ?>" name="<?php echo $this->get_field_name('zip'); ?>" type="text" value="<?php echo $zip; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('name'); ?>"><?php _e('Name:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('name'); ?>"><?php _e('Name:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('name'); ?>" name="<?php echo $this->get_field_name('name'); ?>" type="text" value="<?php echo $name; ?>" /></p>
 		
 <?php

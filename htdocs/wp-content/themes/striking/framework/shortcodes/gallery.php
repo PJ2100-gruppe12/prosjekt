@@ -1,6 +1,6 @@
 <?php
 
-// Thank to Justin Tadlock (http://justintadlock.com)
+// Thank to Justin Tadlock (justintadlock dot com)
 function theme_shortcode_gallery( $output, $attr ) {
 	$post = get_post();
 

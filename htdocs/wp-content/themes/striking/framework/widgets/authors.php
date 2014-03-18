@@ -5,8 +5,8 @@
 class Theme_Widget_Authors extends WP_Widget {
 
 	function Theme_Widget_Authors() {
-		$widget_ops = array('classname' => 'widget_authors', 'description' => __( 'Displays a list of author', 'striking_admin' ) );
-		$this->WP_Widget('authors', THEME_SLUG.' - '.__('Authors', 'striking_admin'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_authors', 'description' => __( 'Displays a list of author', 'theme_admin' ) );
+		$this->WP_Widget('authors', THEME_SLUG.' - '.__('Authors', 'theme_admin'), $widget_ops);
 		
 		if ('widgets.php' == basename($_SERVER['PHP_SELF'])) {
 			add_action( 'admin_print_scripts', array(&$this, 'add_admin_script') );
@@ -41,7 +41,7 @@ class Theme_Widget_Authors extends WP_Widget {
 	
 	function widget( $args, $instance ) {
 		extract( $args );
-		$title = apply_filters('widget_title', empty($instance['title']) ? __('Authors', 'striking_front') : $instance['title'], $instance, $this->id_base);
+		$title = apply_filters('widget_title', empty($instance['title']) ? __('Authors', 'theme_front') : $instance['title'], $instance, $this->id_base);
 
 		$count = (int)$instance['count'];
 
@@ -90,23 +90,23 @@ class Theme_Widget_Authors extends WP_Widget {
 		}
 		$authors = $this->get_all_author();
 ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('How many authors to display?', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('How many authors to display?', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('count'); ?>" class="author_count" name="<?php echo $this->get_field_name('count'); ?>" type="text" value="<?php echo $count; ?>" size="3" /></p>
 
 		<div class="authors_wrap">
 		<?php for($i=1;$i<=10;$i++): $author_id = 'author_'.$i.'_id';$author_desc = 'author_'.$i.'_desc'; ?>
 			<div class="author_<?php echo $i;?>" <?php if($i>$count):?>style="display:none"<?php endif;?>>
 				<p>
-					<label for="<?php echo $this->get_field_id($author_id); ?>"><?php printf(__('#%s Author:', 'striking_admin'),$i);?></label>
+					<label for="<?php echo $this->get_field_id($author_id); ?>"><?php printf(__('#%s Author:', 'theme_admin'),$i);?></label>
 					<select name="<?php echo $this->get_field_name($author_id); ?>" id="<?php echo $this->get_field_id($author_id); ?>" class="widefat">
 						<?php echo $this->built_author_options($authors,$$author_id);?>
 					</select>
 				</p>
 				
-				<p><label for="<?php echo $this->get_field_id( $author_desc ); ?>"><?php printf(__('#%s Author Desc (optional):', 'striking_admin'),$i);?></label>
+				<p><label for="<?php echo $this->get_field_id( $author_desc ); ?>"><?php printf(__('#%s Author Desc (optional):', 'theme_admin'),$i);?></label>
 				<textarea class="widefat" rows="4" cols="20" id="<?php echo $this->get_field_id($author_desc); ?>" name="<?php echo $this->get_field_name($author_desc); ?>"><?php echo $$author_desc; ?></textarea>
 			</div>
 

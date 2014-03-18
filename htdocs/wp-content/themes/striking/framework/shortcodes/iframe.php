@@ -6,10 +6,31 @@ function theme_shortcode_iframe($atts, $content = null) {
 		'src' => '',
 	), $atts));
 	
+	$style = array();
+
+	if(is_numeric($width)){
+		$width = $width.'px';
+	}
+	if(is_numeric($height)){
+		$height = $height.'px';
+	}
+	if($width){
+		$style[] = 'width:'.$width;
+	}
+	if($height){
+		$style[] = 'height:'.$height;
+	}
+	if(!empty($style)){
+		$styles = ' style="'.implode(';',$style).'"';
+	}else{
+		$styles = '';
+	}
+	
 	$width = $width?' width="'.$width.'"':'';
 	$height = $height?' height="'.$height.'"':'';
+
 	
-	return '<iframe src="'.$src.'"'.$width.$height.' seamless="seamless" frameborder="0"></iframe>';
+	return '<iframe src="'.$src.'"'.$width.$height.$styles.' seamless="seamless" frameborder="0"></iframe>';
 }
 
 add_shortcode('iframe','theme_shortcode_iframe');

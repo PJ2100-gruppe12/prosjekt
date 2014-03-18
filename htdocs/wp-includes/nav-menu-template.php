@@ -138,6 +138,7 @@ class Walker_Nav_Menu extends Walker {
 		$atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args );
 
 		$attributes = '';
+		$navbox = '<div class="navbox"></div>';
 		foreach ( $atts as $attr => $value ) {
 			if ( ! empty( $value ) ) {
 				$value = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
@@ -148,6 +149,7 @@ class Walker_Nav_Menu extends Walker {
 		$item_output = $args->before;
 		$item_output .= '<a'. $attributes .'>';
 		/** This filter is documented in wp-includes/post-template.php */
+		$item_output .= $navbox;
 		$item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
 		$item_output .= '</a>';
 		$item_output .= $args->after;

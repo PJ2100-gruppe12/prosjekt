@@ -31,7 +31,7 @@
 	margin:0 0 3px;
 }
 #images_sortable .sort-item-placeholder {
-	height:67px;
+	height:100%;
 	border: 1px dashed #bbb;
 	background-color: #ffffee;
 }

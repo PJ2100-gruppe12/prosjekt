@@ -6,8 +6,6 @@
  * For example, puts together date-based pages if no date.php file exists.
  *
  * Learn more: http://codex.wordpress.org/Template_Hierarchy
- *
- * @package Striking
  */
 
 $layout=theme_get_option('blog','layout');

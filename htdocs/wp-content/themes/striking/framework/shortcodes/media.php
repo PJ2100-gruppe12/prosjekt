@@ -140,6 +140,7 @@ function theme_video_html5($atts){
 	}
 	
 	$poster_attribute = '';
+	$image_fallback = '';
 	$poster_var = '';
 	if ($poster) {
 		$poster_attribute = 'poster="'.htmlspecialchars($poster).'"';
@@ -166,6 +167,13 @@ _end_;
 	if ($loop) {
 		$js_options[] = 'loop: ' . $loop;
 	}
+	if ($width) {
+		$js_options[] = 'defaultVideoWidth: ' . $width;
+	}
+	if ($height) {
+		$js_options[] = 'defaultVideoHeight: ' . $height;
+	}
+	$js_options[] = 'enableAutosize: false';
 	$js_options_string = implode(",", $js_options);
 	
 	$uri = THEME_URI;
@@ -564,10 +572,14 @@ function theme_audio($atts){
 	$js_options[] = 'audioHeight: ' . $height;
 	$js_options_string = implode(",", $js_options);
 	
+	$flash_src = '';
+	
 	// MP3 Source Supplied
 	if ($mp3) {
 		$mp3_source = '<source type="audio/mp3" src="'.htmlspecialchars($mp3).'" />';
 		$flash_src = htmlspecialchars($mp3);
+	}else{
+		$mp3_source = '';
 	}
 	
 	// ogg source supplied
@@ -576,6 +588,8 @@ function theme_audio($atts){
 		if(empty($flash_src)){
 			$flash_src = htmlspecialchars($ogg);
 		}
+	}else{
+		$ogg_source = '';
 	}
 	
 	
@@ -600,7 +614,7 @@ function theme_audio($atts){
 	return <<<HTML
 [raw]<div class="audio_frame">
 <audio id="html5_audio_{$id}" width="{$width}" height="{$height}" controls="controls" {$preload_attribute} {$autoplay_attribute}>
-    {$mp3_source}
+	{$mp3_source}
 	{$ogg_source}
 	<object width="{$width}" height="{$height}" type="application/x-shockwave-flash" data="{$uri}/mediaelement/flashmediaelement.swf">
 		<param name="movie" value="{$uri}/mediaelement/flashmediaelement.swf" />
@@ -615,7 +629,7 @@ function theme_audio($atts){
 		jQuery(this).data("mediaelementInited",true);
 	}).data("mediaelementInited",false);
 
-	if(toggle.size()!=0){
+	if(toggle.length!=0){
 		toggle.find('.toggle_title').click(function() {
 			if(jQuery("#html5_audio_{$id}").data("mediaelementInited")==false){
 				jQuery("#html5_audio_{$id}").trigger('initMediaelement');

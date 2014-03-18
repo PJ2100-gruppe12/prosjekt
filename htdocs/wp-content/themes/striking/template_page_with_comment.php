@@ -2,8 +2,6 @@
 /**
  * Template Name: Page with comment
  * Description: A Page Template for adds comment function to the pages
- *
- * @package Striking
  */
 $post_id = get_queried_object_id();
 $layout = theme_get_inherit_option($post_id, '_layout', 'general','layout');
@@ -17,8 +15,8 @@ echo theme_generator('introduce',$post_id);?>
 <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 			<div class="content">
 				<?php the_content(); ?>
-				<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'striking_front' ), 'after' => '</div>' ) ); ?>
-				<?php edit_post_link(__('Edit', 'striking_front'),'<footer><p class="entry_edit">','</p></footer>'); ?>
+				<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'theme_front' ), 'after' => '</div>' ) ); ?>
+				<?php edit_post_link(__('Edit', 'theme_front'),'<footer><p class="entry_edit">','</p></footer>'); ?>
 				<?php comments_template( '', true ); ?>
 				<div class="clearboth"></div>
 			</div>

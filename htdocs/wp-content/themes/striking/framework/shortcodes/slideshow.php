@@ -40,6 +40,7 @@ function theme_slideshow_nivo($atts, $content = null){
 		'randomstart' => 'false',
 		'captionopacity' => '0.8',
 		'caption' => 'false',
+		'stopatend'=>'false',
 	), $atts));
 	$align = $align?' align'.$align:'';
 	
@@ -76,7 +77,11 @@ function theme_slideshow_nivo($atts, $content = null){
 	}else{
 		$randomstart = 'false';
 	}
-	
+	if($stopatend==='true'){
+		$stopatend = 'true';
+	}else{
+		$stopatend = 'false';
+	}
 	/** fix **/
 	if(!empty($category)){
 		$source = '{s:'.$category.'}'; 
@@ -143,49 +148,58 @@ jQuery(document).ready(function($) {
         controlNavThumbs:false, 
         keyboardNav:false,
         pauseOnHover:{$pauseonhover}, 
-        manualAdvance:false
+        manualAdvance:false,
+        lastSlide: function(){
+			if({$stopatend}){
+				slider.data('nivoslider').stop();
+			}
+		}
     });
+	var directionNav = slider.find('.nivo-directionNav');
+	var controlNav = slider.siblings('.nivo-controlNav');
+
 	slider.find('.nivo-caption').each(function(){
 		jQuery(this).css('opacity', {$captionopacity});
 		if({$controlnav}){
 			jQuery(this).css({
-				paddingRight: slider.find('.nivo-controlNav').width() + 20
+				paddingRight: controlNav.width() + 20
 			});
 		}
 	});
+	
 	slider.find('.nivo-caption').css('opacity', {$captionopacity});
 
 	if({$directionnavhide}){
-		slider.find('.nivo-directionNav').hide();
+		directionNav.hide();
 	}
 	if({$controlnavhide}){
-		slider.find('.nivo-controlNav').hide();
+		controlNav.hide();
 	}
-	slider.hover(function(){
+	slider.parent().hover(function(){
 		if({$directionnavhide}){
-			slider.find('.nivo-directionNav').show();
+			directionNav.show();
 		}
 		if({$controlnavhide}){
-			slider.find('.nivo-controlNav').show();
+			controlNav.show();
 		}
 	}, function(){
 		if({$directionnavhide}){
-			slider.find('.nivo-directionNav').hide();
+			directionNav.hide();
 		}
 		if({$controlnavhide}){
-			slider.find('.nivo-controlNav').hide();
+			controlNav.hide();
 		}
 	});	
 });
 </script>
 <style type="text/css">
-#nivo_slider_{$id} {
+#nivo_slider_{$id}_wrap {
 	width: {$width}px;
 	height: {$height}px;
 }
 </style>
 [/raw]
-<div id="nivo_slider_{$id}" class="nivoslider_wrap{$align}">{$content}</div>
+<div id="nivo_slider_{$id}_wrap" class="nivoslider_wrap{$align}"><div id="nivo_slider_{$id}">{$content}</div></div>
 HTML;
 }
 
@@ -245,8 +259,13 @@ function theme_slideshow_anything($atts, $content = null){
 	$caption_width = $width-40;
 	$caption_side_width = floor($width*0.25);
 	$caption_height = $height-30;
-	$sidebar_width = floor(($width-60) * 0.3);
-	$sidebar_image_width = $width - 60 - $sidebar_width;
+	if($width > 630){
+		$sidebar_width = floor(($width * 0.3135) - 60);
+		$sidebar_image_width = $width - 60 - $sidebar_width;
+	} else {
+		$sidebar_width = floor(($width-60) * 0.3);
+		$sidebar_image_width = $width - 60 - $sidebar_width;
+	}
 	
 	
 	if($buildnavigation=='true') {

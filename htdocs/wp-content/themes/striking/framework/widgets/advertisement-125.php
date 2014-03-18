@@ -5,8 +5,8 @@
 class Theme_Widget_Advertisement_125 extends WP_Widget {
 
 	function Theme_Widget_Advertisement_125() {
-		$widget_ops = array('classname' => 'widget_advertisement_125', 'description' => __( 'Displays a list of advertisement', 'striking_admin' ) );
-		$this->WP_Widget('advertisement_125', THEME_SLUG.' - '.__('Advertisement', 'striking_admin').' 125', $widget_ops);
+		$widget_ops = array('classname' => 'widget_advertisement_125', 'description' => __( 'Displays a list of advertisement', 'theme_admin' ) );
+		$this->WP_Widget('advertisement_125', THEME_SLUG.' - '.__('Advertisement', 'theme_admin').' 125', $widget_ops);
 		
 		if ('widgets.php' == basename($_SERVER['PHP_SELF'])) {
 			add_action( 'admin_print_scripts', array(&$this, 'add_admin_script') );
@@ -73,33 +73,33 @@ class Theme_Widget_Advertisement_125 extends WP_Widget {
 			$$ad_alt = isset($instance[$ad_alt]) ? $instance[$ad_alt] : '';
 		}
 ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('How many advertisement to display?', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('How many advertisement to display?', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('count'); ?>" class="advertisement_count" name="<?php echo $this->get_field_name('count'); ?>" type="text" value="<?php echo $count; ?>" size="3" /></p>
 
 		<p>
-			<em><?php _e("Note: Please input FULL URL <br/>(e.g. <code>http://www.example.com</code>)", 'striking_admin');?></em>
+			<em><?php _e("Note: Please input FULL URL <br/>(e.g. <code>http://www.example.com</code>)", 'theme_admin');?></em>
 		</p>
 
 		<div class="advertisement_wrap">
 		<?php for($i=1;$i<=10;$i++): $ad_image = 'ad_'.$i.'_image';$ad_link = 'ad_'.$i.'_link';$ad_target = 'ad_'.$i.'_target';$ad_alt = 'ad_'.$i.'_alt';  ?>
 			<div class="advertisement_<?php echo $i;?>" <?php if($i>$count):?>style="display:none"<?php endif;?>>
-				<p><label for="<?php echo $this->get_field_id( $ad_image ); ?>"><?php printf(__('#%s Image URL:', 'striking_admin'),$i);?></label>
+				<p><label for="<?php echo $this->get_field_id( $ad_image ); ?>"><?php printf(__('#%s Image URL:', 'theme_admin'),$i);?></label>
 				<input class="widefat" id="<?php echo $this->get_field_id( $ad_image ); ?>" name="<?php echo $this->get_field_name( $ad_image ); ?>" type="text" value="<?php echo $$ad_image; ?>" /></p>
-				<p><label for="<?php echo $this->get_field_id( $ad_link ); ?>"><?php printf(__('#%s Link:', 'striking_admin'),$i);?></label>
+				<p><label for="<?php echo $this->get_field_id( $ad_link ); ?>"><?php printf(__('#%s Link:', 'theme_admin'),$i);?></label>
 				<input class="widefat" id="<?php echo $this->get_field_id( $ad_link ); ?>" name="<?php echo $this->get_field_name( $ad_link ); ?>" type="text" value="<?php echo $$ad_link; ?>" /></p>
 				<p>
-					<label for="<?php echo $this->get_field_id( $ad_target ); ?>"><?php printf(__('#%s Link target:', 'striking_admin'),$i);?></label>
+					<label for="<?php echo $this->get_field_id( $ad_target ); ?>"><?php printf(__('#%s Link target:', 'theme_admin'),$i);?></label>
 					<select name="<?php echo $this->get_field_name( $ad_target ); ?>" id="<?php echo $this->get_field_id( $ad_target ); ?>" class="widefat">
-						<option value="_blank"<?php selected($$ad_target,'_blank');?>><?php _e( 'Load in a new window', 'striking_admin' ); ?></option>
-						<option value="_self"<?php selected($$ad_target,'_self');?>><?php _e( 'Load in the same frame as it was clicked', 'striking_admin' ); ?></option>
-						<option value="_parent"<?php selected($$ad_target,'_parent');?>><?php _e( 'Load in the parent frameset', 'striking_admin' ); ?></option>
-						<option value="_top"<?php selected($$ad_target,'_top');?>><?php _e( 'Load in the full body of the window', 'striking_admin' ); ?></option>
+						<option value="_blank"<?php selected($$ad_target,'_blank');?>><?php _e( 'Load in a new window', 'theme_admin' ); ?></option>
+						<option value="_self"<?php selected($$ad_target,'_self');?>><?php _e( 'Load in the same frame as it was clicked', 'theme_admin' ); ?></option>
+						<option value="_parent"<?php selected($$ad_target,'_parent');?>><?php _e( 'Load in the parent frameset', 'theme_admin' ); ?></option>
+						<option value="_top"<?php selected($$ad_target,'_top');?>><?php _e( 'Load in the full body of the window', 'theme_admin' ); ?></option>
 					</select>
 				</p>
-				<p><label for="<?php echo $this->get_field_id( $ad_alt ); ?>"><?php printf(__('#%s Alternative text:', 'striking_admin'),$i);?></label>
+				<p><label for="<?php echo $this->get_field_id( $ad_alt ); ?>"><?php printf(__('#%s Alternative text:', 'theme_admin'),$i);?></label>
 				<input class="widefat" id="<?php echo $this->get_field_id( $ad_alt ); ?>" name="<?php echo $this->get_field_name( $ad_alt ); ?>" type="text" value="<?php echo $$ad_alt; ?>" /></p>
 			</div>
 		<?php endfor;?>

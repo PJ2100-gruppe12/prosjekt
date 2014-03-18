@@ -3,8 +3,6 @@
  * The Header for our theme.
  *
  * Displays all of the <head> section
- *
- * @package Striking
  */
 ?><!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" <?php language_attributes(); ?>> <![endif]-->
@@ -38,34 +36,8 @@
 <link href="<?php echo THEME_CSS;?>/ie8.css" media="screen" rel="stylesheet" type="text/css">
 <![endif]-->
 <!--[if IE]>
-	<script type="text/javascript" src="<?php echo THEME_JS;?>/html5.js"></script>
+	<script type="text/javascript" src="<?php echo THEME_JS;?>/html5shiv.js"></script>
 <![endif]-->
-<?php
-	if(theme_get_option('font','cufon_enabled')){
-		theme_add_cufon_code();
-	}
-?>
-<script type="text/javascript">
-var image_url='<?php echo THEME_IMAGES;?>';
-<?php
-	if(theme_get_option('advanced','restrict_colorbox')){
-		echo 'var restrict_colorbox = true;';
-	}
-	$grayscale_animSpeed = theme_get_option('advanced','grayscale_animSpeed');
-	$grayscale_outSpeed = theme_get_option('advanced','grayscale_outSpeed');
-	if($grayscale_animSpeed != '1000'){
-		echo 'var grayscale_animSpeed='.$grayscale_animSpeed.';';
-	}
-	if($grayscale_outSpeed != '1000'){
-		echo 'var grayscale_outSpeed='.$grayscale_outSpeed.';';
-	}
-?>
-</script>
-<?php
-	if(theme_get_option('general','analytics') && theme_get_option('general','analytics_position')=='header'){
-		echo stripslashes(theme_get_option('general','analytics'));
-	}
-?>
 </head>
 <body <?php body_class(); ?>>
 <header id="header">
@@ -95,6 +67,7 @@ var image_url='<?php echo THEME_IMAGES;?>';
 		case 'html':
 			if(theme_get_option('general','top_area_html')){
 				echo '<div id="top_area">';
+				echo wp_loginout();
 				echo str_replace(array('[raw]','[/raw]'),'',do_shortcode(wpml_t(THEME_NAME, 'Top Area Html Code', stripslashes( theme_get_option('general','top_area_html') ))));
 				echo '</div>';
 			}
@@ -104,7 +77,7 @@ var image_url='<?php echo THEME_IMAGES;?>';
 			break;
 		case 'widget':
 			echo '<div id="top_area">';
-			dynamic_sidebar(__('Header Widget Area','striking_admin'));
+			dynamic_sidebar(__('Header Widget Area','theme_admin'));
 			echo '</div>';
 			break;
 	}

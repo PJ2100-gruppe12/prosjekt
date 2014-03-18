@@ -1,8 +1,6 @@
 <?php 
 /**
  * A Page Template for displaying posts index page
- *
- * @package Striking
  */
 
 $layout=theme_get_option('blog','layout');

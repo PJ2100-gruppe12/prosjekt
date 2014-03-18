@@ -23,7 +23,6 @@ class Theme_Metabox {
 				add_filter( "postbox_classes_{$post_type}_{$id}", array(&$this, '_metabox_classes') );
 			}
 		}
-		
 	}
 
 	function _metabox_classes($classes){
@@ -80,8 +79,12 @@ class Theme_Metabox {
 			}
 		}
 
-		if (isset($option['prepare']) && function_exists($option['prepare'])) {
-			$option = $option['prepare']($option);
+		if (isset($option['prepare'])){
+			if(method_exists($this, $option['prepare'])) {
+				$option = $this->$option['prepare']($option);
+			}elseif(function_exists($option['prepare'])){
+				$option = $option['prepare']($option);
+			}
 		}
 		if (method_exists($this, '_option_'.$option['type'])) {
 			$method = '_option_'.$option['type'];
@@ -267,8 +270,12 @@ class Theme_Metabox {
 					$value = false;
 				}
 				
-				if (isset($option['process']) && function_exists($option['process'])) {
-					$value = $option['process']($option,$value);
+				if (isset($option['process'])){
+					if(method_exists($this, $option['process'])) {
+						$value = $this->$option['process']($option,$value);
+					}elseif(function_exists($option['process'])){
+						$value = $option['process']($option,$value);
+					}
 				}
 				
 				if (get_post_meta($post_id, $option['id']) == "") {
@@ -352,8 +359,12 @@ class Theme_Metabox_With_Tabs extends Theme_Metabox {
 			}
 		}
 
-		if (isset($option['prepare']) && function_exists($option['prepare'])) {
-			$option = $option['prepare']($option);
+		if (isset($option['prepare'])){
+			if(method_exists($this, $option['prepare'])) {
+				$option = $this->$option['prepare']($option);
+			}elseif(function_exists($option['prepare'])){
+				$option = $option['prepare']($option);
+			}
 		}
 		if (method_exists($this->generator, $option['type'])) { 
 			if(isset($option['group'])){

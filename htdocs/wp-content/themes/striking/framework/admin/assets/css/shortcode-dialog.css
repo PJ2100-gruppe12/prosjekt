@@ -95,9 +95,11 @@ body {
 	margin: 5px;
 	border-top: 1px dotted #CCCCCC;
 }
-.shortcode-item .theme-option-image-preview {
-	width:50px;
-	height:50px;
+.shortcode-item .theme-option-image-preview img {
+	max-width:150px;
+	max-height:150px;
+	width: expression(this.width > 150 ? 150: true);
+	height: expression(this.height > 150 ? 150: true);
 }
 select.chosen {
 	width:70%;

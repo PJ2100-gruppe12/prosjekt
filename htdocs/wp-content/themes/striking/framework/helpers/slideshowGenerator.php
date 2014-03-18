@@ -227,7 +227,7 @@ class slideshowGenerator {
 					break;
 			}
 		}
-		wp_reset_query();
+		wp_reset_postdata();
 		if($number!='-1'){
 			return array_slice($images, 0, $number);
 		} else {

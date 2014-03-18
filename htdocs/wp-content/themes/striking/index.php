@@ -7,8 +7,6 @@
  * It is used to display a page when nothing more specific matches a query.
  * E.g., it puts together the home page when no home.php file exists.
  * Learn more: http://codex.wordpress.org/Template_Hierarchy
- *
- * @package Striking
  */
 
 get_header(); 
@@ -26,7 +24,7 @@ echo theme_generator('introduce',$post_id);?>
 		<?php endwhile; ?>
 <?php else : ?>
 			<article id="post-0" class="post no-results not-found">
-				<p><?php _e( 'Apologies, but no results were found for the requested archive. ', 'striking' ); ?></p>
+				<p><?php _e( 'Apologies, but no results were found for the requested archive. ', 'theme_front' ); ?></p>
 			</article>
 <?php endif; ?>
 			<div class="clearboth"></div>

@@ -1,4 +1,116 @@
 <?php
+
+function theme_generator($slug){
+	do_action( "theme_generator_{$slug}", $slug);
+	$slug = apply_filters("theme_generator_{$slug}",$slug);
+
+	$template = "{$slug}.php";
+
+	theme_load_section($template);
+
+	$args = array_slice( func_get_args(), 1 );
+
+	$function = "theme_section_{$slug}";
+
+	return call_user_func_array($function, $args );
+}
+
+function theme_load_section($template_name){
+	if( file_exists(THEME_SECTIONS.'/'.$template_name)){
+		require_once(THEME_SECTIONS.'/'.$template_name);
+	}
+}
+
+/**
+ * Retrieve option value based on name of option.
+ * 
+ * If the option does not exist or does not have a value, then the return value will be false.
+ * 
+ * @param string $page page name
+ * @param string $name option name
+ */
+function theme_get_option($page, $name = null) {
+	global $theme_options;
+
+	if($theme_options === null){
+		return theme_get_option_from_db($page, $name);
+	}
+
+	if ($name == null) {
+		if (isset($theme_options[$page])) {
+			return $theme_options[$page];
+		} else {
+			return null;
+		}
+	} else {
+		if (isset($theme_options[$page][$name])) {
+			return $theme_options[$page][$name];
+		} else {
+			return null;
+		}
+	}
+}
+
+function theme_get_option_from_db($page, $name = null){
+	$options = get_option(THEME_SLUG . '_' . $page);
+
+	if($name == null){
+		return $options;
+	}else{
+		if(is_array($options) && isset($options[$name])){
+			return $options[$name];
+		}
+		return null;
+	}
+}
+
+function theme_get_inherit_option($post_id, $meta_name, $page, $option_name) {
+	$value = get_post_meta($post_id, $meta_name, true);
+
+	if($value === 'false'){
+		return false;
+	}
+	if($value===""|| $value == 'default'){
+		$value=theme_get_option($page, $option_name);
+	}
+	return $value;
+}
+
+function theme_set_option($page, $name, $value) {
+	global $theme_options;
+	$theme_options[$page][$name] = $value;
+	
+	update_option(THEME_SLUG . '_' . $page, $theme_options[$page]);
+}
+
+function theme_get_sidebar_default(){
+	if(theme_is_post_type('post')){
+		return theme_get_option('sidebar','single_post');
+	}
+	if(theme_is_post_type('portfolio')){
+		return theme_get_option('sidebar','single_portfolio');
+	}
+	if(theme_is_post_type('page')){
+		return theme_get_option('sidebar','single_page');
+	}
+	return '';
+}
+
+function theme_get_sidebar_options(){
+	$sidebars = theme_get_option_from_db('sidebar','sidebars');
+	if(!empty($sidebars)){
+		$sidebars_array = explode(',',$sidebars);
+		
+		$options = array();
+		foreach ($sidebars_array as $sidebar){
+			$options[$sidebar] = $sidebar;
+		}
+		return $options;
+	}else{
+		return array();
+	}
+}
+
 /**
  * It will return a boolean value.
  * If the value to be checked is empty, it will use default value instead of.
@@ -70,7 +182,7 @@ if(!function_exists("get_queried_object_id")){
 }
 if(!function_exists("get_the_author_posts_link")){
 	function get_the_author_posts_link(){
-		return '<a href="' . get_author_posts_url(get_the_author_meta( 'ID' )) . '" title="' . esc_attr( sprintf(__('Visit %s&#8217;s all posts','striking_front'), get_the_author()) ) . '" rel="author">' . get_the_author() . '</a>';
+		return '<a href="' . get_author_posts_url(get_the_author_meta( 'ID' )) . '" title="' . esc_attr( sprintf(__('Visit %s&#8217;s all posts','theme_front'), get_the_author()) ) . '" rel="author">' . get_the_author() . '</a>';
 	}
 }
 // use for template_blog.php
@@ -125,7 +237,8 @@ if(!function_exists("wp_basename")){
 function get_image_src($src) {
 	if(is_multisite()){
 		global $blog_id;
-		if(strpos($src, get_blog_option($blog_id,'upload_path')) !== false){
+		$upload_path = get_blog_option($blog_id,'upload_path');
+		if(!empty($upload_path) && strpos($src, $upload_path) !== false){
 			return str_replace(get_option('siteurl'), '', $src);
 		}
 		if(is_subdomain_install()){
@@ -264,7 +377,7 @@ class ThemeImageResizer {
 		
 		$size = @getimagesize( $file );
 		if ( !$size )
-			return new WP_Error('invalid_image', __('Could not read image size','striking_front'), $file);
+			return new WP_Error('invalid_image', __('Could not read image size','theme_front'), $file);
 
 		list($orig_w, $orig_h, $orig_type) = $size;
 
@@ -275,7 +388,7 @@ class ThemeImageResizer {
 		}
 		$dims = $this->resize_dimensions($orig_w, $orig_h, $width, $height);
 		if ( !$dims )
-			return new WP_Error( 'error_getting_dimensions', __('Could not calculate resized image dimensions','striking_front') );
+			return new WP_Error( 'error_getting_dimensions', __('Could not calculate resized image dimensions','theme_front') );
 		list($dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h) = $dims;
 
 		$newimage = wp_imagecreatetruecolor( $width, $height );
@@ -310,15 +423,15 @@ class ThemeImageResizer {
 
 		if ( IMAGETYPE_GIF == $orig_type ) {
 			if ( !imagegif( $newimage, $destfilename ) )
-				return new WP_Error('resize_path_invalid', __('Resize path invalid','striking_front'));
+				return new WP_Error('resize_path_invalid', __('Resize path invalid','theme_front'));
 		} elseif ( IMAGETYPE_PNG == $orig_type ) {
 			if ( !imagepng( $newimage, $destfilename ) )
-				return new WP_Error('resize_path_invalid', __('Resize path invalid','striking_front'));
+				return new WP_Error('resize_path_invalid', __('Resize path invalid','theme_front'));
 		} else {
 			// all other formats are converted to jpg
 			$destfilename = "{$dir}/{$name}-{$suffix}.jpg";
 			if ( !imagejpeg( $newimage, $destfilename, apply_filters( 'jpeg_quality', $jpeg_quality, 'image_resize' ) ) )
-				return new WP_Error('resize_path_invalid', __('Resize path invalid','striking_front'));
+				return new WP_Error('resize_path_invalid', __('Resize path invalid','theme_front'));
 		}
 
 		imagedestroy( $newimage );
@@ -389,7 +502,7 @@ class ImageResizerByAttachmentId extends ThemeImageResizer {
 			$file = $nggMeta->image->imagePath;
 		}else{
 			if ( !preg_match('!^image/!', get_post_mime_type( $this->attachment_id ))) {
-				return new WP_Error('attachment_is_not_image', __('Attachment is not image','striking_front'));
+				return new WP_Error('attachment_is_not_image', __('Attachment is not image','theme_front'));
 			}
 			$file = get_attached_file($this->attachment_id);
 		}
@@ -397,7 +510,7 @@ class ImageResizerByAttachmentId extends ThemeImageResizer {
 		
 		$info = @getimagesize($file);
 		if ( empty($info) || !in_array($info[2], array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG))) // only gif, jpeg and png images can reliably be displayed
-			return new WP_Error('image_type_is_not_correctly', __('Image type is not correctly','striking_front'));
+			return new WP_Error('image_type_is_not_correctly', __('Image type is not correctly','theme_front'));
 		
 		$resized_file = $this->resize_process($file, $this->width, $this->height, $this->size_name, $this->cache_dir, $this->quality);
 		// update attachment metadata to make it store custom sizes infos
@@ -476,7 +589,7 @@ class ImageResizerByUrl extends ThemeImageResizer {
 		$file = ABSPATH. $path;
 		
 		if(!is_file($file)){
-			return new WP_Error('file_is_not_exists', __('File is not exists','striking_front'));
+			return new WP_Error('file_is_not_exists', __('File is not exists','theme_front'));
 		}
 		$resized_file = $this->resize_process($file, $this->width, $this->height,$this->size_name,$this->cache_dir,$this->quality);
 		if ( is_wp_error($resized_file) ){
@@ -604,14 +717,12 @@ function theme_portfolio_ajax_init(){
 	if(isset($options['current'])){
 		unset($options['current']);
 	}
-	
 	if ( $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest' ) {
-		@header( 'Content-Type: application/html; charset=' . get_option( 'blog_charset' ) );
 		echo apply_filters('the_content',theme_generator('portfolio_list',$options));
 	}
 	exit();
 }
-add_action('init', 'theme_portfolio_ajax_init');
+add_action('wp_loaded', 'theme_portfolio_ajax_init');
 
 function theme_maybe_process_contact_form(){
 	$submit_contact_form = isset($_POST["theme_contact_form_submit"]) ? $_POST["theme_contact_form_submit"] : 0;
@@ -622,7 +733,6 @@ function theme_maybe_process_contact_form(){
 }
 add_action('wp', 'theme_maybe_process_contact_form', 9);
 
-add_action('init', 'theme_exclude_from_search');
 function theme_exclude_from_search(){
 	global $wp_post_types;
 	$post_types = theme_get_option('advanced','exclude_from_search');
@@ -632,6 +742,7 @@ function theme_exclude_from_search(){
 		}
 	}
 }
+add_action('wp_loaded', 'theme_exclude_from_search');
 
 class Theme_Walker_Nav_Menu extends Walker_Nav_Menu {
 	function display_element( $element, &$children_elements, $max_depth, $depth=0, $args, &$output ) {
@@ -655,7 +766,43 @@ class Theme_The_Excerpt_Length_Constructor {
 	function get_length(){
 		return $this->length;
 	}
+	function trim($text){
+		$excerpt_length = apply_filters('excerpt_length', 55);
+		
+		$excerpt_more = apply_filters('excerpt_more', ' ' . '...');
+		$text = theme_strcut( $text, $excerpt_length, $excerpt_more );
+		return $text;
+	}
 }
+
+
+function theme_add_script_to_head(){
+	if(theme_get_option('font','cufon_enabled')){
+		theme_add_cufon_code();
+	}
+?>
+<script type="text/javascript">
+var image_url='<?php echo THEME_IMAGES;?>';
+<?php
+	if(theme_get_option('advanced','restrict_colorbox')){
+		echo 'var restrict_colorbox = true;';
+	}
+	$grayscale_animSpeed = theme_get_option('advanced','grayscale_animSpeed');
+	$grayscale_outSpeed = theme_get_option('advanced','grayscale_outSpeed');
+	if($grayscale_animSpeed != '1000'){
+		echo "var grayscale_animSpeed = ".$grayscale_animSpeed.";\n";
+	}
+	if($grayscale_outSpeed != '1000'){
+		echo "var grayscale_outSpeed = ".$grayscale_outSpeed.";\n";
+	}
+?>
+</script>
+<?php
+	if(theme_get_option('general','analytics') && theme_get_option('general','analytics_position')=='header'){
+		echo stripslashes(theme_get_option('general','analytics'));
+	}
+}
+add_action( 'wp_head', 'theme_add_script_to_head');
 
 if('wp-signup.php' == basename($_SERVER['PHP_SELF'])){
 	add_action( 'wp_head', 'theme_wpmu_signup_stylesheet',1 );
@@ -704,7 +851,7 @@ if('wp-signup.php' == basename($_SERVER['PHP_SELF'])){
 		$output = '<div id="feature">';
 		$output .= '<div class="top_shadow"></div>';
 		$output .= '<div class="inner">';
-		$output .= '<h1>'.__('Sign Up Now','striking_front').'</h1>';
+		$output .= '<h1>'.__('Sign Up Now','theme_front').'</h1>';
 		$output .= '</div>';
 		$output .= '<div class="bottom_shadow"></div>';
 		$output .= '</div>';
@@ -720,4 +867,17 @@ if('wp-signup.php' == basename($_SERVER['PHP_SELF'])){
 		echo '</div>';
 		echo '</div>';
 	}
+}
+
+function theme_strcut($str, $length, $extra = ''){
+	if ( function_exists('mb_strlen') ) {
+		if ( mb_strlen($str) > $length ) {
+			return mb_substr($str, 0, $length).$extra;
+		}
+	} else {
+		if ( strlen($str) > $length ) {
+			return substr($str, 0, $length).$extra;
+		}
+	}
+	return $str;
 }

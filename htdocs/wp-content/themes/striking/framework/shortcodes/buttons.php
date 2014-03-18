@@ -21,7 +21,7 @@ function theme_shortcode_button($atts, $content = null, $code) {
 	$full = ($full==="false")?'':' full';
 	$color = $color?' '.$color:'';
 	$class = $class?' '.$class:'';
-	$link = $link?' href="'.$link.'"':'';
+	$link = $link?' href="'.$link.'"':' href="javascript:;"';
 	$linktarget = $linktarget?' target="'.$linktarget.'"':'';
 	
 	$hoverbgcolor = $hoverbgcolor?($bgcolor?' data-bg="'.$bgcolor.'"':'').' data-hoverBg="'.$hoverbgcolor.'"':'';
@@ -53,6 +53,7 @@ function theme_shortcode_button($atts, $content = null, $code) {
 	}else{
 		$follow_tag = '';
 	}
+
 	$content = '<'.$tag.$id.$link.$linktarget.$bgcolor.$hoverbgcolor.$hovertextcolor.' class="'.apply_filters( 'theme_css_class', 'button' ).' '.$size.$color.$full.$class.$aligncss.'"'.$follow_tag.'><span'.(($textcolor!==''||$width!='')?' style="'.$textcolor.$width.'"':'').'>' . trim($content) . '</span></'.$tag.'>';
 	if($align === 'center'){
 		return '<p class="center">'.$content.'</p>';

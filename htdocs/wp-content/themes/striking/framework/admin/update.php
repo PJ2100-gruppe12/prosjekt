@@ -10,13 +10,13 @@ function theme_update($from, $to) {
 	$wp_version = $GLOBALS['wp_version'];
 
 	$required_wp_version = '3.1';
-	$theme_version = '5.1.9.5';
+	$theme_version = '5.2.2.2';
 
 	$wp_compat     = version_compare( $wp_version, $required_wp_version, '>=' );
 
 	if ( !$wp_compat ) {
 		$wp_filesystem->delete($from, true);
-		return new WP_Error( 'wordpress_not_compatible', sprintf( __('The update cannot be installed because %1$s %2$s requires Wordpress version %3$s or higher. You are running version %4$s.','striking_front'), THEME_NAME, $theme_version, $required_wp_version, $wp_version ) );
+		return new WP_Error( 'wordpress_not_compatible', sprintf( __('The update cannot be installed because %1$s %2$s requires Wordpress version %3$s or higher. You are running version %4$s.','theme_admin'), THEME_NAME, $theme_version, $required_wp_version, $wp_version ) );
 	}
 
 	if(version_compare(THEME_VERSION, '5.1.7', '>=' )){
@@ -54,7 +54,7 @@ function theme_update($from, $to) {
 		$wp_filesystem->delete($to.'delete.php');
 		unlink($tempfile);
 		
-		return new WP_Error('backup_error', __('Backup error.','striking_admin'));
+		return new WP_Error('backup_error', __('Backup error.','theme_admin'));
 	}
 	$wp_filesystem->put_contents($to . 'cache/backup/'.THEME_VERSION.'_'.$theme_version.'.zip',file_get_contents($tempfile),FS_CHMOD_FILE);
 	unlink($tempfile);
@@ -107,7 +107,7 @@ function _copy_theme_file($from, $to){
 			return $result;
 	}
 	if ( ! $wp_filesystem->copy( $from, $to, true, FS_CHMOD_FILE) )
-		return new WP_Error('copy_failed', __('Could not copy file.','striking_front'), $from);
+		return new WP_Error('copy_failed', __('Could not copy file.','theme_admin'), $from);
 }
 
 function _copy_theme_file_mkdir($dir){
@@ -119,7 +119,7 @@ function _copy_theme_file_mkdir($dir){
 			return $result;
 	}
 	if ( !$wp_filesystem->mkdir($dir, FS_CHMOD_DIR) )
-		return new WP_Error('mkdir_failed', __('Could not create directory.','striking_front'), $dir);
+		return new WP_Error('mkdir_failed', __('Could not create directory.','theme_admin'), $dir);
 }
 
 /**
@@ -162,12 +162,12 @@ function _copy_theme_dir($from, $to, $skip_list = array() ) {
 				// If copy failed, chmod file to 0644 and try again.
 				$wp_filesystem->chmod($to . $filename, 0644);
 				if ( ! $wp_filesystem->copy($from . $filename, $to . $filename, true, FS_CHMOD_FILE) )
-					return new WP_Error('copy_failed', __('Could not copy file.','striking_front'), $to . $filename);
+					return new WP_Error('copy_failed', __('Could not copy file.','theme_front'), $to . $filename);
 			}
 		} elseif ( 'd' == $fileinfo['type'] ) {
 			if ( !$wp_filesystem->is_dir($to . $filename) ) {
 				if ( !$wp_filesystem->mkdir($to . $filename, FS_CHMOD_DIR) )
-					return new WP_Error('mkdir_failed', __('Could not create directory.','striking_front'), $to . $filename);
+					return new WP_Error('mkdir_failed', __('Could not create directory.','theme_front'), $to . $filename);
 			}
 			$result = _copy_theme_dir($from . $filename, $to . $filename, $skip_list);
 			if ( is_wp_error($result) )

@@ -22,7 +22,14 @@ function theme_shortcode_image($atts, $content = null, $code) {
 		'autoheight' => 'false',
 		'quality' => false,
 		'caption' => false,
+		'alt' => '',		
 	), $atts));
+	// compatible code
+	if(isset($atts['lightbox_restrict']) && !isset($atts['lightbox_fittoview'])){
+		$lightbox_fittoview = $atts['lightbox_restrict'];
+	}
+	// end compatible
+
 	if(!$width){
 		$width = theme_get_option('image', $size.'_width');
 		if(!$width){
@@ -68,14 +75,20 @@ function theme_shortcode_image($atts, $content = null, $code) {
 		$caption_str = '';
 	}
 	$image_src = theme_get_image_src(array('type'=>$source_type,'value'=>$source_value), array($width, $height),$quality);
+	if($alt == '' && $source_type == 'attachment_id') {
+		$alt = get_post_meta($source_value, '_wp_attachment_image_alt', true);
+	}
+	if($alt=='') {
+		$alt = $title;
+	}
 	if ( is_feed() ) {
 		if($link == '#'){
-			return '<img width="'.$width.'" '.((empty($height))?'':'height="'.$height.'"'). 'alt="'.$title.'" src="'. $image_src.'" />';
+			return '<img width="'.$width.'" '.((empty($height))?'':'height="'.$height.'"'). 'alt="'.$alt.'" src="'. $image_src.'" />';
 		}else{
-			return '<a href="'.$link.'"'.$linktarget.'><img width="'.$width.'" '.((empty($height))?'':'height="'.$height.'"'). ' alt="'.$title.'" src="'.$image_src.'" /></a>';
+			return '<a href="'.$link.'"'.$linktarget.'><img width="'.$width.'" '.((empty($height))?'':'height="'.$height.'"'). ' alt="'.$alt.'" src="'.$image_src.'" /></a>';
 		}
 	}else{
-		$content = '<img width="'.$width.'" '.((empty($height))?'':'height="'.$height.'"'). ' alt="'.$title.'" src="'.$image_src.'" />';
+		$content = '<img width="'.$width.'" '.((empty($height))?'':'height="'.$height.'"'). ' alt="'.$alt.'" src="'.$image_src.'" />';
 		return '<span class="image_styled'.($align?' align'.$align:'').'"><span class="image_frame effect-'.$effect.'" style="width:'.$width.'px;'.((empty($height))?'':'height:'.$height.'px').'"><a'.($group?' rel="'.$group.'"':'').$linktarget.$lightbox_fittoview.' class="image_size_'.$size.$no_link.($icon?' image_icon_'.$icon:'').($lightbox =='true'?' lightbox':'').'" title="'.$title.'" href="'.$link.'">' . $content . '</a></span><img class="image_shadow" width="'.($width+2).'" src="'.THEME_IMAGES.'/image_shadow.png"/>'.$caption_str.'</span>';
 	}
 }

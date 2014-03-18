@@ -5,8 +5,8 @@
 class Theme_Widget_SubNav extends WP_Widget {
 
 	function Theme_Widget_SubNav() {
-		$widget_ops = array('classname' => 'widget_subnav', 'description' => __( 'Displays a list of SubPages', 'striking_admin') );
-		$this->WP_Widget('subnav', THEME_SLUG.' - '.__('Sub Navigation', 'striking_admin'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_subnav', 'description' => __( 'Displays a list of SubPages', 'theme_admin') );
+		$this->WP_Widget('subnav', THEME_SLUG.' - '.__('Sub Navigation', 'theme_admin'), $widget_ops);
 	}
 
 	function widget( $args, $instance ) {
@@ -69,22 +69,22 @@ class Theme_Widget_SubNav extends WP_Widget {
 		$title = esc_attr( $instance['title'] );
 		$exclude = esc_attr( $instance['exclude'] );
 	?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'striking_admin'); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'theme_admin'); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 		<p>
-			<label for="<?php echo $this->get_field_id('sortby'); ?>"><?php _e( 'Sort by:', 'striking_admin'); ?></label>
+			<label for="<?php echo $this->get_field_id('sortby'); ?>"><?php _e( 'Sort by:', 'theme_admin'); ?></label>
 			<select name="<?php echo $this->get_field_name('sortby'); ?>" id="<?php echo $this->get_field_id('sortby'); ?>" class="widefat">
-				<option value="menu_order"<?php selected( $instance['sortby'], 'menu_order' ); ?>><?php _e('Page order', 'striking_admin'); ?></option>
-				<option value="post_title"<?php selected( $instance['sortby'], 'post_title' ); ?>><?php _e('Page title', 'striking_admin'); ?></option>
-				<option value="ID"<?php selected( $instance['sortby'], 'ID' ); ?>><?php _e( 'Page ID', 'striking_admin' ); ?></option>
+				<option value="menu_order"<?php selected( $instance['sortby'], 'menu_order' ); ?>><?php _e('Page order', 'theme_admin'); ?></option>
+				<option value="post_title"<?php selected( $instance['sortby'], 'post_title' ); ?>><?php _e('Page title', 'theme_admin'); ?></option>
+				<option value="ID"<?php selected( $instance['sortby'], 'ID' ); ?>><?php _e( 'Page ID', 'theme_admin' ); ?></option>
 			</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id('exclude'); ?>"><?php _e( 'Exclude:', 'striking_admin' ); ?></label> <input type="text" value="<?php echo $exclude; ?>" name="<?php echo $this->get_field_name('exclude'); ?>" id="<?php echo $this->get_field_id('exclude'); ?>" class="widefat" />
+			<label for="<?php echo $this->get_field_id('exclude'); ?>"><?php _e( 'Exclude:', 'theme_admin' ); ?></label> <input type="text" value="<?php echo $exclude; ?>" name="<?php echo $this->get_field_name('exclude'); ?>" id="<?php echo $this->get_field_id('exclude'); ?>" class="widefat" />
 			<br />
-			<small><?php _e( 'Page IDs, separated by commas.' ,'striking_admin'); ?></small>
+			<small><?php _e( 'Page IDs, separated by commas.' ,'theme_admin'); ?></small>
 		</p>
 		<p><input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('parent_linkable'); ?>" name="<?php echo $this->get_field_name('parent_linkable'); ?>"<?php checked( $parent_linkable ); ?> />
-		<label for="<?php echo $this->get_field_id('parent_linkable'); ?>"><?php _e( 'Make Parent Linkable?', 'striking_admin' ); ?></label></p>
+		<label for="<?php echo $this->get_field_id('parent_linkable'); ?>"><?php _e( 'Make Parent Linkable?', 'theme_admin' ); ?></label></p>
 <?php
 	}
 }

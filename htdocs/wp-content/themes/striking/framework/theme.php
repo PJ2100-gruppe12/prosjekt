@@ -12,12 +12,32 @@ class Theme {
 	function init($options) {
 		/* Define theme's constants. */
 		$this->constants($options);
-		
-		/* Add language support. */
-		add_action('init',array(&$this, 'language'));
-		
+
+		$this->base_function();
+
+		/* Load theme's plugin. */
+		$this->plugins();
+
 		/* Add theme support. */
 		add_action('after_setup_theme', array(&$this, 'supports'));
+
+		/* Initialize the theme's widgets. */
+		add_action('widgets_init',array(&$this, 'widgets'));
+
+		add_action('init',array(&$this, '_init'));
+	}
+
+	function _init(){
+		//Long posts should require a higher limit, see http://core.trac.wordpress.org/ticket/8553
+		@ini_set('pcre.backtrack_limit', 500000);
+		
+		//Increase Memory Limit
+		if((int)@ini_get('memory_limit')<64){
+			@ini_set('memory_limit', '64M');
+		}
+
+		/* Add language support. */
+		$this->language();
 		
 		/* Load theme's options. */
 		$this->options();
@@ -28,25 +48,11 @@ class Theme {
 		/* Register theme's custom post type. */
 		$this->types();
 		
-		/* Load theme's plugin. */
-		$this->plugins();
-		
 		/* Load theme's shortcodess. */
 		$this->shortcodes();
-		
-		/* Initialize the theme's widgets. */
-		add_action('widgets_init',array(&$this, 'widgets'));
-		
+
 		/* Load admin files. */
-        	$this->admin();
-		
-		//Long posts should require a higher limit, see http://core.trac.wordpress.org/ticket/8553
-		@ini_set('pcre.backtrack_limit', 500000);
-		
-		//Increase Memory Limit
-		if((int)@ini_get('memory_limit')<64){
-			@ini_set('memory_limit', '64M');
-		}
+		$this->admin();
 
 		add_action( 'admin_bar_menu', array(&$this,'admin_bar_menu') ,81);
 	}
@@ -105,6 +111,10 @@ class Theme {
 		define('THEME_ADMIN_SHORTCODES_URI', THEME_URI.'/framework/admin/shortcodes');
 	}
 	
+	function base_function() {
+		require_once (THEME_FUNCTIONS . '/common.php');
+	}
+
 	/**
 	 * Add theme support.
 	 */
@@ -128,14 +138,14 @@ class Theme {
 			add_theme_support('menus');
 
 			register_nav_menus(array(
-				'primary-menu' => __(THEME_NAME . ' Navigation', 'striking_admin' ), 
-				'footer-menu' => __(THEME_NAME . ' Footer Menu', 'striking_admin' )
+				'primary-menu' => __(THEME_NAME . ' Navigation', 'theme_admin' ), 
+				'footer-menu' => __(THEME_NAME . ' Footer Menu', 'theme_admin' )
 			));
 			
 			//This enables post and comment RSS feed links to head. This should be used in place of the deprecated automatic_feed_links.
 			add_theme_support('automatic-feed-links');
 			
-			add_editor_style();
+			//add_editor_style();
 		}
 	}
 	
@@ -172,7 +182,7 @@ class Theme {
 		global $theme_options;
 		$theme_options = array();
 
-		$option_files = array(
+		$option_files = apply_filters('theme_options', array(
 			'general' => 'Theme_Options_Page_General',
 			'background' => 'Theme_Options_Page_Background',
 			'color' => 'Theme_Options_Page_Color',
@@ -186,7 +196,7 @@ class Theme {
 			'portfolio' => 'Theme_Options_Page_Portfolio',			
 			'footer' => 'Theme_Options_Page_Footer',
 			'advanced' => 'Theme_Options_Page_Advanced',
-		);
+		));
 
 		global $options_page_factory;
 		$options_page_factory = new Theme_Options_Page_Factory();
@@ -201,15 +211,13 @@ class Theme {
 	 * Loads the core theme functions.
 	 */
 	function functions() {
-		require_once (THEME_FUNCTIONS . '/common.php');
 		require_once (THEME_FUNCTIONS . '/head.php');
 		require_once (THEME_FUNCTIONS . '/filter.php');
 		require_once (THEME_FUNCTIONS . '/wpml-integration.php');
 		require_once (THEME_FUNCTIONS . '/wpml-string.php');
-		require_once (THEME_HELPERS . '/themeGenerator.php');
 		require_once (THEME_HELPERS . '/slideshowGenerator.php');
-		require_once (THEME_HELPERS . '/sidebarGenerator.php');
-		if(theme_get_option('advanced', 'woocommerce')){
+		
+		if(class_exists( 'Woocommerce' )){
 			require_once (THEME_FUNCTIONS . '/woocommerce.php');
 		}
 	}
@@ -220,6 +228,7 @@ class Theme {
 	function plugins() {
 		require_once (THEME_PLUGINS . '/breadcrumbs-plus/breadcrumbs-plus.php');
 		require_once (THEME_PLUGINS . '/wp-pagenavi/wp-pagenavi.php');
+		require_once (THEME_PLUGINS . '/google_font/google_font.php');
 	}
 	
 	/**
@@ -259,6 +268,13 @@ class Theme {
 		register_widget('Theme_Widget_Portfolios_List');
 		register_widget('Theme_Widget_Related_Portfolios_List');
 		register_widget('Theme_Widget_Gmap');
+
+		require_once (THEME_HELPERS . '/sidebarGenerator.php');
+
+		global $_sidebarGenerator;
+		$_sidebarGenerator = new sidebarGenerator;
+
+		$_sidebarGenerator->register_sidebar();
 	}
 	
 	/**
@@ -311,7 +327,7 @@ class Theme {
 			'title' => THEME_NAME,
 			'href' => admin_url('admin.php?page=theme_general')
 		));
-		$option_pages = array(
+		$option_pages = apply_filters('theme_admin_bar_menu', array(
 			'General'=>'theme_general',
 			'Background'=>'theme_background',
 			'Color'=>'theme_color',
@@ -325,7 +341,7 @@ class Theme {
 			'Portfolio'=>'theme_portfolio',
 			'Footer'=>'theme_footer',
 			'Advanced'=>'theme_advanced',
-		);
+		));
 		foreach($option_pages as $title => $page){
 			$wp_admin_bar->add_menu( array(
 				'parent' => THEME_SLUG,
@@ -343,10 +359,10 @@ class Theme {
 	function language(){
 		$locale = get_locale();
 		if (is_admin()) {
-			load_theme_textdomain( 'striking_admin', THEME_ADMIN . '/languages' );
+			load_theme_textdomain( 'theme_admin', THEME_ADMIN . '/languages' );
 			$locale_file = THEME_ADMIN . "/languages/$locale.php";
 		}else{
-			load_theme_textdomain( 'striking_front', THEME_DIR . '/languages' );
+			load_theme_textdomain( 'theme_front', THEME_DIR . '/languages' );
 			$locale_file = THEME_DIR . "/languages/$locale.php";
 		}
 		if ( is_readable( $locale_file ) ){

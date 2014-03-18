@@ -6,8 +6,6 @@
  * http://codex.wordpress.org/The_Loop to understand it and
  * http://codex.wordpress.org/Template_Tags to understand
  * the tags used in it.
- *
- * @package Striking
  */
 $featured_image = theme_get_option('blog', 'index_featured_image');
 $featured_image_type = theme_get_option('blog', 'featured_image_type');
@@ -19,6 +17,15 @@ if(is_search()){
 if(!isset($layout) || $layout=='default'){
 	$layout = theme_get_option('blog','layout');
 }
+$width = '';
+if($featured_image_type != 'left' && $featured_image_type != 'right'){
+	if ($layout == 'full'){
+		$width = 960;
+	} else {
+		$width = 630;
+	}
+}
+
 $columns = theme_get_option('blog','columns');
 $frame = theme_get_option('blog','frame');
 
@@ -29,10 +36,12 @@ if($columns > 6){
 	$columns = 1;
 }
 if ($columns != 1) {
-	if($layout == 'full'){
-		$layout = floor((958-25*($columns-1))/$columns);
-	}else{
-		$layout = floor((628-25*($columns-1))/$columns);
+	if($featured_image_type != 'left' && $featured_image_type != 'right'){
+		if($layout == 'full'){
+			$width = floor((958-38*($columns-1))/$columns);
+		}else{
+			$width = floor((628-25*($columns-1))/$columns);
+		}
 	}
 }
 
@@ -46,10 +55,7 @@ if($frame){
 	$frame_css = '';
 }
 if(is_search() && !have_posts() && $search_nothing_found = wpml_t(THEME_NAME, 'Search Nothing Found Text',theme_get_option('blog','search_nothing_found'))) { 
-   echo '<div class="info">
-<div class="message_box_content">'.$search_nothing_found.'</div>
-<div class="clearboth"></div>
-</div>'; 
+   echo '<div class="search-no-results-message">'. do_shortcode(stripslashes($search_nothing_found)) .'</div>'; 
 }
 if ( have_posts() ) while ( have_posts() ) : the_post(); 
 $i++;
@@ -62,25 +68,24 @@ if ($columns != 1) {
 }
 ?>
 <article id="post-<?php the_ID(); ?>" class="entry entry_<?php echo $featured_image_type;?><?php echo $frame_css;?>"> 
-<?php if($featured_image && $featured_image_type!=='below'){echo theme_generator('blog_featured_image',$featured_image_type,$layout,'',$frame);} ?>
+<?php if($featured_image && $featured_image_type!=='below'){echo theme_generator('blog_featured_image',$featured_image_type,$width,'',$frame);} ?>
 	<div class="entry_info">
-		<h2 class="entry_title"><a href="<?php echo get_permalink() ?>" rel="bookmark" title="<?php printf( __("Permanent Link to %s", 'striking_front'), get_the_title() ); ?>"><?php the_title(); ?></a></h2>
+		<h2 class="entry_title"><a href="<?php echo get_permalink() ?>" rel="bookmark" title="<?php printf( __("Permanent Link to %s", 'theme_front'), get_the_title() ); ?>"><?php the_title(); ?></a></h2>
 		<div class="entry_meta">
 <?php echo theme_generator('blog_meta'); ?>
 		</div>
 	</div>
-<?php if($featured_image && $featured_image_type=='below'){echo theme_generator('blog_featured_image',$featured_image_type,$layout);} ?>
+<?php if($featured_image && $featured_image_type=='below'){echo theme_generator('blog_featured_image',$featured_image_type,$width,'',$frame);} ?>
 		<div class="entry_content">
 <?php 
-
-// relating to http://kaptinlin.com/support/discussion/5868/content-inside-column-shortcodes-is-not-displayed-in-search-results-for-pages#Item_2  I think it need to add some function.
 	if($display_full):
 		global $more;
 		$more = 0;
 		the_content(wpml_t(THEME_NAME, 'Blog Post Read More Button Text',stripslashes(theme_get_option('blog','read_more_text'))),false);
 	else:
 		the_excerpt();
-		if(theme_get_option('blog','read_more_button')):?>
+		if(theme_get_option('blog','read_more')):
+			if(theme_get_option('blog','read_more_button')):?>
 		<div class="read_more_wrap">
 			<a class="read_more_link <?php echo apply_filters( 'theme_css_class', 'button' );?> small" href="<?php the_permalink(); ?>" rel="nofollow"><span><?php echo wpml_t(THEME_NAME, 'Blog Post Read More Button Text',stripslashes(theme_get_option('blog','read_more_text')));?></span></a>
 		</div>
@@ -89,6 +94,7 @@ if ($columns != 1) {
 			<a class="read_more_link" href="<?php the_permalink(); ?>" rel="nofollow"><?php echo wpml_t(THEME_NAME, 'Blog Post Read More Button Text',stripslashes(theme_get_option('blog','read_more_text')));?></a>
 		</div>
 	<?php endif; 
+		endif;
 	endif;
 ?>
 		

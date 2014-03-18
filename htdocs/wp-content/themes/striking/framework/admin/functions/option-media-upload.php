@@ -15,7 +15,7 @@ function option_type_url_form_media(){
 	<table class="describe"><tbody>
 		<tr>
 			<th valign="top" scope="row" class="label" style="width:130px;">
-				<span class="alignleft"><label for="src">' . __('URL','striking_admin') . '</label></span>
+				<span class="alignleft"><label for="src">' . __('URL','theme_admin') . '</label></span>
 				<span class="alignright"><abbr id="status_img" title="required" class="required">*</abbr></span>
 			</th>
 			<td class="field"><input id="src" name="src" value="" type="text" aria-required="true" onblur="addExtImage.getImageData()" /></td>
@@ -23,7 +23,7 @@ function option_type_url_form_media(){
 
 		<tr>
 			<th valign="top" scope="row" class="label">
-				<span class="alignleft"><label for="title">' . __('Title','striking_admin') . '</label></span>
+				<span class="alignleft"><label for="title">' . __('Title','theme_admin') . '</label></span>
 				<span class="alignright"><abbr title="required" class="required">*</abbr></span>
 			</th>
 			<td class="field"><input id="title" name="title" value="" type="text" aria-required="true" /></td>
@@ -31,7 +31,7 @@ function option_type_url_form_media(){
 		<tr class="image-only">
 			<td></td>
 			<td>
-				<input type="button" class="button" id="go_button" style="color:#bbb;" onclick="mediaUploader.OptionUploaderImageByUrl(\''. $_REQUEST['target'].'\')" value="' . __( 'Use this' , 'striking_admin' ) . '" />
+				<input type="button" class="button" id="go_button" style="color:#bbb;" onclick="mediaUploader.OptionUploaderImageByUrl(\''. $_REQUEST['target'].'\')" value="' . __( 'Use this' , 'theme_admin' ) . '" />
 			</td>
 		</tr>
 	</tbody></table>
@@ -45,22 +45,22 @@ function option_image_attachment_fields_to_edit($form_fields, $post){
 	$attachment_id = $post->ID;
 	if ( current_user_can( 'delete_post', $attachment_id ) ) {
 		if ( !EMPTY_TRASH_DAYS ) {
-			$delete = "<a href='" . wp_nonce_url( "post.php?action=delete&amp;post=$attachment_id", 'delete-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='delete'>" . __( 'Delete Permanently' , 'striking_admin' ) . '</a>';
+			$delete = "<a href='" . wp_nonce_url( "post.php?action=delete&amp;post=$attachment_id", 'delete-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='delete'>" . __( 'Delete Permanently' , 'theme_admin' ) . '</a>';
 		} elseif ( !MEDIA_TRASH ) {
-			$delete = "<a href='#' class='del-link' onclick=\"document.getElementById('del_attachment_$attachment_id').style.display='block';return false;\">" . __( 'Delete' , 'striking_admin' ) . "</a>
-			 <div id='del_attachment_$attachment_id' class='del-attachment' style='display:none;'>" . sprintf( __( 'You are about to delete <strong>%s</strong>.' , 'striking_admin' ), $filename ) . "
-			 <a href='" . wp_nonce_url( "post.php?action=delete&amp;post=$attachment_id", 'delete-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='button'>" . __( 'Continue' , 'striking_admin' ) . "</a>
-			 <a href='#' class='button' onclick=\"this.parentNode.style.display='none';return false;\">" . __( 'Cancel' , 'striking_admin' ) . "</a>
+			$delete = "<a href='#' class='del-link' onclick=\"document.getElementById('del_attachment_$attachment_id').style.display='block';return false;\">" . __( 'Delete' , 'theme_admin' ) . "</a>
+			 <div id='del_attachment_$attachment_id' class='del-attachment' style='display:none;'>" . sprintf( __( 'You are about to delete <strong>%s</strong>.' , 'theme_admin' ), $filename ) . "
+			 <a href='" . wp_nonce_url( "post.php?action=delete&amp;post=$attachment_id", 'delete-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='button'>" . __( 'Continue' , 'theme_admin' ) . "</a>
+			 <a href='#' class='button' onclick=\"this.parentNode.style.display='none';return false;\">" . __( 'Cancel' , 'theme_admin' ) . "</a>
 			 </div>";
 		} else {
-			$delete = "<a href='" . wp_nonce_url( "post.php?action=trash&amp;post=$attachment_id", 'trash-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='delete'>" . __( 'Move to Trash' , 'striking_admin' ) . "</a>
-			<a href='" . wp_nonce_url( "post.php?action=untrash&amp;post=$attachment_id", 'untrash-attachment_' . $attachment_id ) . "' id='undo[$attachment_id]' class='undo hidden'>" . __( 'Undo' , 'striking_admin' ) . "</a>";
+			$delete = "<a href='" . wp_nonce_url( "post.php?action=trash&amp;post=$attachment_id", 'trash-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='delete'>" . __( 'Move to Trash' , 'theme_admin' ) . "</a>
+			<a href='" . wp_nonce_url( "post.php?action=untrash&amp;post=$attachment_id", 'untrash-attachment_' . $attachment_id ) . "' id='undo[$attachment_id]' class='undo hidden'>" . __( 'Undo' , 'theme_admin' ) . "</a>";
 		}
 	} else {
 		$delete = '';
 	}
 	$form_fields['buttons'] = array( 
-		'tr' => "\t\t<tr><td></td><td><input type='button' class='button' onclick='mediaUploader.OptionUploaderImageByAttachmentId(".$post->ID.",\"". $_REQUEST['target']."\")' value='" . __( 'Use this' , 'striking_admin' ) . "' /> $delete</td></tr>\n"
+		'tr' => "\t\t<tr><td></td><td><input type='button' class='button' onclick='mediaUploader.OptionUploaderImageByAttachmentId(".$post->ID.",\"". $_REQUEST['target']."\")' value='" . __( 'Use this' , 'theme_admin' ) . "' /> $delete</td></tr>\n"
 	);
 	return $form_fields;
 }

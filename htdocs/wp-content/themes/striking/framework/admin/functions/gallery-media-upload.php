@@ -24,23 +24,23 @@ function gallery_image_attachment_fields_to_edit($form_fields, $post){
 	$attachment_id = $post->ID;
 	if ( current_user_can( 'delete_post', $attachment_id ) ) {
 		if ( !EMPTY_TRASH_DAYS ) {
-			$delete = "<a href='" . wp_nonce_url( "post.php?action=delete&amp;post=$attachment_id", 'delete-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='delete'>" . __('Delete Permanently','striking_admin') . '</a>';
+			$delete = "<a href='" . wp_nonce_url( "post.php?action=delete&amp;post=$attachment_id", 'delete-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='delete'>" . __('Delete Permanently','theme_admin') . '</a>';
 		} elseif ( !MEDIA_TRASH ) {
-			$delete = "<a href='#' class='del-link' onclick=\"document.getElementById('del_attachment_$attachment_id').style.display='block';return false;\">" . __('Delete','striking_admin') . "</a>
-			 <div id='del_attachment_$attachment_id' class='del-attachment' style='display:none;'>" . sprintf( __('You are about to delete <strong>%s</strong>.','striking_admin'), $filename ) . "
-			 <a href='" . wp_nonce_url( "post.php?action=delete&amp;post=$attachment_id", 'delete-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='button'>" . __('Continue','striking_admin') . "</a>
-			 <a href='#' class='button' onclick=\"this.parentNode.style.display='none';return false;\">" . __('Cancel','striking_admin') . "</a>
+			$delete = "<a href='#' class='del-link' onclick=\"document.getElementById('del_attachment_$attachment_id').style.display='block';return false;\">" . __('Delete','theme_admin') . "</a>
+			 <div id='del_attachment_$attachment_id' class='del-attachment' style='display:none;'>" . sprintf( __('You are about to delete <strong>%s</strong>.','theme_admin'), $filename ) . "
+			 <a href='" . wp_nonce_url( "post.php?action=delete&amp;post=$attachment_id", 'delete-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='button'>" . __('Continue','theme_admin') . "</a>
+			 <a href='#' class='button' onclick=\"this.parentNode.style.display='none';return false;\">" . __('Cancel','theme_admin') . "</a>
 			 </div>";
 		} else {
-			$delete = "<a href='" . wp_nonce_url( "post.php?action=trash&amp;post=$attachment_id", 'trash-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='delete'>" . __('Move to Trash','striking_admin') . "</a>
-			<a href='" . wp_nonce_url( "post.php?action=untrash&amp;post=$attachment_id", 'untrash-attachment_' . $attachment_id ) . "' id='undo[$attachment_id]' class='undo hidden'>" . __('Undo','striking_admin') . "</a>";
+			$delete = "<a href='" . wp_nonce_url( "post.php?action=trash&amp;post=$attachment_id", 'trash-attachment_' . $attachment_id ) . "' id='del[$attachment_id]' class='delete'>" . __('Move to Trash','theme_admin') . "</a>
+			<a href='" . wp_nonce_url( "post.php?action=untrash&amp;post=$attachment_id", 'untrash-attachment_' . $attachment_id ) . "' id='undo[$attachment_id]' class='undo hidden'>" . __('Undo','theme_admin') . "</a>";
 		}
 	} else {
 		$delete = '';
 	}
 	
 	$form_fields['buttons'] = array( 
-		'tr' => "\t\t<tr><td></td><td><input type='button' class='button' onclick='themeImageInsertIntoGallery(".$post->ID.")' value='" . esc_attr__('Insert into Gallery','striking_admin') . "' /> $delete<input type='hidden' value='".$post->ID."' name='gallery_image_ids[]'></td></tr>\n"
+		'tr' => "\t\t<tr><td></td><td><input type='button' class='button' onclick='themeImageInsertIntoGallery(".$post->ID.")' value='" . esc_attr__('Insert into Gallery','theme_admin') . "' /> $delete<input type='hidden' value='".$post->ID."' name='gallery_image_ids[]'></td></tr>\n"
 	);
 	return $form_fields;
 }

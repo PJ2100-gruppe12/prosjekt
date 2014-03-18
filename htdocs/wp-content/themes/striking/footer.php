@@ -1,8 +1,6 @@
 <?php
 /**
  * The template for displaying the footer.
- *
- * @package Striking
  */
 
 if(theme_get_option('footer','footer') || theme_get_option('footer','sub_footer')):
@@ -18,9 +16,6 @@ if(theme_get_option('footer','footer') || theme_get_option('footer','sub_footer'
 	}else{
 		$footer_color = '';
 	}
-if(theme_get_option('footer','stricky_footer')){
-	echo '<div><div>';
-}
 ?>
 <footer id="footer"<?php echo $footer_color;?>>
 <?php if(theme_get_option('footer','footer')):?>
@@ -193,7 +188,7 @@ endif;
 			break;
 		case 'widget':
 			echo '<div id="footer_right_area">';
-			dynamic_sidebar(__('Sub Footer Widget Area','striking_admin'));
+			dynamic_sidebar(__('Sub Footer Widget Area','theme_admin'));
 			echo '</div>';
 			break;
 	}
@@ -204,11 +199,7 @@ endif;
 <?php endif;?>
 </footer>
 <?php
-if(theme_get_option('footer','stricky_footer')){
-	echo '</div></div>';
-}
-endif;?>
-<?php 
+endif;
 	wp_footer();
 	theme_add_cufon_code_footer();
 	if(theme_get_option('general','analytics') && theme_get_option('general','analytics_position')=='bottom'){

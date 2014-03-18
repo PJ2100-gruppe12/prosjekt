@@ -8,8 +8,10 @@
 }(function ($) {
   $.fn.tweet = function(o){
     var s = $.extend({
+      twitter_oauth_url: "../includes/tweet/index.php",               // [string]   custom twitter api script url 
       username: null,                           // [string or array] required unless using the 'query' option; one or more twitter screen names (use 'list' option for multiple names, where possible)
       list: null,                               // [string]   optional name of list belonging to username
+      list_id: null,                            // [integer]  ID of list to fetch when using list functionality
       favorites: false,                         // [boolean]  display the user's favorites instead of his tweets
       query: null,                              // [string]   optional search query (see also: http://search.twitter.com/operators)
       avatar_size: null,                        // [integer]  height and width of avatar if displayed (48px max)
@@ -28,11 +30,9 @@
       loading_text: 'loading tweets...',                       // [string]   optional loading text, displayed while tweets load
       refresh_interval: null,                   // [integer]  optional number of seconds after which to reload tweets
       twitter_url: "twitter.com",               // [string]   custom twitter url, if any (apigee, etc.)
-      twitter_api_url: "api.twitter.com",       // [string]   custom twitter api url, if any (apigee, etc.)
-      twitter_search_url: "search.twitter.com", // [string]   custom twitter search url, if any (apigee, etc.)
       template: "{avatar}{time}{join} {text}",  // [string or function] template used to construct each tweet <li> - see code for available vars
       comparator: function(tweet1, tweet2) {    // [function] comparator used to sort tweets (see Array.sort)
-        return tweet2["tweet_time"] - tweet1["tweet_time"];
+        return tweet2.tweet_time - tweet1.tweet_time;
       },
       filter: function(tweet) {                 // [function] whether or not to include a particular tweet (be sure to also set 'fetch')
         return true;
@@ -85,8 +85,8 @@
       linkUser: replacer(/(^|[\W])@(\w+)/gi, "$1<span class=\"at\">@</span><a href=\"http://"+s.twitter_url+"/$2\">$2</a>"),
       // Support various latin1 (\u00**) and arabic (\u06**) alphanumeric chars
       linkHash: replacer(/(?:^| )[\#]+([\w\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u00ff\u0600-\u06ff]+)/gi,
-                         ' <a href="http://'+s.twitter_search_url+'/search?q=&tag=$1&lang=all'+
-                         ((s.username && s.username.length == 1 && !s.list) ? '&from='+s.username.join("%2BOR%2B") : '')+
+                         ' <a href="https://twitter.com/search?q=%23$1&lang=all'+
+                         ((s.username && s.username.length === 1 && !s.list) ? '&from='+s.username.join("%2BOR%2B") : '')+
                          '" class="tweet_hashtag">#$1</a>'),
       makeHeart: replacer(/(&lt;)+[3]/gi, "<tt class='heart'>&#x2665;</tt>")
     });
@@ -97,7 +97,7 @@
         var text = match;
         for(var i = 0; i < entities.length; ++i) {
           var entity = entities[i];
-          if (entity.url == url && entity.expanded_url) {
+          if (entity.url === url && entity.expanded_url) {
             url = entity.expanded_url;
             text = entity.display_url;
             break;
@@ -152,18 +152,17 @@
     }
 
     function build_api_url() {
-      var proto = ('https:' == document.location.protocol ? 'https:' : 'http:');
       var count = (s.fetch === null) ? s.count : s.fetch;
-      var common_params = '&include_entities=1&callback=?';
+      var common_params = '&include_entities=1';
       if (s.list) {
-        return proto+"//"+s.twitter_api_url+"/1/"+s.username[0]+"/lists/"+s.list+"/statuses.json?page="+s.page+"&per_page="+count+common_params;
+        return s.twitter_oauth_url+'?type=list&owner_screen_name='+s.username[0]+'&list_id='+s.list_id+'&slug='+s.list+"&page="+s.page+"&count="+count+'&include_rts='+(s.retweets ? '&include_rts=1' : '')+common_params;
       } else if (s.favorites) {
-        return proto+"//"+s.twitter_api_url+"/1/favorites.json?screen_name="+s.username[0]+"&page="+s.page+"&count="+count+common_params;
-      } else if (s.query === null && s.username.length == 1) {
-        return proto+'//'+s.twitter_api_url+'/1/statuses/user_timeline.json?screen_name='+s.username[0]+'&count='+count+(s.retweets ? '&include_rts=1' : '')+'&page='+s.page+common_params;
+        return s.twitter_oauth_url+"?type=favorites&screen_name="+s.username[0]+"&page="+s.page+"&count="+count+common_params;
+      } else if (s.query === null && s.username.length === 1) {
+        return s.twitter_oauth_url+'?type=usertimeline&screen_name='+s.username[0]+'&count='+count+(s.retweets ? '&include_rts=1' : '')+'&page='+s.page+common_params;
       } else {
         var query = (s.query || 'from:'+s.username.join(' OR from:'));
-        return proto+'//'+s.twitter_search_url+'/search.json?&q='+encodeURIComponent(query)+'&rpp='+count+'&page='+s.page+common_params;
+        return s.twitter_oauth_url+'?type=search&q='+encodeURIComponent(query)+'&count='+count+'&page='+s.page+common_params;
       }
     }
 
@@ -191,7 +190,7 @@
       o.retweet = typeof(item.retweeted_status) != 'undefined';
 
       o.tweet_time = parse_date(item.created_at);
-      o.join_text = s.join_text == "auto" ? build_auto_join_text(item.text) : s.join_text;
+      o.join_text = s.join_text === "auto" ? build_auto_join_text(item.text) : s.join_text;
       o.tweet_id = item.id_str;
       o.twitter_base = "http://"+s.twitter_url+"/";
       o.user_url = o.twitter_base+o.screen_name;
@@ -247,6 +246,12 @@
       var loading = $('<p class="loading">'+s.loading_text+'</p>');
       if (s.loading_text) $(widget).not(":has(.tweet_list)").empty().append(loading);
       $.getJSON(build_api_url(), function(data){
+        if(data && data.errors && $.isArray(data.errors)) {
+          $.each(data.errors,function(i, error){
+            console.info(error);
+          });
+          return ;
+        }
         var tweets = $.map(data.results || data, extract_template_data);
         tweets = $.grep(tweets, s.filter).sort(s.comparator).slice(0, s.count);
         $(widget).trigger("tweet:retrieved", [tweets]);
@@ -254,15 +259,14 @@
     }
 
     return this.each(function(i, widget){
-      if(s.username && typeof(s.username) == "string"){
+      if(s.username && typeof(s.username) === "string"){
         s.username = [s.username];
       }
-
       $(widget).unbind("tweet:render").unbind("tweet:retrieved").unbind("tweet:load").
         bind({
           "tweet:load": function() { load(widget); },
           "tweet:retrieved": function(ev, tweets) {
-            $(widget).trigger("tweet:render", [tweets])
+            $(widget).trigger("tweet:render", [tweets]);
           },
           "tweet:render": function(ev, tweets) {
             render_tweets($(widget), tweets);

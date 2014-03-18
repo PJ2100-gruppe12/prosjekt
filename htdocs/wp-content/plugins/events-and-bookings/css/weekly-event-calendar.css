@@ -1,27 +1,32 @@
 #wpmudevevents-wrapper {
 	padding: 1em;
 }
+
 .wpmudevevents-list {
 	clear: both;
 	padding: 1em;
 }
+
 .wpmudevevents-list table {
 	width: 100%;
 	border-collapse: collapse;
 }
+
 .wpmudevevents-list table th {
 	width: 12%;
-	background: #333;
-	color: #ddd;
+	background: #009245;
+	color: #ffffff;
 	padding: .4em;
 	cursor: default;
 }
+
 .wpmudevevents-list table td {
 	border: 1px solid #ddd;
 	height: 60px;
 }
+
 .wpmudevevents-list table td.today {
-	background: #ddd;
+	background:#99FFFF;
 }
 
 .wpmudevevents-list table td.now {
@@ -32,14 +37,17 @@ a.wpmudevevents-calendar-event {
 	display: block;
 	margin: .2em;
 	padding: .1em .4em;
-	background: #75AB24;
+	background: #FFFF19;
 	color: #fff;
+	text-align: center;
 	text-decoration: none;
-	border: 1px solid #558B04;
+	border: 1px solid #FFFF19;
 	border-radius: 5px;
 }
+
 a.wpmudevevents-calendar-event:hover {
-	background: #659B14;
+	background: #fff;
+	border: 1px solid #FFFF19;    
 	text-decoration: none;
 }
 
@@ -48,29 +56,33 @@ a.wpmudevevents-calendar-event:hover {
 	position: absolute;
 	padding: .4em;
 	min-width: 200px;
-	background: #464646;
+	background: #FFFF19;
 	margin-top: 1em;
-	border: 1px solid #262626;
+	border: 1px solid #fff;
 	border-radius: 5px;
 }
 
 .wpmudevevents-weekly-calendar-hours-mins{
-font-weight:bold;
-font-size:0.8em;
-text-align:center;
+	font-weight:bold;
+	font-size:0.8em;
+	text-align:center;
 }
 
 .wpmudevevents-calendar-avatar, .wpmudevevents-calendar-thumbnail{
-float:left; width:80px;margin:5px;
+	float:left; 
+	width:80px;
+	margin:5px;
 }
 
 .wpmudevevents-calendar-author, .wpmudevevents-calendar-venue, .wpmudevevents-calendar-start{
-font-weight:bold;font-size:larger;float:left;width:200px;
+	font-weight:bold;
+	font-size:larger;
+	float:center;
+	width:200px;
 }
 
 .wpmudevevents-calendar-bio, .wpmudevevents-calendar-content{
-float:left;width:200px;
+	float:center;
+	width:200px;
 }
-
-
-/* 182384-1394637978 */
+/* 182384-1394637533-ai */

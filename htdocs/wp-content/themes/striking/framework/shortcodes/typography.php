@@ -80,7 +80,7 @@ function theme_shortcode_list($atts, $content = null, $code) {
 	if($color){
 		$color = ' list_color_'.$color;
 	}
-	return str_replace('<ul>', '<ul class="'.$style.$color.'">', do_shortcode($content));
+	return str_replace('<ul>', '<ul class="'.$style.$color.'">', do_shortcode(trim($content)));
 }
 add_shortcode('list', 'theme_shortcode_list');
 

@@ -5,8 +5,8 @@
 class Theme_Widget_Popular_Posts extends WP_Widget {
 
 	function Theme_Widget_Popular_Posts() {
-		$widget_ops = array('classname' => 'widget_popular_posts', 'description' => __( "Displays the popular posts on your site", 'striking_admin') );
-		$this->WP_Widget('popular_posts', THEME_SLUG.' - '.__('Popular Posts', 'striking_admin'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_popular_posts', 'description' => __( "Displays the popular posts on your site", 'theme_admin') );
+		$this->WP_Widget('popular_posts', THEME_SLUG.' - '.__('Popular Posts', 'theme_admin'), $widget_ops);
 		$this->alt_option_name = 'widget_popular_posts';
 
 		add_action( 'save_post', array(&$this, 'flush_widget_cache') );
@@ -40,7 +40,7 @@ class Theme_Widget_Popular_Posts extends WP_Widget {
 		ob_start();
 		extract($args);
 
-		$title = apply_filters('widget_title', empty($instance['title']) ? __('Popular Posts', 'striking_front') : $instance['title'], $instance, $this->id_base);
+		$title = apply_filters('widget_title', empty($instance['title']) ? __('Popular Posts', 'theme_front') : $instance['title'], $instance, $this->id_base);
 		if ( !$number = (int) $instance['number'] )
 			$number = 10;
 		else if ( $number < 1 )
@@ -103,7 +103,19 @@ class Theme_Widget_Popular_Posts extends WP_Widget {
 <?php endif;//end has_post_thumbnail ?>
 <?php endif;//disable_thumbnail ?>
 				<div class="post_extra_info">
-					<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>"><?php if ( get_the_title() ) { if($title_length && mb_strlen(get_the_title())>$title_length){echo mb_substr(get_the_title(),0,$title_length).'...';}else{the_title();} }else the_ID(); ?></a>
+					<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>">
+						<?php 
+							if( get_the_title() ) { 
+								if((int)$title_length){
+									echo theme_strcut(get_the_title(),$title_length,'...');
+								}else{
+									echo get_the_title();
+								}
+							}else {
+								the_ID();
+							}
+						?>
+					</a>
 <?php if(in_array('time', $display_extra_type)):?>
 					<time datetime="<?php the_time('Y-m-d') ?>"><?php echo get_the_date(); ?></time>
 <?php endif;?>
@@ -157,6 +169,9 @@ class Theme_Widget_Popular_Posts extends WP_Widget {
 		$cat = isset($instance['cat']) ? $instance['cat'] : array();
 		$authors = isset($instance['authors']) ? $instance['authors'] : array();
 		$authors_list = $this->get_all_author();
+		if(empty($authors_list)){
+			$authors_list = array();
+		}
 		
 		if ( !isset($instance['number']) || !$number = (int) $instance['number'] )
 			$number = 5;
@@ -171,33 +186,33 @@ class Theme_Widget_Popular_Posts extends WP_Widget {
 		$categories = get_categories('orderby=name&hide_empty=0');
 
 ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:','striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:','theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 
-		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" /></p>
 
 		<p><input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('disable_thumbnail'); ?>" name="<?php echo $this->get_field_name('disable_thumbnail'); ?>"<?php checked( $disable_thumbnail ); ?> />
-		<label for="<?php echo $this->get_field_id('disable_thumbnail'); ?>"><?php _e( 'Disable Post Thumbnail?' , 'striking_admin'); ?></label></p>
+		<label for="<?php echo $this->get_field_id('disable_thumbnail'); ?>"><?php _e( 'Disable Post Thumbnail?' , 'theme_admin'); ?></label></p>
 		
-		<p><label for="<?php echo $this->get_field_id('title_length'); ?>"><?php _e('Length of Title to show:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title_length'); ?>"><?php _e('Length of Title to show:', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('title_length'); ?>" name="<?php echo $this->get_field_name('title_length'); ?>" type="text" value="<?php echo $title_length; ?>" size="3" /></p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('display_extra_type'); ?>"><?php _e( 'Display Extra infomation type:', 'striking_admin' ); ?></label>
+			<label for="<?php echo $this->get_field_id('display_extra_type'); ?>"><?php _e( 'Display Extra infomation type:', 'theme_admin' ); ?></label>
 			<select name="<?php echo $this->get_field_name('display_extra_type'); ?>" id="<?php echo $this->get_field_id('display_extra_type'); ?>" class="widefat">
-				<option value="time"<?php selected($display_extra_type,'time');?>><?php _e( 'Time', 'striking_admin' ); ?></option>
-				<option value="description"<?php selected($display_extra_type,'description');?>><?php _e( 'Description', 'striking_admin' ); ?></option>
-				<option value="both"<?php selected($display_extra_type,'both');?>><?php _e( 'Time and Description', 'striking_admin' ); ?></option>
-				<option value="none"<?php selected($display_extra_type,'none');?>><?php _e( 'None', 'striking_admin' ); ?></option>
+				<option value="time"<?php selected($display_extra_type,'time');?>><?php _e( 'Time', 'theme_admin' ); ?></option>
+				<option value="description"<?php selected($display_extra_type,'description');?>><?php _e( 'Description', 'theme_admin' ); ?></option>
+				<option value="both"<?php selected($display_extra_type,'both');?>><?php _e( 'Time and Description', 'theme_admin' ); ?></option>
+				<option value="none"<?php selected($display_extra_type,'none');?>><?php _e( 'None', 'theme_admin' ); ?></option>
 			</select>
 		</p>
 		
-		<p><label for="<?php echo $this->get_field_id('desc_length'); ?>"><?php _e('Length of Description to show:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('desc_length'); ?>"><?php _e('Length of Description to show:', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('desc_length'); ?>" name="<?php echo $this->get_field_name('desc_length'); ?>" type="text" value="<?php echo $desc_length; ?>" size="3" /></p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('cat'); ?>"><?php _e( 'Categorys:' , 'striking_admin'); ?></label>
+			<label for="<?php echo $this->get_field_id('cat'); ?>"><?php _e( 'Categorys:' , 'theme_admin'); ?></label>
 			<select style="height:5.5em" name="<?php echo $this->get_field_name('cat'); ?>[]" id="<?php echo $this->get_field_id('cat'); ?>" class="widefat" multiple="multiple">
 				<?php foreach($categories as $category):?>
 				<option value="<?php echo $category->term_id;?>"<?php echo in_array($category->term_id, $cat)? ' selected="selected"':'';?>><?php echo $category->name;?></option>
@@ -206,7 +221,7 @@ class Theme_Widget_Popular_Posts extends WP_Widget {
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('authors'); ?>"><?php _e( 'Authors:' , 'striking_admin'); ?></label>
+			<label for="<?php echo $this->get_field_id('authors'); ?>"><?php _e( 'Authors:' , 'theme_admin'); ?></label>
 			<select style="height:5.5em" name="<?php echo $this->get_field_name('authors'); ?>[]" id="<?php echo $this->get_field_id('authors'); ?>" class="widefat" multiple="multiple">
 				<?php foreach($authors_list as $user_id => $display_name):?>
 				<option value="<?php echo $user_id;?>"<?php echo in_array($user_id, $authors)? ' selected="selected"':'';?>><?php echo $display_name;?></option>

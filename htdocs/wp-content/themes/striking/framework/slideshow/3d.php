@@ -29,7 +29,7 @@ class Theme_Slideshow_3d {
 		}else{
 			$lang = '';
 		}
-		$noflash = __('You need to <a href="http://www.adobe.com/products/flashplayer/" target="_blank">upgrade your Flash Player</a> to version 10 or newer.','striking_front');
+		$noflash = __('You need to <a href="http://www.adobe.com/products/flashplayer/" target="_blank">upgrade your Flash Player</a> to version 10 or newer.','theme_front');
 		$output = <<<HTML
 
 <div id="feature" class="3d"{$color}>

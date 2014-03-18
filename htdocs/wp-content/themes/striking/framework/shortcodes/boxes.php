@@ -3,9 +3,13 @@
 function theme_shortcode_message($atts, $content = null, $code) {
 	extract(shortcode_atts(array(
 		'align' => false,
+		'class' => '',
 	), $atts));
+	if($class){
+		$class = ' '.$class;
+	}
 	$align = $align?' '.$align:'';
-	return '<div class="' .apply_filters( 'theme_css_class', $code ). $align . '"><div class="message_box_content">' . do_shortcode($content) . '</div><div class="clearboth"></div></div>';
+	return '<div class="'.apply_filters( 'theme_css_class', $code ).$align.$class.'"><div class="message_box_content">'.do_shortcode($content).'</div><div class="clearboth"></div></div>';
 }
 
 add_shortcode('info','theme_shortcode_message');
@@ -23,6 +27,7 @@ function theme_shortcode_framed_box($atts, $content = null, $code) {
 		'textcolor' => '',
 		'rounded' => 'false',
 		'align' => false,
+		'class' => '',
 	), $atts));
 	
 	if($width){
@@ -48,6 +53,9 @@ function theme_shortcode_framed_box($atts, $content = null, $code) {
 		$style = '';
 	}
 	$align = $align?' align'.$align:'';
+	if($class){
+		$class = ' '.$class;
+	}
 	$bgcolor = $bgcolor?'background-color:'.$bgcolor.';':'';
 	$textcolor = $textcolor?'color:'.$textcolor:'';
 	$rounded = ($rounded == 'true')?' rounded':'';
@@ -59,7 +67,7 @@ function theme_shortcode_framed_box($atts, $content = null, $code) {
 	if(!preg_match("/<[^>]*>/",$content)){
 		$content = "<p>".trim($content)."</p>";
 	}
-	return '<div class="' .$code.$rounded.$align. '"'.$style.'><div class="framed_box_content"'.$content_style.'>' . do_shortcode($content) . '<div class="clearboth"></div></div></div>';
+	return '<div class="' .$code.$rounded.$align.$class. '"'.$style.'><div class="framed_box_content"'.$content_style.'>' . do_shortcode($content) . '<div class="clearboth"></div></div></div>';
 }
 add_shortcode('framed_box','theme_shortcode_framed_box');
 
@@ -68,12 +76,17 @@ function theme_shortcode_note($atts, $content = null) {
 		'align' => false,
 		'title' => '',
 		'width' => false,
+		'class' => '',
 	), $atts));
 	$align = $align?' align'.$align:'';
+	if($class){
+		$class = ' '.$class;
+	}
 	$width = $width?' style="width:'.(int)$width.'px"':'';
 	if(!empty($title)){
 		$title = '<h4 class="'.apply_filters( 'theme_css_class', 'note_title' ).'">'.$title.'</h4>';
 	}
-	return '<div class="' .apply_filters( 'theme_css_class', 'note' ). $align . '"'.$width.'>'.$title.'<div class="'.apply_filters( 'theme_css_class', 'note_content' ).'">' . do_shortcode($content) . '</div></div>';
+
+	return '<div class="'.apply_filters( 'theme_css_class', 'note' ).$align.$class.'"'.$width.'>'.$title.'<div class="'.apply_filters( 'theme_css_class', 'note_content' ).'">' . do_shortcode($content) . '</div></div>';
 }
 add_shortcode('note','theme_shortcode_note');

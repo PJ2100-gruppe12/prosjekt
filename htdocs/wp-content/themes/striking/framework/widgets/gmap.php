@@ -5,10 +5,18 @@
 class Theme_Widget_Gmap extends WP_Widget {
 
 	function Theme_Widget_Gmap() {
-		$widget_ops = array('classname' => 'widget_gmap', 'description' => __( 'Displays a google map.', 'striking_admin' ) );
-		$this->WP_Widget('gmap', THEME_SLUG.' - '.__('Gmap', 'striking_admin'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_gmap', 'description' => __( 'Displays a google map.', 'theme_admin' ) );
+		$this->WP_Widget('gmap', THEME_SLUG.' - '.__('Gmap', 'theme_admin'), $widget_ops);
+
+		if ( is_active_widget(false, false, $this->id_base) ){
+			add_action( 'wp_print_scripts', array(&$this, 'add_script') );
+		}
 	}
-	
+
+	function add_script(){
+		wp_enqueue_script( 'jquery-gmap');
+	}
+
 	function widget( $args, $instance ) {
 		extract( $args );
 		$title = apply_filters('widget_title', empty($instance['title']) ? '' : $instance['title'], $instance, $this->id_base);
@@ -19,8 +27,6 @@ class Theme_Widget_Gmap extends WP_Widget {
 		$html = $instance['html'];
 		$popup = $instance['popup'];
 		$height = (int)$instance['height'];
-		
-		wp_print_scripts( 'jquery-gmap');
 		
 		if($zoom < 1){
 			$zoom = 1;
@@ -80,28 +86,28 @@ class Theme_Widget_Gmap extends WP_Widget {
 		$popup = isset( $instance['popup'] ) ? (bool) $instance['popup'] : false;
 		$height = isset($instance['height']) ? absint($instance['height']) : 250;
 ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 
-		<p><label for="<?php echo $this->get_field_id('address'); ?>"><?php _e('Address (optional):', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('address'); ?>"><?php _e('Address (optional):', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('address'); ?>" name="<?php echo $this->get_field_name('address'); ?>" type="text" value="<?php echo $address; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('latitude'); ?>"><?php _e('Latitude:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('latitude'); ?>"><?php _e('Latitude:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('latitude'); ?>" name="<?php echo $this->get_field_name('latitude'); ?>" type="text" value="<?php echo $latitude; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('longitude'); ?>"><?php _e('Longitude:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('longitude'); ?>"><?php _e('Longitude:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('longitude'); ?>" name="<?php echo $this->get_field_name('longitude'); ?>" type="text" value="<?php echo $longitude; ?>" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Zoom value from 1 to 19:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('zoom'); ?>"><?php _e('Zoom value from 1 to 19:', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('zoom'); ?>" name="<?php echo $this->get_field_name('zoom'); ?>" type="text" value="<?php echo $zoom; ?>" size="3" /></p>
 		
-		<p><label for="<?php echo $this->get_field_id('html'); ?>"><?php _e('Content for the marker:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('html'); ?>"><?php _e('Content for the marker:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('html'); ?>" name="<?php echo $this->get_field_name('html'); ?>" type="text" value="<?php echo $html; ?>" /></p>
 		
 		<p><input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('popup'); ?>" name="<?php echo $this->get_field_name('popup'); ?>"<?php checked( $popup ); ?> />
-		<label for="<?php echo $this->get_field_id('popup'); ?>"><?php _e( 'Auto popup the info?', 'striking_admin' ); ?></label></p>
+		<label for="<?php echo $this->get_field_id('popup'); ?>"><?php _e( 'Auto popup the info?', 'theme_admin' ); ?></label></p>
 		
-		<p><label for="<?php echo $this->get_field_id('height'); ?>"><?php _e('Height:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('height'); ?>"><?php _e('Height:', 'theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('height'); ?>" name="<?php echo $this->get_field_name('height'); ?>" type="text" value="<?php echo $height; ?>" /></p>
 		
 <?php

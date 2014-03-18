@@ -58,8 +58,8 @@ class shortcodesGenerator {
 			shortcodeMenu.init({
 				uri:'<?php echo $this->uri;?>',
 				langs:{
-					shortcodes:"<?php _e('Shortcodes','striking_admin');?>",
-					insert_shortcodes:"<?php _e('Insert Shortcode','striking_admin');?>"
+					shortcodes:"<?php _e('Shortcodes','theme_admin');?>",
+					insert_shortcodes:"<?php _e('Insert Shortcode','theme_admin');?>"
 				}
 			});
 		});
@@ -98,7 +98,7 @@ class shortcodesGenerator {
 	function add_fullscreen_button($buttons){
 		$buttons[] = 'separator';
 		$buttons['shortcode'] = array(
-			'title' => __('shortcodeGenerator','striking_admin'),
+			'title' => __('shortcodeGenerator','theme_admin'),
 			'both' => true
 		);
 		return $buttons;

@@ -16,15 +16,15 @@ function theme_shortcode_contactform($atts,$content = null) {
 	$textcolor = $textcolor?' style="color:'.$textcolor.'"':'';
 	
 	if(empty($success)){
-		$success = __('Your message was successfully sent. <strong>Thank You!</strong>','striking_front');
+		$success = __('Your message was successfully sent. <strong>Thank You!</strong>','theme_front');
 	}
-	$name_str = __('Name *','striking_front');
-	$email_str = __('Email *','striking_front');
+	$name_str = __('Name *','theme_front');
+	$email_str = __('Email *','theme_front');
 
 	if(!empty($submit)){
 		$submit_str = $submit;
 	}else{
-		$submit_str = __('Submit','striking_front');
+		$submit_str = __('Submit','theme_front');
 	}
 	
 	$email = str_replace('@','*',$email);
@@ -63,11 +63,12 @@ function theme_shortcode_search($atts,$content = null) {
 	$bgcolor = $bgcolor?' style="background-color:'.$bgcolor.'"':'';
 	$textcolor = $textcolor?' style="color:'.$textcolor.'"':'';
 	
-	$search_str = __('Search..', 'striking_front');
+	$search_str = __('Search..', 'theme_front');
+	$search_button_str = __('Search', 'theme_front');
 	$button_class = apply_filters( 'theme_css_class', 'button' );
 	$url = home_url();
 	return <<<HTML
-<form method="get" id="searchform" action="{$url}"><input type="text" class="text_input" value="{$search_str}" name="s" id="s" onfocus="if(this.value == '{$search_str}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{$search_str}';}" /><button type="submit" class="{$button_class} gray"{$bgcolor}><span{$textcolor}>{$search_str}</span></button></form>
+<form method="get" id="searchform" action="{$url}"><input type="text" class="text_input" value="{$search_str}" name="s" id="s" onfocus="if(this.value == '{$search_str}') {this.value = '';}" onblur="if (this.value == '') {this.value = '{$search_str}';}" /><button type="submit" class="{$button_class} gray"{$bgcolor}><span{$textcolor}>{$search_button_str}</span></button></form>
 HTML;
 }
 add_shortcode('search', 'theme_shortcode_search');
@@ -87,15 +88,15 @@ function theme_shortcode_twitter($atts) {
 	
 	wp_print_scripts('jquery-tweet');
 	$id = rand(1,1000);
-	$just_now_text = __('just now','striking_front');
-	$seconds_ago_text = __('about %d seconds ago','striking_front');
-	$a_minutes_ago_text = __('about a minute ago','striking_front');
-	$minutes_ago_text = __('about %d minutes ago','striking_front');
-	$a_hours_ago_text = __('about an hour ago','striking_front');
-	$hours_ago_text = __('about %d hours ago','striking_front');
-	$a_day_ago_text = __('about a day ago','striking_front');
-	$days_ago_text = __('about %d days ago','striking_front');
-	$view_text = __('view tweet on twitter','striking_front');
+	$just_now_text = __('just now','theme_front');
+	$seconds_ago_text = __('about %d seconds ago','theme_front');
+	$a_minutes_ago_text = __('about a minute ago','theme_front');
+	$minutes_ago_text = __('about %d minutes ago','theme_front');
+	$a_hours_ago_text = __('about an hour ago','theme_front');
+	$hours_ago_text = __('about %d hours ago','theme_front');
+	$a_day_ago_text = __('about a day ago','theme_front');
+	$days_ago_text = __('about %d days ago','theme_front');
+	$view_text = __('view tweet on twitter','theme_front');
 	
 	if ( !empty( $user_array )|| $query!="null" ) {
 		$username = implode(',',$user_array);
@@ -103,12 +104,14 @@ function theme_shortcode_twitter($atts) {
 			$query = '"'.html_entity_decode($query).'"';
 		}
 		$with_avatar = ($avatarsize != 'null')?' with_avatar':'';
+		$oauth_url = THEME_URI . '/includes/tweet/index.php';
 		return <<<HTML
 [raw]
 <div class="twitter_wrap{$with_avatar}">
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	jQuery("#twitter_wrap_{$id}").tweet({
+		twitter_oauth_url: "{$oauth_url}",
 		username: [{$username}],
 		count: {$count},
 		query: {$query},
@@ -218,6 +221,7 @@ function theme_shortcode_contact_info($atts) {
 		'color' => '',
 		'phone' => '',
 		'cellphone' => '',
+		'fax' => '',
 		'email' => '',
 		'link' => '',
 		'address' => '',
@@ -297,7 +301,7 @@ function theme_shortcode_archives($atts){
 		$count = 0;
 	}
 	if($dropdown === 'true'){
-		$output = '<select name="archive-dropdown" onchange=\'document.location.href=this.options[this.selectedIndex].value;\'> <option value="">'.esc_attr(__('Select Month','striking_front')).'</option> '.wp_get_archives(apply_filters('widget_archives_dropdown_args', array('type' => 'monthly', 'format' => 'option', 'show_post_count' => $count,'echo'=> 0))).' </select>';
+		$output = '<select name="archive-dropdown" onchange=\'document.location.href=this.options[this.selectedIndex].value;\'> <option value="">'.esc_attr(__('Select Month','theme_front')).'</option> '.wp_get_archives(apply_filters('widget_archives_dropdown_args', array('type' => 'monthly', 'format' => 'option', 'show_post_count' => $count,'echo'=> 0))).' </select>';
 	}else{
 		$output = '<ul>'.wp_get_archives(apply_filters('widget_archives_args', array('type' => 'monthly', 'show_post_count' => $count, 'echo'=>0))).'</ul>';
 	}
@@ -341,7 +345,7 @@ function theme_shortcode_categories($atts){
 	$cat_args = array('orderby' => 'name', 'show_count' => $count, 'hierarchical' => $hierarchical, 'echo'=>0);
 
 	if($dropdown === 'true'){
-		$cat_args['show_option_none'] = __('Select Category','striking_front');
+		$cat_args['show_option_none'] = __('Select Category','theme_front');
 		$output = wp_dropdown_categories(apply_filters('widget_categories_dropdown_args', $cat_args));
 		$home_url = home_url();
 		$output .= <<<HTML
@@ -444,8 +448,8 @@ function theme_shortcode_popular_posts($atts) {
 			}
 			$output .= '<div class="post_extra_info">';
 			$title = get_the_title();
-			if((int)$title_length && mb_strlen($title)>$title_length){
-				$title =  mb_substr($title,0,$title_length).'...';
+			if((int)$title_length){
+				$title = theme_strcut($title,$title_length,'...');
 			}
 			$output .= '<a class="post_title" href="'.get_permalink().'" title="'.get_the_title().'" rel="bookmark">'.$title.'</a>';
 			
@@ -552,8 +556,8 @@ function theme_shortcode_recent_posts($atts) {
 			}
 			$output .= '<div class="post_extra_info">';
 			$title = get_the_title();
-			if((int)$title_length && mb_strlen($title)>$title_length){
-				$title =  mb_substr($title,0,$title_length).'...';
+			if((int)$title_length){
+				$title = theme_strcut($title,$title_length,'...');
 			}
 			$output .= '<a class="post_title" href="'.get_permalink().'" title="'.get_the_title().'" rel="bookmark">'.$title.'</a>';
 			if(in_array('time', $extra)){
@@ -595,6 +599,7 @@ function theme_shortcode_portfolio_list($atts) {
 		'offset' => 0,
 		'title_length' => '',
 		'desc_length' => '80',
+		'target' => '_self',
 	), $atts));
 	
 	$cache = wp_cache_get('shortcode_portfolio_list', 'shortcode');
@@ -659,8 +664,15 @@ function theme_shortcode_portfolio_list($atts) {
 			$r->the_post();
 			$output .= '<li>';
 			if($thumbnail!='false'){
+				$type = get_post_meta(get_the_id(), '_type', true);
+				if($type == 'link'){
+					$link = get_post_meta(get_the_ID(), '_link', true);
+					$href = theme_get_superlink($link);
+				} else {
+					$href = get_permalink();
+				}
 				if (has_post_thumbnail() ){
-					$output .= '<a class="thumbnail" href="'.get_permalink().'" title="'.get_the_title().'">';
+					$output .= '<a class="thumbnail" href="'.$href.'" title="'.get_the_title().'" target="'.$target.'">';
 					$output .= get_the_post_thumbnail(get_the_ID(),array(65,65),array('title'=>get_the_title(),'alt'=>get_the_title()));
 					$output .= '</a>';
 				}elseif(theme_get_option('portfolio','display_default_thumbnail')){
@@ -669,17 +681,17 @@ function theme_shortcode_portfolio_list($atts) {
 					}else{
 						$default_thumbnail_image = THEME_IMAGES.'/widget_posts_thumbnail.png';
 					}
-					$output .= '<a class="thumbnail" href="'.get_permalink().'" title="'.get_the_title().'">';
+					$output .= '<a class="thumbnail" href="'.$href.'" title="'.get_the_title().'" target="'.$target.'">';
 					$output .= '<img src="'.$default_thumbnail_image.'" width="65" height="65" title="'.get_the_title().'" alt="'. get_the_title().'"/>';
 					$output .= '</a>';
 				}
 			}
 			$output .= '<div class="post_extra_info">';
 			$title = get_the_title();
-			if((int)$title_length && mb_strlen($title)>$title_length){
-				$title =  mb_substr($title,0,$title_length).'...';
+			if((int)$title_length){
+				$title = theme_strcut($title,$title_length,'...');
 			}
-			$output .= '<a class="post_title" href="'.get_permalink().'" title="'.get_the_title().'" rel="bookmark">'.$title.'</a>';
+			$output .= '<a class="post_title" href="'.get_permalink().'" title="'.get_the_title().'" rel="bookmark" target="'.$target.'">'.$title.'</a>';
 			if(in_array('time', $extra)){
 				$output .= '<time datetime="'.get_the_time('Y-m-d').'">'.get_the_date().'</time>';
 			}

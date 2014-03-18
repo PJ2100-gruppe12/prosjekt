@@ -3,7 +3,7 @@ class Theme_Options_Page_Footer extends Theme_Options_Page_With_Tabs {
 	public $slug = 'footer';
 
 	function __construct(){
-		$this->name = sprintf(__('%s Footer Settings','striking_admin'),THEME_NAME);
+		$this->name = sprintf(__('%s Footer Settings','theme_admin'),THEME_NAME);
 		parent::__construct();
 	}
 
@@ -11,25 +11,25 @@ class Theme_Options_Page_Footer extends Theme_Options_Page_With_Tabs {
 		$options = array(
 			array(
 				"slug" => 'general',
-				"name" => __("Footer General Settings",'striking_admin'),
+				"name" => __("Footer General Settings",'theme_admin'),
 				"options" => array(
 					array(
-						"name" => __("Sticky Footer",'striking_admin'),
-						"desc" => __("If you want display footer on the bottom of the screen, turn on the button.",'striking_admin'),
+						"name" => __("Sticky Footer",'theme_admin'),
+						"desc" => __("If you want display footer on the bottom of the screen when total page content less then screen height, turn on the button.",'theme_admin'),
 						"id" => "stricky_footer",
 						"default" => false,
 						"type" => "toggle"
 					),
 					array(
-						"name" => __("Footer",'striking_admin'),
-						"desc" => __("If you don't want display footer, turn off the button.",'striking_admin'),
+						"name" => __("Footer",'theme_admin'),
+						"desc" => __("If you don't want display footer, turn off the button.",'theme_admin'),
 						"id" => "footer",
 						"default" => true,
 						"type" => "toggle"
 					),
 					array(
-						"name" => __("Footer Column layout",'striking_admin'),
-						"desc" => __("choose the layout of footer columns you'd like the footer widgets displayed in",'striking_admin'),
+						"name" => __("Footer Column layout",'theme_admin'),
+						"desc" => __("choose the layout of footer columns you'd like the footer widgets displayed in",'theme_admin'),
 						"id" => "column",
 						"function" => "_option_column_function",
 						"default" => "4",
@@ -39,37 +39,37 @@ class Theme_Options_Page_Footer extends Theme_Options_Page_With_Tabs {
 			),
 			array(
 				"slug" => 'sub',
-				"name" => __("Sub Footer Settings",'striking_admin'),
+				"name" => __("Sub Footer Settings",'theme_admin'),
 				"options" => array(
 					array(
-						"name" => __("Sub Footer",'striking_admin'),
-						"desc" => __("If you don't want display sub footer, turn off the button.",'striking_admin'),
+						"name" => __("Sub Footer",'theme_admin'),
+						"desc" => __("If you don't want display sub footer, turn off the button.",'theme_admin'),
 						"id" => "sub_footer",
 						"default" => true,
 						"type" => "toggle"
 					),
 					array(
-						"name" => __("Copyright Footer Text",'striking_admin'),
-						"desc" => __("Enter the copyright text that you'd like to display in the footer",'striking_admin'),
+						"name" => __("Copyright Footer Text",'theme_admin'),
+						"desc" => __("Enter the copyright text that you'd like to display in the footer",'theme_admin'),
 						"id" => "copyright",
-						"default" => "Copyright &copy; 2012 MyCompany.com. All Rights Reserved",
+						"default" => "Copyright &copy; 2013 MyCompany.com. All Rights Reserved",
 						"rows" => 3,
 						"type" => "textarea"
 					),
 					array(
-						"name" => __("Sub Footer Widget Area Type",'striking_admin'),
+						"name" => __("Sub Footer Widget Area Type",'theme_admin'),
 						"desc" => "",
 						"id" => "footer_right_area_type",
 						"default" => 'menu',
 						"options" => array(
-							"menu" => __('Menu','striking_admin'),
-							"html" => __('Html','striking_admin'),
-							"widget" => __('Widget Area','striking_admin'),
+							"menu" => __('Menu','theme_admin'),
+							"html" => __('Html','theme_admin'),
+							"widget" => __('Widget Area','theme_admin'),
 						),
 						"type" => "select",
 					),
 					array(
-						"name" => __("Sub Footer Widget Area Html code",'striking_admin'),
+						"name" => __("Sub Footer Widget Area Html code",'theme_admin'),
 						"desc" => '',
 						"id" => "footer_right_area_html",
 						"default" => "",

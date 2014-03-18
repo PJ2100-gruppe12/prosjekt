@@ -30,7 +30,7 @@ function wpml_get_home_url(){
 // USAGE place this on the single.php, page.php, index.php etc... - inside the loop
 // function wpml_content_languages($args)
 // args: skip_missing, before, after
-// defaults: skip_missing = 1, before =  __('This post is also available in: ','sitepress'), after = ''
+// defaults: skip_missing = 1, before =  __('This post is also available in: '), after = ''
 function wpml_content_languages($args=''){
 	parse_str($args);
 	if(function_exists('icl_get_languages')){
@@ -162,7 +162,7 @@ function wpml_default_link($anchor){
 	}
 	
 	if($qv){
-		$link = '<a href="' .  $sitepress->language_url($sitepress->get_default_language()) . $url_glue . $qv . '" rel="nofollow">' . $anchor . '</a>';
+        $link = '<a href="' .  $sitepress->language_url($sitepress->get_default_language()) . $url_glue . $qv . '" rel="nofollow">' . esc_html($anchor) . '</a>';
 	}else{
 		$link = '';
 	} 

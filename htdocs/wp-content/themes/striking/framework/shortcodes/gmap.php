@@ -41,7 +41,7 @@ function theme_shortcode_googlemap($atts, $content = null, $code) {
 		$height = '';
 	}
 	$html = str_replace('{linebreak}', '<br/>', $html);
-	wp_print_scripts( 'jquery-gmap');
+	wp_enqueue_script( 'jquery-gmap');
 	
 	/* fix */
 	$search  = array('G_NORMAL_MAP', 'G_SATELLITE_MAP', 'G_HYBRID_MAP', 'G_DEFAULT_MAP_TYPES', 'G_PHYSICAL_MAP');
@@ -67,11 +67,11 @@ HTML;
 	if($marker != 'false'){
 		return <<<HTML
 <div id="google_map_{$id}" class="google_map{$align}" style="{$width}{$height}"></div>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 [raw]
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	var tabs = jQuery("#google_map_{$id}").parents('.tabs_container,.mini_tabs_container,.accordion');
+	var tabs = jQuery("#google_map_{$id}").parents('.tabs_container,.mini_tabs_container,.accordion, .theme_accordion');
+	var toggle = jQuery("#google_map_{$id}").parents('.toggle');
 	jQuery("#google_map_{$id}").bind('initGmap',function(){
 		jQuery(this).gMap({
 			zoom: {$zoom},
@@ -89,15 +89,27 @@ jQuery(document).ready(function($) {
 		});
 		jQuery(this).data("gMapInited",true);
 	}).data("gMapInited",false);
-	if(tabs.size()!=0){
-		tabs.find('ul.tabs,ul.mini_tabs,.accordion').data("tabs").onClick(function(index) {
-			this.getCurrentPane().find('.google_map').each(function(){
-				if(jQuery(this).data("gMapInited")==false){
-					jQuery(this).trigger('initGmap');
-				}
+	if(tabs.length!=0){
+		tabs.each(function(){
+			var api = null;
+			if($(this).is('.accordion, .theme_accordion')){
+				api = $(this).data("tabs");
+			}else{
+				api = $(this).find('.tabs, .theme_tabs, .mini_tabs, .theme_mini_tabs').data("tabs");
+			}
+			api.onClick(function(index) {
+				this.getCurrentPane().find('.google_map').each(function(){
+					if(jQuery(this).data("gMapInited")==false){
+						jQuery(this).trigger('initGmap');
+					}
+				});
 			});
 		});
-	}else{
+	}else if(toggle.length!=0){
+		toggle.find('.toggle_title').on('toggle::open', function(){
+			jQuery("#google_map_{$id}").trigger('initGmap');
+		});
+	} else {
 		jQuery("#google_map_{$id}").trigger('initGmap');
 	}
 });
@@ -108,10 +120,10 @@ HTML;
 return <<<HTML
 <div id="google_map_{$id}" class="google_map{$align}" style="{$width}{$height}"></div>
 [raw]
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	var tabs = jQuery("#google_map_{$id}").parents('.tabs_container,.mini_tabs_container,.accordion');
+	var tabs = jQuery("#google_map_{$id}").parents('.tabs_container,.mini_tabs_container,.accordion, .theme_accordion');
+	var toggle = jQuery("#google_map_{$id}").parents('.toggle');
 	jQuery("#google_map_{$id}").bind('initGmap',function(){
 		jQuery("#google_map_{$id}").gMap({
 			zoom: {$zoom},
@@ -125,15 +137,27 @@ jQuery(document).ready(function($) {
 		});
 		jQuery(this).data("gMapInited",true);
 	}).data("gMapInited",false);
-	if(tabs.size()!=0){
-		tabs.find('ul.tabs,ul.mini_tabs,.accordion').data("tabs").onClick(function(index) {
-			this.getCurrentPane().find('.google_map').each(function(){
-				if(jQuery(this).data("gMapInited")==false){
-					jQuery(this).trigger('initGmap');
-				}
+	if(tabs.length!=0){
+		tabs.each(function(){
+			var api = null;
+			if($(this).is('.accordion, .theme_accordion')){
+				api = $(this).data("tabs");
+			}else{
+				api = $(this).find('.tabs, .theme_tabs, .mini_tabs, .theme_mini_tabs').data("tabs");
+			}
+			api.onClick(function(index) {
+				this.getCurrentPane().find('.google_map').each(function(){
+					if(jQuery(this).data("gMapInited")==false){
+						jQuery(this).trigger('initGmap');
+					}
+				});
 			});
 		});
-	}else{
+	}else if(toggle.length!=0){
+		toggle.find('.toggle_title').on('toggle::open', function(){
+			jQuery("#google_map_{$id}").trigger('initGmap');
+		});
+	} else {
 		jQuery("#google_map_{$id}").trigger('initGmap');
 	}
 });

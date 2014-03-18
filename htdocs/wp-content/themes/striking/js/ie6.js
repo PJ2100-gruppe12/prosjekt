@@ -8,8 +8,11 @@ DD_belatedPNG.fix('input.text_input,textarea.textarea,#sidebar .widget li a,.wid
 DD_belatedPNG.fix('#cboxClose,#cboxNext,#cboxPrevious,#cboxLoadingGraphic,#cboxLoadingOverlay');
 
 jQuery(document).ready(function($) {
-	jQuery('.button, .theme_button').hover(
-		function(){ jQuery(this).addClass('hover'); },
-		function(){ jQuery(this).removeClass('hover'); }
-	);
+    $('.button, .theme_button').hover(
+
+        function() {
+            $(this).addClass('hover');
+        }, function() {
+            $(this).removeClass('hover');
+        });
 });

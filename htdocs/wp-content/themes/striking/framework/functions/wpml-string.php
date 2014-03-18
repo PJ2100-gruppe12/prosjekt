@@ -9,7 +9,7 @@ wpml_register_string( THEME_NAME , 'Copyright Footer Text', stripslashes(theme_g
 
 wpml_register_string( THEME_NAME , 'Footer Right Area Html Code', stripslashes(theme_get_option('footer','footer_right_area_html')));
 
-wpml_register_string( THEME_NAME , 'Social Icon Widget Alt Title', __('Follow Us on','striking_front'));
+wpml_register_string( THEME_NAME , 'Social Icon Widget Alt Title', __('Follow Us on','theme_front'));
 
 wpml_register_string( THEME_NAME , 'Blog Post Read More Button Text', stripslashes(theme_get_option('blog','read_more_text')));
 

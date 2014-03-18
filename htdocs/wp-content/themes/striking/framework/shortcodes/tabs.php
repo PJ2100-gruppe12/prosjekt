@@ -6,7 +6,6 @@ function theme_shortcode_tabs($atts, $content = null, $code) {
 		'history' => false,
 		'initialtab' => 1
 	), $atts));
-	
 	if (!preg_match_all("/(.?)\[(tab)\b(.*?)(?:(\/))?\](?:(.+?)\[\/tab\])?(.?)/s", $content, $matches)) {
 		return do_shortcode($content);
 	} else {
@@ -18,7 +17,7 @@ function theme_shortcode_tabs($atts, $content = null, $code) {
 		
 		for($i = 0; $i < count($matches[0]); $i++) {
 			if($history=='true'){
-				$href= '#'.rawurlencode(str_replace(" ", "_", trim($matches[3][$i]['title'])));
+				$href= '#'.rawurlencode(theme_unaccent(str_replace(" ", "_", trim($matches[3][$i]['title']))));
 			}else{
 				$href = '#';
 			}
@@ -63,7 +62,7 @@ function theme_shortcode_accordions($atts, $content = null, $code) {
 		}
 		$output = '';
 		for($i = 0; $i < count($matches[0]); $i++) {
-			$output .= '<div class="'.apply_filters( 'theme_css_class', 'tab' ).'">' . $matches[3][$i]['title'] . '</div>';
+			$output .= '<div class="'.apply_filters( 'theme_css_class', 'tab' ).'"><a href="#">' . $matches[3][$i]['title'] . '</a></div>';
 			$output .= '<div class="'.apply_filters( 'theme_css_class', 'pane' ).'">' . do_shortcode(trim($matches[5][$i])) . '</div>';
 		}
 		if((int)$initialtab > 1){
@@ -96,3 +95,12 @@ function theme_shortcode_toggle($atts, $content = null, $code) {
 	return '<div class="toggle'.$state.'"><h4 class="toggle_title">' . $title . '</h4><div class="toggle_content"'.$display.'>' . do_shortcode(trim($content)) . '</div></div>';
 }
 add_shortcode('toggle', 'theme_shortcode_toggle');
+
+function theme_unaccent($string) {
+    if (strpos($string = htmlentities($string, ENT_QUOTES, 'UTF-8'), '&') !== false)
+    {
+        $string = html_entity_decode(preg_replace('~&([a-z]{1,2})(?:acute|cedil|circ|grave|lig|orn|ring|slash|tilde|uml);~i', '$1', $string), ENT_QUOTES, 'UTF-8');
+    }
+
+    return $string;
+}

@@ -1,12 +1,24 @@
 body {
-	font-family: "Lucida Sans Unicode","Lucida Grande",Garuda,sans-serif;
+	font-family: Arial,Helvetica,Garuda,sans-serif;
 	line-height: 20px;
 
 }
 
-
+#site_name, #site_description, 
+.kwick_title, .kwick_detail h3, 
+#navigation a, 
+.portfolio_title, 
+.dropcap1, .dropcap2, .dropcap3, .dropcap4, 
+h1,h2,h3,h4,h5,h6,
+#feature h1, #introduce, 
+#footer h3, #copyright{
+	font-family: 'PT Sans Narrow';
+	
+	
+}h1,h2,h3,h4,h5,h6 {font-family: "PT Sans Narrow"; text-transform: uppercase; font-weight: bold;}
+body,copyright {font-family: "PT Sans";}
 #header {
-	height: 90px;
+	height: 160px;
 	background-color: #fefefe;
 
 }
@@ -19,7 +31,7 @@ body {
 	font-size: 11px;
 }
 #logo, #logo_text {
-	bottom: 20px;
+	bottom: 10px;
 }
 #navigation .menu > li.hover > a,
 #navigation .menu > li.hover > a:active,
@@ -100,14 +112,14 @@ a:hover {
 	background-color: #fefefe;
 
 	color: #333333;
-	font-size: 12px;
+	font-size: 14px;
 }
 
 .wp-pagenavi a:hover {
-	font-size: 14px;
+	font-size: 16px;
 }
 .wp-pagenavi span.current {
-	font-size: 16px;
+	font-size: 18px;
 }
 ul.mini_tabs li.current, ul.mini_tabs li.current a {
 	background-color: #fefefe;
@@ -273,10 +285,10 @@ h6 {
 	font-size: 12px;
 }
 #nivo_slider_wrap, #nivo_slider_loading, #nivo_slider {
-	height: 300px;
+	height: 440px;
 }
 #nivo_slider_frame {
-	height: 299px;
+	height: 439px;
 }
 #nivo_slider_loading {
 	background-color: #ffffff;
@@ -285,7 +297,10 @@ h6 {
 	background-color: #000000;
 	color: #ffffff;
 }
-#kwicks li {
+.slider_control_bg {
+	background-color: #000000;
+}
+#kwicks, #kwicks li {
 	height: 440px;
 }
 .kwick_frame,.kwick_last_frame {
@@ -298,7 +313,7 @@ ul.anythingBase li.panel, div.anythingSlider .anythingWindow {
 	background-color: #ffffff;
 }
 #anything_slider_wrap, #anything_slider_loading, #anything_slider {
-	height: 464px;
+	height: 440px;
 }
 #anything_slider p {
 	font-size: 12px;
@@ -330,13 +345,13 @@ ul.anythingBase li.panel, div.anythingSlider .anythingWindow {
 	color: #ffffff !important;
 }
 .caption_left, .caption_right {
-	height: 434px;
+	height: 410px;
 }
 .entry {
 	margin-bottom: 80px;
 }
 .entry_title {
-	font-size: 36px;
+	font-size: 24px;
 }
 .entry_left .entry_image .image_frame {
 	width: 200px;
@@ -397,11 +412,15 @@ ul.mini_tabs li a.current {
 }
 .accordion .tab {
 	background-color: #f5f5f5;
-	color: #666666;
+}
+.accordion .tab a {
+	color: #666666 !important;
 }
 .accordion .tab.current {
 	background-color: #FFFFFF;
-	color: #333333;
+}
+.accordion .tab.current a {
+	color: #333333 !important;
 }
 #page input[type="text"],
 #page input[type="password"],
@@ -441,3 +460,49 @@ ul.mini_tabs li a.current {
 #footer .textarea {
 	color:  #ffffff;
 }
+#navigation {
+right: -15px;
+bottom: -20px;
+position: absolute;
+height: 130px;
+}
+.jqueryslidemenu ul li {width: 150px;}
+
+.jqueryslidemenu ul li a {overflow: visible;
+text-align: center; margin-bottom: 50px;text-transform: uppercase;
+font-weight: bold;
+}
+
+.navbox {
+background-color: #000;
+height: 60px;
+width: 60px;
+margin: auto;
+-webkit-transform: rotate(-45deg);
+-webkit-transition: all 0.2s ease-in 0s;
+}
+.navbox:hover {
+background-color: green;
+-webkit-transform: rotate(0deg);
+-webkit-transition: all 0.2s ease-in 0s;
+}
+
+.jqueryslidemenu ul li ul li a .navbox {
+background-color: transparent;
+height: 0px;}
+
+.jqueryslidemenu ul li ul li a {
+width: auto;
+text-align: left;
+}
+
+#top_area {
+top: 0px;
+width: 50px;
+background: black;
+color: #fff!important;
+padding: 5px 10px;
+}
+
+#top_area a {
+color: #fff!important; font-weight: bold;}

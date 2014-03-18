@@ -16,7 +16,13 @@
 				<?php echo $size;?>
 			</td>
 			<td>
-				<?php echo mb_substr($image->post_content,0,50,get_option('blog_charset'));?>
+				<?php if(function_exists('mb_substr')){ 
+					echo mb_substr($image->post_content,0,50,get_option('blog_charset'));
+				} else{
+					echo substr($image->post_content,0,50);
+				}
+
+				?>
 			</td>
 			<td width="90" align="center">
 				<div class="button-secondary edit-item" style="margin-bottom: 2px;">Edit</div>

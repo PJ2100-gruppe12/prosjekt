@@ -5,8 +5,8 @@
 class Theme_Widget_Portfolios_List extends WP_Widget {
 
 	function Theme_Widget_Portfolios_List() {
-		$widget_ops = array('classname' => 'widget_portfolios_list', 'description' => __( "Displays the portfolio list on your site", 'striking_admin') );
-		$this->WP_Widget('portfolios_list', THEME_SLUG.' - '.__('Portfolio List', 'striking_admin'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_portfolios_list', 'description' => __( "Displays the portfolio list on your site", 'theme_admin') );
+		$this->WP_Widget('portfolios_list', THEME_SLUG.' - '.__('Portfolio List', 'theme_admin'), $widget_ops);
 		$this->alt_option_name = 'widget_portfolios_list';
 
 		add_action( 'save_post', array(&$this, 'flush_widget_cache') );
@@ -28,7 +28,7 @@ class Theme_Widget_Portfolios_List extends WP_Widget {
 		ob_start();
 		extract($args);
 
-		$title = apply_filters('widget_title', empty($instance['title']) ? __('Portfolios', 'striking_front') : $instance['title'], $instance, $this->id_base);
+		$title = apply_filters('widget_title', empty($instance['title']) ? __('Portfolios', 'theme_front') : $instance['title'], $instance, $this->id_base);
 		if ( !$number = (int) $instance['number'] )
 			$number = 10;
 		else if ( $number < 1 )
@@ -48,6 +48,8 @@ class Theme_Widget_Portfolios_List extends WP_Widget {
 		
 		$disable_thumbnail = $instance['disable_thumbnail'] ? '1' : '0';
 		$display_extra_type = $instance['display_extra_type'] ? $instance['display_extra_type'] :'time';
+		$target = isset($instance['target'])?$instance['target']:'_self';
+
 		if($display_extra_type == 'both'){
 			$display_extra_type = array('time','description');
 		}else{
@@ -100,9 +102,17 @@ class Theme_Widget_Portfolios_List extends WP_Widget {
 		<ul class="posts_list">
 <?php  while ($r->have_posts()) : $r->the_post(); ?>
 			<li>
-<?php if(!$disable_thumbnail):?>
+<?php if(!$disable_thumbnail):
+	$type = get_post_meta(get_the_id(), '_type', true);
+	if($type == 'link'){
+		$link = get_post_meta(get_the_ID(), '_link', true);
+		$href = theme_get_superlink($link);
+	} else {
+		$href = get_permalink();
+	}
+?>
 <?php if (has_post_thumbnail() ): ?>
-				<a class="thumbnail" href="<?php echo get_permalink() ?>" title="<?php the_title();?>">
+				<a class="thumbnail" href="<?php echo $href; ?>" title="<?php the_title();?>" target="<?php echo $target;?>">
 					<?php the_post_thumbnail(array(65,65),array('title'=>get_the_title(),'alt'=>get_the_title())); ?>
 				</a>
 <?php elseif(theme_get_option('portfolio','display_default_thumbnail')):
@@ -112,13 +122,23 @@ class Theme_Widget_Portfolios_List extends WP_Widget {
 		$default_thumbnail_image = THEME_IMAGES.'/widget_posts_thumbnail.png';
 	}
 ?>
-				<a class="thumbnail" href="<?php echo get_permalink() ?>" title="<?php the_title();?>">
+				<a class="thumbnail" href="<?php echo $href; ?>" title="<?php the_title();?>" target="<?php echo $target;?>">
 					<img src="<?php echo $default_thumbnail_image;?>" width="65" height="65" title="<?php the_title();?>" alt="<?php the_title();?>"/>
 				</a>
 <?php endif;//end has_post_thumbnail ?>
 <?php endif;//disable_thumbnail ?>
 				<div class="post_extra_info">
-					<a href="<?php the_permalink() ?>" rel="bookmark" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>"><?php if ( get_the_title() ) { if($title_length && mb_strlen(get_the_title())>$title_length){echo mb_substr(get_the_title(),0,$title_length).'...';}else{the_title();} }else the_ID(); ?></a>
+					<a href="<?php echo $href; ?>" rel="bookmark" title="<?php echo esc_attr(get_the_title() ? get_the_title() : get_the_ID()); ?>" target="<?php echo $target;?>">
+						<?php 
+							if( get_the_title() ) { 
+								if((int)$title_length){
+									echo theme_strcut(get_the_title(),$title_length,'...');
+								}
+							}else {
+								the_ID();
+							}
+						?>
+					</a>
 <?php if(in_array('time', $display_extra_type)):?>
 					<time datetime="<?php the_time('Y-m-d') ?>"><?php echo get_the_date(); ?></time>
 <?php endif;?>
@@ -152,6 +172,7 @@ class Theme_Widget_Portfolios_List extends WP_Widget {
 		$instance['cat'] = $new_instance['cat'];
 		$instance['portfolio_type'] = $new_instance['portfolio_type'];
 		$instance['orderby'] = $new_instance['orderby'];
+		$instance['target'] = $new_instance['target'];
 		
 		$this->flush_widget_cache();
 
@@ -173,6 +194,7 @@ class Theme_Widget_Portfolios_List extends WP_Widget {
 		$cat = isset($instance['cat']) ? $instance['cat'] : array();
 		$portfolio_type = isset($instance['portfolio_type']) ? $instance['portfolio_type'] : array();
 		$orderby = isset( $instance['orderby'] ) ? $instance['orderby'] : 'menu_order';
+		$target = isset($instance['target'])?$instance['target']:'_self';
 		
 		if ( !isset($instance['number']) || !$number = (int) $instance['number'] )
 			$number = 5;
@@ -183,41 +205,41 @@ class Theme_Widget_Portfolios_List extends WP_Widget {
 
 		$categories = get_terms('portfolio_category','orderby=name&hide_empty=0&suppress_filters=0');
 		$portfolio_type_array = array(
-			"image" => __('Image','striking_admin'),
-			"gallery" => __('Gallery','striking_admin'),
-			"video" => __('Video','striking_admin'),
-			"doc" => __('Document','striking_admin'),
-			"link" => __('Link','striking_admin'),
-			"lightbox" => __('Lightbox','striking_admin'),
+			"image" => __('Image','theme_admin'),
+			"gallery" => __('Gallery','theme_admin'),
+			"video" => __('Video','theme_admin'),
+			"doc" => __('Document','theme_admin'),
+			"link" => __('Link','theme_admin'),
+			"lightbox" => __('Lightbox','theme_admin'),
 		);
 ?>
-		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:','striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:','theme_admin'); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
 
-		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('number'); ?>"><?php _e('Number of posts to show:', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('number'); ?>" name="<?php echo $this->get_field_name('number'); ?>" type="text" value="<?php echo $number; ?>" size="3" /></p>
 
 		<p><input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id('disable_thumbnail'); ?>" name="<?php echo $this->get_field_name('disable_thumbnail'); ?>"<?php checked( $disable_thumbnail ); ?> />
-		<label for="<?php echo $this->get_field_id('disable_thumbnail'); ?>"><?php _e( 'Disable Post Thumbnail?' , 'striking_admin'); ?></label></p>
+		<label for="<?php echo $this->get_field_id('disable_thumbnail'); ?>"><?php _e( 'Disable Post Thumbnail?' , 'theme_admin'); ?></label></p>
 		
-		<p><label for="<?php echo $this->get_field_id('title_length'); ?>"><?php _e('Length of Title to show:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('title_length'); ?>"><?php _e('Length of Title to show:', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('title_length'); ?>" name="<?php echo $this->get_field_name('title_length'); ?>" type="text" value="<?php echo $title_length; ?>" size="3" /></p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('display_extra_type'); ?>"><?php _e( 'Display Extra infomation type:', 'striking_admin' ); ?></label>
+			<label for="<?php echo $this->get_field_id('display_extra_type'); ?>"><?php _e( 'Display Extra infomation type:', 'theme_admin' ); ?></label>
 			<select name="<?php echo $this->get_field_name('display_extra_type'); ?>" id="<?php echo $this->get_field_id('display_extra_type'); ?>" class="widefat">
-				<option value="time"<?php selected($display_extra_type,'time');?>><?php _e( 'Time', 'striking_admin' ); ?></option>
-				<option value="description"<?php selected($display_extra_type,'description');?>><?php _e( 'Description', 'striking_admin' ); ?></option>
-				<option value="both"<?php selected($display_extra_type,'both');?>><?php _e( 'Time and Description', 'striking_admin' ); ?></option>
-				<option value="none"<?php selected($display_extra_type,'none');?>><?php _e( 'None', 'striking_admin' ); ?></option>
+				<option value="time"<?php selected($display_extra_type,'time');?>><?php _e( 'Time', 'theme_admin' ); ?></option>
+				<option value="description"<?php selected($display_extra_type,'description');?>><?php _e( 'Description', 'theme_admin' ); ?></option>
+				<option value="both"<?php selected($display_extra_type,'both');?>><?php _e( 'Time and Description', 'theme_admin' ); ?></option>
+				<option value="none"<?php selected($display_extra_type,'none');?>><?php _e( 'None', 'theme_admin' ); ?></option>
 			</select>
 		</p>
 		
-		<p><label for="<?php echo $this->get_field_id('desc_length'); ?>"><?php _e('Length of Description to show:', 'striking_admin'); ?></label>
+		<p><label for="<?php echo $this->get_field_id('desc_length'); ?>"><?php _e('Length of Description to show:', 'theme_admin'); ?></label>
 		<input id="<?php echo $this->get_field_id('desc_length'); ?>" name="<?php echo $this->get_field_name('desc_length'); ?>" type="text" value="<?php echo $desc_length; ?>" size="3" /></p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('cat'); ?>"><?php _e( 'Categorys:' , 'striking_admin'); ?></label>
+			<label for="<?php echo $this->get_field_id('cat'); ?>"><?php _e( 'Categorys:' , 'theme_admin'); ?></label>
 			<select style="height:5.5em" name="<?php echo $this->get_field_name('cat'); ?>[]" id="<?php echo $this->get_field_id('cat'); ?>" class="widefat" multiple="multiple">
 				<?php foreach($categories as $category):?>
 				<option value="<?php echo $category->term_id;?>"<?php echo in_array($category->term_id, $cat)? ' selected="selected"':'';?>><?php echo $category->name;?></option>
@@ -226,7 +248,7 @@ class Theme_Widget_Portfolios_List extends WP_Widget {
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('portfolio_type'); ?>"><?php _e( 'Portfolio Type:' , 'striking_admin'); ?></label>
+			<label for="<?php echo $this->get_field_id('portfolio_type'); ?>"><?php _e( 'Portfolio Type:' , 'theme_admin'); ?></label>
 			<select style="height:5.5em" name="<?php echo $this->get_field_name('portfolio_type'); ?>[]" id="<?php echo $this->get_field_id('portfolio_type'); ?>" class="widefat" multiple="multiple">
 				<?php foreach($portfolio_type_array as $key=>$value):?>
 				<option value="<?php echo $key;?>"<?php echo in_array($key, $portfolio_type)? ' selected="selected"':'';?>><?php echo $value;?></option>
@@ -235,17 +257,27 @@ class Theme_Widget_Portfolios_List extends WP_Widget {
 		</p>
 		
 		<p>
-			<label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e( 'Orderby:', 'striking_admin' ); ?></label>
+			<label for="<?php echo $this->get_field_id('orderby'); ?>"><?php _e( 'Orderby:', 'theme_admin' ); ?></label>
 			<select name="<?php echo $this->get_field_name('orderby'); ?>" id="<?php echo $this->get_field_id('orderby'); ?>" class="widefat">
-				<option value="none"<?php selected($orderby,'none');?>><?php _e( 'None', 'striking_admin' ); ?></option>
-				<option value="ID"<?php selected($orderby,'ID');?>><?php _e( ' Order by post id', 'striking_admin' ); ?></option>
-				<option value="author"<?php selected($orderby,'author');?>><?php _e( ' Order by author', 'striking_admin' ); ?></option>
-				<option value="title"<?php selected($orderby,'title');?>><?php _e( ' Order by title', 'striking_admin' ); ?></option>
-				<option value="date"<?php selected($orderby,'date');?>><?php _e( 'Order by date', 'striking_admin' ); ?></option>
-				<option value="modified"<?php selected($orderby,'modified');?>><?php _e( 'Order by last modified date', 'striking_admin' ); ?></option>
-				<option value="rand"<?php selected($orderby,'rand');?>><?php _e( 'Random order', 'striking_admin' ); ?></option>
-				<option value="comment_count"<?php selected($orderby,'comment_count');?>><?php _e( 'Order by number of comments', 'striking_admin' ); ?></option>
-				<option value="menu_order"<?php selected($orderby,'menu_order');?>><?php _e( 'Order by Page Order', 'striking_admin' ); ?></option>
+				<option value="none"<?php selected($orderby,'none');?>><?php _e( 'None', 'theme_admin' ); ?></option>
+				<option value="ID"<?php selected($orderby,'ID');?>><?php _e( ' Order by post id', 'theme_admin' ); ?></option>
+				<option value="author"<?php selected($orderby,'author');?>><?php _e( ' Order by author', 'theme_admin' ); ?></option>
+				<option value="title"<?php selected($orderby,'title');?>><?php _e( ' Order by title', 'theme_admin' ); ?></option>
+				<option value="date"<?php selected($orderby,'date');?>><?php _e( 'Order by date', 'theme_admin' ); ?></option>
+				<option value="modified"<?php selected($orderby,'modified');?>><?php _e( 'Order by last modified date', 'theme_admin' ); ?></option>
+				<option value="rand"<?php selected($orderby,'rand');?>><?php _e( 'Random order', 'theme_admin' ); ?></option>
+				<option value="comment_count"<?php selected($orderby,'comment_count');?>><?php _e( 'Order by number of comments', 'theme_admin' ); ?></option>
+				<option value="menu_order"<?php selected($orderby,'menu_order');?>><?php _e( 'Order by Page Order', 'theme_admin' ); ?></option>
+			</select>
+		</p>
+
+		<p>
+			<label for="<?php echo $this->get_field_id( 'target' ); ?>"><?php _e('Link target:', 'theme_admin');?></label>
+			<select name="<?php echo $this->get_field_name( 'target' ); ?>" id="<?php echo $this->get_field_id( 'target' ); ?>" class="widefat">
+				<option value="_blank"<?php selected($target,'_blank');?>><?php _e( 'Load in a new window', 'theme_admin' ); ?></option>
+				<option value="_self"<?php selected($target,'_self');?>><?php _e( 'Load in the same frame as it was clicked', 'theme_admin' ); ?></option>
+				<option value="_parent"<?php selected($target,'_parent');?>><?php _e( 'Load in the parent frameset', 'theme_admin' ); ?></option>
+				<option value="_top"<?php selected($target,'_top');?>><?php _e( 'Load in the full body of the window', 'theme_admin' ); ?></option>
 			</select>
 		</p>
 <?php

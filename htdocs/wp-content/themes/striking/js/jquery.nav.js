@@ -1,4 +1,4 @@
-/*! Nav - v0.2.0 - 2012-10-29
+/*! Nav - v0.3.0 - 2012-10-29
 * https://github.com/KaptinLin/nav
 * Copyright (c) 2012 KaptinLin; Licensed GPL */
 

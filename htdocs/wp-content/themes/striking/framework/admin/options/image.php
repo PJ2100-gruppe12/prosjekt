@@ -3,8 +3,8 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 	public $slug = 'image';
 
 	function __construct(){
-		$this->name = sprintf(__('%s Image Settings','striking_admin'),THEME_NAME);
-		//"desc" => __("The options listed below determine the dimensions in pixels to use in the shortcode of image.",'striking_admin'),
+		$this->name = sprintf(__('%s Image Settings','theme_admin'),THEME_NAME);
+		//"desc" => __("The options listed below determine the dimensions in pixels to use in the shortcode of image.",'theme_admin'),
 		parent::__construct();
 	}
 
@@ -12,11 +12,11 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 		$options = array(
 			array(
 				"slug" => 'general',
-				"name" => __("Image General",'striking_admin'),
+				"name" => __("Image General",'theme_admin'),
 				"options" => array(
 					array(
-						"name" => __("Custom Sizes",'striking_admin'),
-						"desc" => __("Enter the name of custom you'd like to create.",'striking_admin'),
+						"name" => __("Custom Sizes",'theme_admin'),
+						"desc" => __("Enter the name of custom you'd like to create.",'theme_admin'),
 						"id" => "customs",
 						"function" =>  "_option_customs_function",
 						"default" => "",
@@ -26,10 +26,10 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 			),
 			array(
 				"slug" => 'size_small',
-				"name" => __("Image Size: Small",'striking_admin'),
+				"name" => __("Image Size: Small",'theme_admin'),
 				"options" => array(
 					array(
-						"name" => __("Width",'striking_admin'),
+						"name" => __("Width",'theme_admin'),
 						"desc" => "",
 						"id" => "small_width",
 						"default" => 220,
@@ -39,7 +39,7 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 						"type" => "range"
 					),
 					array(
-						"name" => __("Height",'striking_admin'),
+						"name" => __("Height",'theme_admin'),
 						"desc" => "",
 						"id" => "small_height",
 						"default" => 150,
@@ -52,10 +52,10 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 			),
 			array(
 				"slug" => 'size_medium',
-				"name" => __("Image Size: Medium",'striking_admin'),
+				"name" => __("Image Size: Medium",'theme_admin'),
 				"options" => array(
 					array(
-						"name" => __("Width",'striking_admin'),
+						"name" => __("Width",'theme_admin'),
 						"desc" => "",
 						"id" => "medium_width",
 						"default" => 292,
@@ -65,7 +65,7 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 						"type" => "range"
 					),
 					array(
-						"name" => __("Height",'striking_admin'),
+						"name" => __("Height",'theme_admin'),
 						"desc" => "",
 						"id" => "medium_height",
 						"default" => 190,
@@ -78,10 +78,10 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 			),
 			array(
 				"slug" => 'size_large',
-				"name" => __("Image Size: Large",'striking_admin'),
+				"name" => __("Image Size: Large",'theme_admin'),
 				"options" => array(
 					array(
-						"name" => __("Width",'striking_admin'),
+						"name" => __("Width",'theme_admin'),
 						"desc" => "",
 						"id" => "large_width",
 						"default" => 459,
@@ -91,7 +91,7 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 						"type" => "range"
 					),
 					array(
-						"name" => __("Height",'striking_admin'),
+						"name" => __("Height",'theme_admin'),
 						"desc" => "",
 						"id" => "large_height",
 						"default" => 240,
@@ -112,7 +112,7 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 					"name" => "Image Size: ".$custom." Sizes",
 					"options" => array(
 						array(
-							"name" => __("Width",'striking_admin'),
+							"name" => __("Width",'theme_admin'),
 							"desc" => "",
 							"id" => $custom."_width",
 							"default" => 150,
@@ -122,7 +122,7 @@ class Theme_Options_Page_Image extends Theme_Options_Page_With_Tabs {
 							"type" => "range"
 						),
 						array(
-							"name" => __("Height",'striking_admin'),
+							"name" => __("Height",'theme_admin'),
 							"desc" => "",
 							"id" => $custom."_height",
 							"default" => 150,
@@ -189,11 +189,11 @@ jQuery(document).ready( function($) {
 </style>
 HTML;
 		
-		echo '<input type="text" id="add_custom" name="add_custom" pattern="([a-zA-Z\x7f-\xff][ a-zA-Z0-9_\x7f-\xff]*){0,1}" data-message="'.__('Please input a valid name which starts with a letter, followed by letters, numbers, spaces, or underscores.','striking_admin').'" maxlength="20" /><span class="validator-error"></span>';
+		echo '<input type="text" id="add_custom" name="add_custom" pattern="([a-zA-Z\x7f-\xff][ a-zA-Z0-9_\x7f-\xff]*){0,1}" data-message="'.__('Please input a valid name which starts with a letter, followed by letters, numbers, spaces, or underscores.','theme_admin').'" maxlength="20" /><span class="validator-error"></span>';
 		if(!empty($customs)){
-			echo '<div class="custom-title">'.__('Below are the Sizes you have created','striking_admin').'</div>';
+			echo '<div class="custom-title">'.__('Below are the Sizes you have created','theme_admin').'</div>';
 			foreach($customs as $custom){
-				echo '<div class="custom-item"><span>'.$custom.'</span><input type="hidden" class="custom-item-value" value="'.$custom.'"/><input type="button" class="button" value="'.__('Delete','striking_admin').'"/></div>';
+				echo '<div class="custom-item"><span>'.$custom.'</span><input type="hidden" class="custom-item-value" value="'.$custom.'"/><input type="button" class="button" value="'.__('Delete','theme_admin').'"/></div>';
 			}
 		}
 		echo '<input type="hidden" value="' . $default . '" name="' . $value['id'] . '" id="customs"/>';

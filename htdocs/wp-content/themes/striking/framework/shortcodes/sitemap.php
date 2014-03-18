@@ -41,7 +41,7 @@ function sitemap_categories($atts){
 		$show_count = false;
 	}
 	if($show_feed === true || $show_feed == 'true'){
-		$feed = __( 'RSS', 'striking_front' );
+		$feed = __( 'RSS', 'theme_front' );
 	}else{
 		$feed = '';
 	}
@@ -83,7 +83,7 @@ function sitemap_posts($atts){
 	
 	$output = '';
 	while ($archive_query->have_posts()) : $archive_query->the_post();
-		$output .= '<li><a href="'.get_permalink().'" rel="bookmark" title="'.sprintf( __("Permanent Link to %s", 'striking_front'), get_the_title() ).'">'. get_the_title().'</a>'.($show_comment?' ('.get_comments_number().')':'').'</li>';
+		$output .= '<li><a href="'.get_permalink().'" rel="bookmark" title="'.sprintf( __("Permanent Link to %s", 'theme_front'), get_the_title() ).'">'. get_the_title().'</a>'.($show_comment?' ('.get_comments_number().')':'').'</li>';
 	endwhile;
 	return '<ul>'.$output.'</ul>';
 }
@@ -128,7 +128,7 @@ function sitemap_portfolios($atts){
 	
 	$output = '';
 	while (have_posts()) : the_post();
-		$output .= '<li><a href="'.get_permalink().'" rel="bookmark" title="'.sprintf( __("Permanent Link to %s", 'striking_front'), get_the_title() ).'">'. get_the_title().'</a>'.($show_comment?' ('.get_comments_number().')':'').'</li>';
+		$output .= '<li><a href="'.get_permalink().'" rel="bookmark" title="'.sprintf( __("Permanent Link to %s", 'theme_front'), get_the_title() ).'">'. get_the_title().'</a>'.($show_comment?' ('.get_comments_number().')':'').'</li>';
 	endwhile;
 	wp_reset_query();
 	return '<ul>'.$output.'</ul>';
@@ -149,24 +149,24 @@ function sitemap_all($atts){
 	$output = '';
 	
 	if(in_array('pages',$shows)){
-		$output .= '<h2>'.__('Pages','striking_front').'</h2>';
+		$output .= '<h2>'.__('Pages','theme_front').'</h2>';
 		$output .= sitemap_pages($atts);
-		$output .= '<div class="divider top"><a href="#">'.__('Top','striking_front').'</a></div> ';
+		$output .= '<div class="divider top"><a href="#">'.__('Top','theme_front').'</a></div> ';
 	}
 	if(in_array('categories',$shows)){
-		$output .= '<h2>'.__('Category Archives','striking_front').'</h2>';
+		$output .= '<h2>'.__('Category Archives','theme_front').'</h2>';
 		$output .= sitemap_categories($atts);
-		$output .= '<div class="divider top"><a href="#">'.__('Top','striking_front').'</a></div> ';
+		$output .= '<div class="divider top"><a href="#">'.__('Top','theme_front').'</a></div> ';
 	}
 	if(in_array('posts',$shows)){
-		$output .= '<h2>'.__('Blog Posts','striking_front').'</h2>';
+		$output .= '<h2>'.__('Blog Posts','theme_front').'</h2>';
 		$output .= sitemap_posts($atts);
-		$output .= '<div class="divider top"><a href="#">'.__('Top','striking_front').'</a></div> ';
+		$output .= '<div class="divider top"><a href="#">'.__('Top','theme_front').'</a></div> ';
 	}
 	if(in_array('portfolios',$shows)){
-		$output .= '<h2>'.__('Portfolios','striking_front').'</h2>';
+		$output .= '<h2>'.__('Portfolios','theme_front').'</h2>';
 		$output .= sitemap_portfolios($atts);
-		$output .= '<div class="divider top"><a href="#">'.__('Top','striking_front').'</a></div> ';
+		$output .= '<div class="divider top"><a href="#">'.__('Top','theme_front').'</a></div> ';
 	}
 	
 	return $output;

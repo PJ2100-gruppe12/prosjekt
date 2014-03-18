@@ -9,8 +9,9 @@ class Theme_Post_Type_Slideshow {
 	}
 
 	function init(){
+		$this->register();
 		add_action( 'template_redirect', array(&$this, 'context_fixer') );
-		add_action('init', array(&$this, 'register'),0);
+		add_action( "restrict_manage_posts", array( &$this, '_action_filters' ));
 	}
 
 	function register(){
@@ -21,20 +22,20 @@ class Theme_Post_Type_Slideshow {
 	function register_post_type() {
 		register_post_type($this->post_type, array(
 			'labels' => array(
-				'name' => _x('Slider Items', 'post type general name', 'striking_admin'),
-				'singular_name' => _x('Slider Item', 'post type singular name', 'striking_admin'),
-				'add_new' => _x('Add New', 'slideshow', 'striking_admin'),
-				'add_new_item' => __('Add New Slider Item', 'striking_admin'),
-				'edit_item' => __('Edit Slider Item', 'striking_admin'),
-				'new_item' => __('New Slider Item', 'striking_admin'),
-				'view_item' => __('View Slider Item', 'striking_admin'),
-				'search_items' => __('Search Slider Items', 'striking_admin'),
-				'not_found' =>  __('No slider item found', 'striking_admin'),
-				'not_found_in_trash' => __('No slider items found in Trash', 'striking_admin'), 
+				'name' => _x('Slider Items', 'post type general name', 'theme_admin'),
+				'singular_name' => _x('Slider Item', 'post type singular name', 'theme_admin'),
+				'add_new' => _x('Add New', 'slideshow', 'theme_admin'),
+				'add_new_item' => __('Add New Slider Item', 'theme_admin'),
+				'edit_item' => __('Edit Slider Item', 'theme_admin'),
+				'new_item' => __('New Slider Item', 'theme_admin'),
+				'view_item' => __('View Slider Item', 'theme_admin'),
+				'search_items' => __('Search Slider Items', 'theme_admin'),
+				'not_found' =>  __('No slider item found', 'theme_admin'),
+				'not_found_in_trash' => __('No slider items found in Trash', 'theme_admin'), 
 				'parent_item_colon' => '',
-				'menu_name' => __('Slider Items', 'striking_admin' ),
+				'menu_name' => __('Slider Items', 'theme_admin' ),
 			),
-			'singular_label' => __('slideshow', 'striking_admin'),
+			'singular_label' => __('slideshow', 'theme_admin'),
 			'public' => false,
 			'publicly_queryable' => false,
 			'exclude_from_search' => true,
@@ -57,29 +58,60 @@ class Theme_Post_Type_Slideshow {
 		register_taxonomy($this->post_type_taxonomy,$this->post_type,array(
 			'hierarchical' => true,
 			'labels' => array(
-				'name' => _x( 'Slider Categories', 'taxonomy general name', 'striking_admin' ),
-				'singular_name' => _x( 'Slideshow Category', 'taxonomy singular name', 'striking_admin' ),
-				'search_items' =>  __( 'Search Categories', 'striking_admin' ),
-				'popular_items' => __( 'Popular Categories', 'striking_admin' ),
-				'all_items' => __( 'All Categories', 'striking_admin' ),
+				'name' => _x( 'Slider Categories', 'taxonomy general name', 'theme_admin' ),
+				'singular_name' => _x( 'Slideshow Category', 'taxonomy singular name', 'theme_admin' ),
+				'search_items' =>  __( 'Search Categories', 'theme_admin' ),
+				'popular_items' => __( 'Popular Categories', 'theme_admin' ),
+				'all_items' => __( 'All Categories', 'theme_admin' ),
 				'parent_item' => null,
 				'parent_item_colon' => null,
-				'edit_item' => __( 'Edit Slideshow Category', 'striking_admin' ), 
-				'update_item' => __( 'Update Slideshow Category', 'striking_admin' ),
-				'add_new_item' => __( 'Add New Slideshow Category', 'striking_admin' ),
-				'new_item_name' => __( 'New Slideshow Category Name', 'striking_admin' ),
-				'separate_items_with_commas' => __( 'Separate Slideshow category with commas', 'striking_admin' ),
-				'add_or_remove_items' => __( 'Add or remove slideshow category', 'striking_admin' ),
-				'choose_from_most_used' => __( 'Choose from the most used slideshow category', 'striking_admin' ),
-				'menu_name' => __( 'Categories', 'striking_admin' ),
+				'edit_item' => __( 'Edit Slideshow Category', 'theme_admin' ), 
+				'update_item' => __( 'Update Slideshow Category', 'theme_admin' ),
+				'add_new_item' => __( 'Add New Slideshow Category', 'theme_admin' ),
+				'new_item_name' => __( 'New Slideshow Category Name', 'theme_admin' ),
+				'separate_items_with_commas' => __( 'Separate Slideshow category with commas', 'theme_admin' ),
+				'add_or_remove_items' => __( 'Add or remove slideshow category', 'theme_admin' ),
+				'choose_from_most_used' => __( 'Choose from the most used slideshow category', 'theme_admin' ),
+				'menu_name' => __( 'Categories', 'theme_admin' ),
 			),
 			'public' => false,
 			'show_in_nav_menus' => false,
 			'show_ui' => true,
 			'show_tagcloud' => false,
-			'query_var' => false,
+			'query_var' => true,
 			'rewrite' => false,
 		));
+	}
+
+	public function _action_filters(){
+		$screen = get_current_screen();
+		if($screen->post_type !== $this->post_type){
+			return;
+		}
+		
+		$taxonomy_slug = $this->post_type_taxonomy;
+		$taxonomy = get_taxonomy($taxonomy_slug);
+		if($taxonomy){
+			$args = array(
+				'orderby' => 'name',
+				'hide_empty' => false
+			);
+
+			$terms = get_terms($taxonomy_slug, $args);
+
+			if($terms) {
+				printf(' &nbsp;<select name="%s" class="postform">', $taxonomy_slug);
+				printf('<option value="0">%s</option>', _x('Show all ' . $taxonomy->label, 'taxonomy show all filter'));
+				foreach ($terms as $term) {
+					if(isset($_GET[$taxonomy_slug]) && $_GET[$taxonomy_slug] === $term->slug) {
+						printf('<option value="%s" selected="selected">%s (%s)</option>', $term->slug, $term->name, $term->count);
+					} else {
+						printf('<option value="%s">%s (%s)</option>', $term->slug, $term->name, $term->count);
+					}
+				}
+				print('</select>&nbsp;');
+			}
+		}
 	}
 
 	function context_fixer(){
@@ -96,15 +128,18 @@ class Theme_Post_Type_Slideshow {
 		add_filter('manage_edit-'.$this->post_type.'_columns', array(&$this, 'edit_columns'));
 		add_action('manage_posts_custom_column',array(&$this, 'manager_custom_column'), 10, 2);
 
+		add_action('wp_enqueue_script',array(&$this,'deregister_script'));
+	}
+	
+	function deregister_script(){
 		if(theme_is_post_type_edit($this->post_type) || theme_is_post_type_new($this->post_type)){
 			wp_deregister_script('autosave');
 		}
 	}
-
 	function edit_columns($columns){
-		$columns['slideshow_category'] = __('Categories', 'striking_admin' );
-		$columns['author'] = __('Author', 'striking_admin' );
-		$columns['thumbnail'] = __('Thumbnail', 'striking_admin' );
+		$columns['slideshow_category'] = __('Categories', 'theme_admin' );
+		$columns['author'] = __('Author', 'theme_admin' );
+		$columns['thumbnail'] = __('Thumbnail', 'theme_admin' );
 		
 		return $columns;
 	}

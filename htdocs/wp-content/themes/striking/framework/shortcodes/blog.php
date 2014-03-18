@@ -33,7 +33,7 @@ function theme_shortcode_blog($atts, $content = null, $code) {
 		'category__and' =>'',
 		'category__not_in' => '',
 	), $atts));
-	
+
 	$query = array(
 		'posts_per_page' => (int)$count,
 		'post_type'=>'post',
@@ -56,9 +56,7 @@ function theme_shortcode_blog($atts, $content = null, $code) {
 	if($posts){
 		$query['post__in'] = explode(',',$posts);
 	}
-	if((int)$offset != 0){
-		$query['offset'] = (int)$offset;
-	}
+	
 	if ($nopaging == 'false') {
 		global $wp_version;
 		if((is_front_page() || is_home() ) && version_compare($wp_version, "3.1", '>=')){//fix wordpress 3.1 paged query 
@@ -70,15 +68,51 @@ function theme_shortcode_blog($atts, $content = null, $code) {
 	} else {
 		$query['showposts'] = $count;
 	}
+	if((int)$offset != 0){
+		$query['offset'] = (int)$offset;
+
+		if ($nopaging == 'false') {
+			$how_many_posts_past = $query['posts_per_page'] * ($query['paged'] - 1);
+			$query['offset'] = (int)$offset + (($query['paged'] > 1) ? $how_many_posts_past : 0);
+			$query['showposts'] = $count;
+		}
+	}
+	$column = (int)$column;
+	if($column > 6){
+		$column = 6;
+	}elseif($column < 1){
+		$column = 1;
+	}
+
 	if($image == 'true'){
 		if($imagetype == 'default'){
 			$featured_image_type = theme_get_option('blog', 'featured_image_type');
 		}else{
 			$featured_image_type = $imagetype;
 		}
+		if(empty($width)){
+			if($featured_image_type != 'left' && $featured_image_type != 'right'){
+				$layout = theme_get_inherit_option(get_queried_object_id(), '_layout', 'general','layout');
+				
+				if($column > 1){
+					if($layout == 'full'){
+						$width = floor((958-38*($column-1))/$column);
+					}else{
+						$width = floor((628-25*($column-1))/$column);
+					}
+				} else {
+					if($layout == 'full'){
+						$width = '960';
+					} else {
+						$width = '630';
+					}
+				}
+			}
+		}  
 	}else{
 		$featured_image_type = 'full';
 	}
+
 	if($frame == 'default'){
 		$frame =  theme_get_option('blog','frame');
 	}elseif($frame == 'true'){
@@ -105,8 +139,8 @@ function theme_shortcode_blog($atts, $content = null, $code) {
 	if($effect == 'default'){
 		$effect = theme_get_option('blog','effect');
 	}
-	$r = new WP_Query($query);
 
+	$r = new WP_Query($query);
 	$column = (int)$column;
 	if($column > 6){
 		$column = 6;
@@ -185,8 +219,8 @@ function theme_shortcode_blog_column_posts(&$r, $atts, $current) {
 		$read_more_text = wpml_t(THEME_NAME, 'Blog Post Read More Button Text',stripslashes(theme_get_option('blog','read_more_text')));
 	}
 	if ($grid == 'true') {
-		$class = array('half','third','fourth','fifth','sixth');
-		$css = $class[$column-2];
+		$class = array('','half','third','fourth','fifth','sixth');
+		$css = $class[$column-1];
 	} else {
 		$start = ($current-1) * $posts_per_column +1;
 		$end = $current * $posts_per_column;
@@ -255,7 +289,7 @@ function theme_shortcode_blog_column_posts(&$r, $atts, $current) {
 			if($title == 'true' || $meta == 'true'){
 				$output .= '<div class="entry_info">';
 				if($title == 'true'){
-					$output .= '<h2 class="entry_title"><a href="'.get_permalink().'" rel="bookmark" title="'.sprintf( __("Permanent Link to %s", 'striking_front'), get_the_title() ).'">'.get_the_title().'</a></h2>';
+					$output .= '<h2 class="entry_title"><a href="'.get_permalink().'" rel="bookmark" title="'.sprintf( __("Permanent Link to %s", 'theme_front'), get_the_title() ).'">'.get_the_title().'</a></h2>';
 				}
 				if($meta == 'true'){
 					$output .= '<div class="entry_meta"'.$divider_style.'>';
@@ -278,8 +312,7 @@ function theme_shortcode_blog_column_posts(&$r, $atts, $current) {
 					$content = str_replace(']]>', ']]&gt;', $content);
 					$output .= $content;
 				}else{
-					$content = get_the_excerpt();
-					$content = apply_filters('the_excerpt', $content);
+					$content = apply_filters('the_excerpt', get_the_excerpt());
 					$output .= '<div>'.$content.'</div>';
 					
 					if($read_more){
@@ -293,6 +326,16 @@ function theme_shortcode_blog_column_posts(&$r, $atts, $current) {
 					}
 				}
 				$output .= '</div>';
+			} else {
+				if($read_more){
+					$output .= '<div class="read_more_wrap">';
+					if($read_more_button){
+						$output .= '<a class="read_more_link '.apply_filters( 'theme_css_class', 'button' ).' small" href="'.get_permalink().'" rel="nofollow"><span>'.$read_more_text.'</span></a>';
+					}else{
+						$output .= '<a class="read_more_link" href="'.get_permalink().'" rel="nofollow">'.$read_more_text.'</a>';
+					}
+					$output .= '</div>';
+				}
 			}
 			
 			$output .= '</article>';
@@ -312,20 +355,20 @@ function theme_shortcode_blog_column_posts(&$r, $atts, $current) {
 function theme_blog_pagenavi($before = '', $after = '', $blog_query, $paged) {
 	global $wpdb, $wp_query;
 	
-	if (is_single())
-		return;
+	// if (is_single())
+	// 	return;
 	
 	$pagenavi_options = array(
-		//'pages_text' => __('Page %CURRENT_PAGE% of %TOTAL_PAGES%','striking_front'),
+		//'pages_text' => __('Page %CURRENT_PAGE% of %TOTAL_PAGES%','theme_front'),
 		'pages_text' => '',
 		'current_text' => '%PAGE_NUMBER%',
 		'page_text' => '%PAGE_NUMBER%',
-		'first_text' => __('&laquo; First','striking_front'),
-		'last_text' => __('Last &raquo;','striking_front'),
-		'next_text' => __('&raquo;','striking_front'),
-		'prev_text' => __('&laquo;','striking_front'),
-		'dotright_text' => __('...','striking_front'),
-		'dotleft_text' => __('...','striking_front'),
+		'first_text' => __('&laquo; First','theme_front'),
+		'last_text' => __('Last &raquo;','theme_front'),
+		'next_text' => __('&raquo;','theme_front'),
+		'prev_text' => __('&laquo;','theme_front'),
+		'dotright_text' => __('...','theme_front'),
+		'dotleft_text' => __('...','theme_front'),
 		'style' => 1,
 		'num_pages' => 4,
 		'always_show' => 0,

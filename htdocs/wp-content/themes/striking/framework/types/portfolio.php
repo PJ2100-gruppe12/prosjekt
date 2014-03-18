@@ -9,8 +9,9 @@ class Theme_Post_Type_Portfolio {
 	}
 
 	function init(){
+		$this->register();
 		add_action( 'template_redirect', array(&$this, 'context_fixer') );
-		add_action('init', array(&$this, 'register'),0);
+		add_action( "restrict_manage_posts", array( &$this, '_action_filters' ));
 	}
 
 	function register(){
@@ -26,20 +27,20 @@ class Theme_Post_Type_Portfolio {
 		}
 		register_post_type($this->post_type, array(
 			'labels' => array(
-				'name' => _x('Portfolio items', 'post type general name', 'striking_admin' ),
-				'singular_name' => _x('Portfolio Item', 'post type singular name', 'striking_admin' ),
-				'add_new' => _x('Add New', 'portfolio', 'striking_admin' ),
-				'add_new_item' => __('Add New Portfolio Item', 'striking_admin' ),
-				'edit_item' => __('Edit Portfolio Item', 'striking_admin' ),
-				'new_item' => __('New Portfolio Item', 'striking_admin' ),
-				'view_item' => __('View Portfolio Item', 'striking_admin' ),
-				'search_items' => __('Search Portfolio Items', 'striking_admin' ),
-				'not_found' =>  __('No portfolio item found', 'striking_admin' ),
-				'not_found_in_trash' => __('No portfolio items found in Trash', 'striking_admin' ), 
+				'name' => _x('Portfolio items', 'post type general name', 'theme_admin' ),
+				'singular_name' => _x('Portfolio Item', 'post type singular name', 'theme_admin' ),
+				'add_new' => _x('Add New', 'portfolio', 'theme_admin' ),
+				'add_new_item' => __('Add New Portfolio Item', 'theme_admin' ),
+				'edit_item' => __('Edit Portfolio Item', 'theme_admin' ),
+				'new_item' => __('New Portfolio Item', 'theme_admin' ),
+				'view_item' => __('View Portfolio Item', 'theme_admin' ),
+				'search_items' => __('Search Portfolio Items', 'theme_admin' ),
+				'not_found' =>  __('No portfolio item found', 'theme_admin' ),
+				'not_found_in_trash' => __('No portfolio items found in Trash', 'theme_admin' ), 
 				'parent_item_colon' => '',
-				'menu_name' => __('Portfolio items', 'striking_admin' ),
+				'menu_name' => __('Portfolio items', 'theme_admin' ),
 			),
-			'singular_label' => __('portfolio', 'striking_admin' ),
+			'singular_label' => __('portfolio', 'theme_admin' ),
 			'public' => true,
 			'publicly_queryable' => true,
 			'exclude_from_search' => false,
@@ -62,29 +63,60 @@ class Theme_Post_Type_Portfolio {
 		register_taxonomy($this->post_type_taxonomy,$this->post_type,array(
 			'hierarchical' => true,
 			'labels' => array(
-				'name' => _x( 'Portfolio Categories', 'taxonomy general name', 'striking_admin' ),
-				'singular_name' => _x( 'Portfolio Category', 'taxonomy singular name', 'striking_admin' ),
-				'search_items' =>  __( 'Search Categories', 'striking_admin' ),
-				'popular_items' => __( 'Popular Categories', 'striking_admin' ),
-				'all_items' => __( 'All Categories', 'striking_admin' ),
+				'name' => _x( 'Portfolio Categories', 'taxonomy general name', 'theme_admin' ),
+				'singular_name' => _x( 'Portfolio Category', 'taxonomy singular name', 'theme_admin' ),
+				'search_items' =>  __( 'Search Categories', 'theme_admin' ),
+				'popular_items' => __( 'Popular Categories', 'theme_admin' ),
+				'all_items' => __( 'All Categories', 'theme_admin' ),
 				'parent_item' => null,
 				'parent_item_colon' => null,
-				'edit_item' => __( 'Edit Portfolio Category', 'striking_admin' ), 
-				'update_item' => __( 'Update Portfolio Category', 'striking_admin' ),
-				'add_new_item' => __( 'Add New Portfolio Category', 'striking_admin' ),
-				'new_item_name' => __( 'New Portfolio Category Name', 'striking_admin' ),
-				'separate_items_with_commas' => __( 'Separate Portfolio category with commas', 'striking_admin' ),
-				'add_or_remove_items' => __( 'Add or remove portfolio category', 'striking_admin' ),
-				'choose_from_most_used' => __( 'Choose from the most used portfolio category', 'striking_admin' ),
-				'menu_name' => __( 'Categories', 'striking_admin' ),
+				'edit_item' => __( 'Edit Portfolio Category', 'theme_admin' ), 
+				'update_item' => __( 'Update Portfolio Category', 'theme_admin' ),
+				'add_new_item' => __( 'Add New Portfolio Category', 'theme_admin' ),
+				'new_item_name' => __( 'New Portfolio Category Name', 'theme_admin' ),
+				'separate_items_with_commas' => __( 'Separate Portfolio category with commas', 'theme_admin' ),
+				'add_or_remove_items' => __( 'Add or remove portfolio category', 'theme_admin' ),
+				'choose_from_most_used' => __( 'Choose from the most used portfolio category', 'theme_admin' ),
+				'menu_name' => __( 'Categories', 'theme_admin' ),
 			),
 			'public' => false,
 			'show_in_nav_menus' => false,
 			'show_ui' => true,
 			'show_tagcloud' => false,
-			'query_var' => false,
+			'query_var' => true,
 			'rewrite' => false,
 		));
+	}
+
+	public function _action_filters(){
+		$screen = get_current_screen();
+		if($screen->post_type !== $this->post_type){
+			return;
+		}
+		
+		$taxonomy_slug = $this->post_type_taxonomy;
+		$taxonomy = get_taxonomy($taxonomy_slug);
+		if($taxonomy){
+			$args = array(
+				'orderby' => 'name',
+				'hide_empty' => false
+			);
+
+			$terms = get_terms($taxonomy_slug, $args);
+
+			if($terms) {
+				printf(' &nbsp;<select name="%s" class="postform">', $taxonomy_slug);
+				printf('<option value="0">%s</option>', _x('Show all ' . $taxonomy->label, 'taxonomy show all filter'));
+				foreach ($terms as $term) {
+					if(isset($_GET[$taxonomy_slug]) && $_GET[$taxonomy_slug] === $term->slug) {
+						printf('<option value="%s" selected="selected">%s (%s)</option>', $term->slug, $term->name, $term->count);
+					} else {
+						printf('<option value="%s">%s (%s)</option>', $term->slug, $term->name, $term->count);
+					}
+				}
+				print('</select>&nbsp;');
+			}
+		}
 	}
 
 	function context_fixer(){
@@ -106,9 +138,9 @@ class Theme_Post_Type_Portfolio {
 	}
 
 	function edit_columns($columns){
-		$columns['portfolio_categories'] = __('Categories', 'striking_admin' );
-		$columns['description'] = __('Description', 'striking_admin' );
-		$columns['thumbnail'] = __('Thumbnail', 'striking_admin' );
+		$columns['portfolio_categories'] = __('Categories', 'theme_admin' );
+		$columns['description'] = __('Description', 'theme_admin' );
+		$columns['thumbnail'] = __('Thumbnail', 'theme_admin' );
 		
 		return $columns;
 	}

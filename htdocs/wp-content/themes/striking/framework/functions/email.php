@@ -31,11 +31,11 @@ if(!preg_match('/^[^@]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$/', $to)){
 
 $error = apply_filters('theme_mail_spam', $error, $name, $email, $content, $to);
 if($error == false){
-	$subject = sprintf(__('%1$s\'s message from %2$s','striking_front'),$sitename,$name);
-	$body = __('Site: ','striking_front').$sitename.' ('.$siteurl.')'."\n\n";
-	$body .= __('Name: ','striking_front').$name."\n\n";
-	$body .= __('Email: ','striking_front').$email."\n\n";
-	$body .= __('Messages: ','striking_front').$content;
+	$subject = sprintf(__('%1$s\'s message from %2$s','theme_front'),$sitename,$name);
+	$body = __('Site: ','theme_front').$sitename.' ('.$siteurl.')'."\n\n";
+	$body .= __('Name: ','theme_front').$name."\n\n";
+	$body .= __('Email: ','theme_front').$email."\n\n";
+	$body .= __('Messages: ','theme_front').$content;
 	$headers = "From: \"{$name}\" <{$email}>\n" . "Content-Type: text/plain; charset=\"" . get_option('blog_charset') . "\"\n";
 	$headers .= "Reply-To: $email\n";
 	

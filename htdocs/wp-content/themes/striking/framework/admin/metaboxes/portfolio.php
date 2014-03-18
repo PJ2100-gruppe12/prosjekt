@@ -3,7 +3,7 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 	public $slug = 'portfolio';
 	public function config(){
 		return array(
-			'title' => sprintf(__('%s Portfolio Single Options','striking_admin'),THEME_NAME),
+			'title' => sprintf(__('%s Portfolio Single Options','theme_admin'),THEME_NAME),
 			'post_types' => array('portfolio'),
 			'callback' => '',
 			'context' => 'normal',
@@ -74,9 +74,16 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 ?>
 	<li class="meta-box-item">
 		<div id="gallery_actions">
-			<a title="Add Media" class="thickbox" id="add_media" href="media-upload.php?post_id=<?php echo $post->ID; ?>&gallery_image_upload=1&type=image&TB_iframe=1&width=640&height=644" style="border:none;text-decoration:none;">
+<?php
+		global $wp_version;
+		if(version_compare($wp_version, "3.5", '<')){
+			echo '<a title="Add Media" class="thickbox" id="add_media" href="media-upload.php?post_id='.$post->ID.'&gallery_image_upload=1&type=image&TB_iframe=1&width=640&height=644" style="border:none;text-decoration:none;">
 				<input type="button" class="button-primary" value="Add Image" id="add-image" name="add">
-			</a>
+			</a>';
+		} else {
+			echo '<a href="#" class="button theme-add-gallery-button" data-uploader_title="Add Images to gallery" data-uploader_button_text="Add Images" title="Add Image">Add Images</a>';
+		}
+?>	
 		</div>
 
 		<div id="gallery_table_wrapper">
@@ -118,76 +125,83 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 	public function tabs(){
 		return array(
 			array(
-				"name" => __("Portfolio General Setup",'striking_admin'),
+				"name" => __("Portfolio General Setup",'theme_admin'),
 				"options" => array(
 					array(
-						"name" => __("Portfolio Type",'striking_admin'),
-						"desc" => sprintf(__("%s supports image and video for demonstrating the portfolio in the Lightbox. If the type is document, the thumbnail image is link to page of portfolio",'striking_admin'),THEME_NAME),
+						"name" => __("Featured Image",'theme_admin'),
+						"desc" => __("Whether to dispaly Featured Image in this page. This will override the global configuration",'theme_admin'),
+						"id" => "_featured_image",
+						"default" => '',
+						"type" => "tritoggle",
+					),
+					array(
+						"name" => __("Portfolio Type",'theme_admin'),
+						"desc" => sprintf(__("%s supports image and video for demonstrating the portfolio in the Lightbox. If the type is document, the thumbnail image is link to page of portfolio",'theme_admin'),THEME_NAME),
 						"id" => "_type",
 						"default" => 'image',
 						"options" => array(
-							"image" => __('Image','striking_admin'),
-							"gallery" => __('Gallery','striking_admin'),
-							"video" => __('Video','striking_admin'),
-							"doc" => __('Document','striking_admin'),
-							"link" => __('Link','striking_admin'),
-							"lightbox" => __('Lightbox','striking_admin'),
+							"image" => __('Image','theme_admin'),
+							"gallery" => __('Gallery','theme_admin'),
+							"video" => __('Video','theme_admin'),
+							"doc" => __('Document','theme_admin'),
+							"link" => __('Link','theme_admin'),
+							"lightbox" => __('Lightbox','theme_admin'),
 						),
 						"type" => "select",
 					),
 					array(
-						"name" => __("Breadcrumbs Parent Page",'striking_admin'),
-						"desc" => __("If set will enable portfolio items breadcrumbs. The page you choose here will be the parent page of portfolio items on the breadcrumbs.",'striking_admin'),
+						"name" => __("Breadcrumbs Parent Page",'theme_admin'),
+						"desc" => __("If set will enable portfolio items breadcrumbs. The page you choose here will be the parent page of portfolio items on the breadcrumbs.",'theme_admin'),
 						"id" => "_breadcrumbs_page",
 						"page" => 0,
 						"default" => 0,
 						"chosen" => "true", 
-						"prompt" => __("Default",'striking_admin'),
+						"prompt" => __("Default",'theme_admin'),
 						"type" => "select",
 					),
 					array(
-						"name" => __("Thumbnail Icon",'striking_admin'),
-						"desc" => __("It will override portfolio type's defualt icon setting.",'striking_admin'),
+						"name" => __("Thumbnail Icon",'theme_admin'),
+						"desc" => __("It will override portfolio type's defualt icon setting.",'theme_admin'),
 						"id" => "_icon",
 						"default" => 'default',
 						"options" => array(
-							"default" => __('Default','striking_admin'),
-							"zoom" => __('Image','striking_admin'),
-							"play" => __('Video','striking_admin'),
-							"doc" => __('Document','striking_admin'),
-							"link" => __('Link','striking_admin'),
+							"default" => __('Default','theme_admin'),
+							"zoom" => __('Image','theme_admin'),
+							"play" => __('Video','theme_admin'),
+							"doc" => __('Document','theme_admin'),
+							"link" => __('Link','theme_admin'),
 						),
 						"type" => "select",
 					),
 					array(
-						"name" => __("Enable Read More",'striking_admin'),
-						"desc" => __("if this is on, the read more button will show.",'striking_admin'),
+						"name" => __("Enable Read More",'theme_admin'),
+						"desc" => __("if this is on, the read more button will show.",'theme_admin'),
 						"id" => "_more",
 						"default" => "",
 						"type" => "tritoggle"
 					),
 					array(
-						"name" => __("Link for Read More",'striking_admin'),
+						"name" => __("Link for Read More",'theme_admin'),
 						"id" => "_more_link",
 						"default" => "",
 						"shows" => array('page','cat','post','manually'),
 						"type" => "superlink"
 					),
 					array(
-						"name" => __("Link Target for Read More",'striking_admin'),
+						"name" => __("Link Target for Read More",'theme_admin'),
 						"id" => "_more_link_target",
 						"default" => '_self',
 						"options" => array(
-							"_blank" => __('Load in a new window','striking_admin'),
-							"_self" => __('Load in the same frame as it was clicked','striking_admin'),
-							"_parent" => __('Load in the parent frameset','striking_admin'),
-							"_top" => __('Load in the full body of the window','striking_admin'),
+							"_blank" => __('Load in a new window','theme_admin'),
+							"_self" => __('Load in the same frame as it was clicked','theme_admin'),
+							"_parent" => __('Load in the parent frameset','theme_admin'),
+							"_top" => __('Load in the full body of the window','theme_admin'),
 						),
 						"type" => "select",
 					),
 					array(
-						"name" => __("Restrict image Lightbox Dimension",'striking_admin'),
-						"desc" => __("If you enable this option, the lightbox dimension will be restricted to fit the browse screen size.",'striking_admin'),
+						"name" => __("Restrict image Lightbox Dimension",'theme_admin'),
+						"desc" => __("If you enable this option, the lightbox dimension will be restricted to fit the browse screen size.",'theme_admin'),
 						"id" => "_image_lightbox_fittoview",
 						"default" => "",
 						"type" => "tritoggle"
@@ -195,12 +209,12 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 				),
 			),
 			array(
-				"name" => __("Portfolio Type: Image",'striking_admin'),
+				"name" => __("Portfolio Type: Image",'theme_admin'),
 				'id' => 'portfolio_type_image',
 				"options" => array(
 					array(
-						"name" => __("Substitute Image for Lightbox (optional)",'striking_admin'),
-						"desc" => __("The substitute images you would like to use for the portfolio lightbox pop-up demonstrate.If not assigned, it will use featured image instead.",'striking_admin'),
+						"name" => __("Substitute Image for Lightbox (optional)",'theme_admin'),
+						"desc" => __("The substitute images you would like to use for the portfolio lightbox pop-up demonstrate.If not assigned, it will use featured image instead.",'theme_admin'),
 						"id" => "_image",
 						"button" => "Insert Image",
 						"default" => '',
@@ -209,12 +223,12 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 				),
 			),
 			array(
-				"name" => __("Portfolio Type: Video",'striking_admin'),
+				"name" => __("Portfolio Type: Video",'theme_admin'),
 				'id' => 'portfolio_type_video',
 				"options" => array(
 					array(
-						"name" => __("Video Link for Lightbox",'striking_admin'),
-						"desc" => __("Paste the full url of the Flash(YouTube or Vimeo etc).Only necessary when the lightbox type is video.",'striking_admin'),
+						"name" => __("Video Link for Lightbox",'theme_admin'),
+						"desc" => __("Paste the full url of the Flash(YouTube or Vimeo etc).Only necessary when the lightbox type is video.",'theme_admin'),
 						"size" => 30,
 						"id" => "_video",
 						"default" => '',
@@ -222,8 +236,8 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 						"type" => "text",
 					),
 					array(
-						"name" => __("Video Width",'striking_admin'),
-						"desc" => __("If you specify a number below, this will override the global configuration.",'striking_admin'),
+						"name" => __("Video Width",'theme_admin'),
+						"desc" => __("If you specify a number below, this will override the global configuration.",'theme_admin'),
 						"id" => "_video_width",
 						"default" => "",
 						"min" => 0,
@@ -234,8 +248,8 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 						"type" => "measurement",
 					),
 					array(
-						"name" => __("Video Height",'striking_admin'),
-						"desc" => __("If you specify a number below, this will override the global configuration.",'striking_admin'),
+						"name" => __("Video Height",'theme_admin'),
+						"desc" => __("If you specify a number below, this will override the global configuration.",'theme_admin'),
 						"id" => "_video_height",
 						"default" => "",
 						"min" => 0,
@@ -248,12 +262,12 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 				),
 			),
 			array(
-				"name" => __("Portfolio Type: Lightbox",'striking_admin'),
+				"name" => __("Portfolio Type: Lightbox",'theme_admin'),
 				'id' => 'portfolio_type_lightbox',
 				"options" => array(
 					array(
-						"name" => __("Lightbox iframe href",'striking_admin'),
-						"desc" => __("If you specify the full url of the website link below, when you click on the item, it will show the website on the lightbox.",'striking_admin'),
+						"name" => __("Lightbox iframe href",'theme_admin'),
+						"desc" => __("If you specify the full url of the website link below, when you click on the item, it will show the website on the lightbox.",'theme_admin'),
 						"id" => '_lightbox_href',
 						"size" => 30,
 						"default" => '',
@@ -261,15 +275,15 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 						"type" => "text",
 					),
 					array(
-						"name" => __("Lightbox Content",'striking_admin'),
-						"desc" => __("The content that display on the lightbox when the portfolio item type is lightbox. You can use shortcode here.",'striking_admin'),
+						"name" => __("Lightbox Content",'theme_admin'),
+						"desc" => __("The content that display on the lightbox when the portfolio item type is lightbox. You can use shortcode here.",'theme_admin'),
 						"id" => "_lightbox_content",
 						"default" => '',
 						"type" => "textarea",
 					),
 					array(
-						"name" => __("Lightbox Width",'striking_admin'),
-						"desc" => __("If you specify a number below, this will override the global configuration.",'striking_admin'),
+						"name" => __("Lightbox Width",'theme_admin'),
+						"desc" => __("If you specify a number below, this will override the global configuration.",'theme_admin'),
 						"id" => "_lightbox_width",
 						"default" => "",
 						"min" => 0,
@@ -280,8 +294,8 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 						"type" => "measurement",
 					),
 					array(
-						"name" => __("Lightbox Height",'striking_admin'),
-						"desc" => __("If you specify a number below, this will override the global configuration.",'striking_admin'),
+						"name" => __("Lightbox Height",'theme_admin'),
+						"desc" => __("If you specify a number below, this will override the global configuration.",'theme_admin'),
 						"id" => "_lightbox_height",
 						"default" => "",
 						"min" => 0,
@@ -294,33 +308,33 @@ class Theme_Metabox_Portfolio extends Theme_Metabox_With_Tabs {
 				),
 			),
 			array(
-				"name" => __("Portfolio Type: Link",'striking_admin'),
+				"name" => __("Portfolio Type: Link",'theme_admin'),
 				'id' => 'portfolio_type_link',
 				"options" => array(
 					array(
-						"name" => __("Link for Portfolio item",'striking_admin'),
-						"desc" => __("The url that the portfolio item linked to. It only available if Portfolio type set to Link.",'striking_admin'),
+						"name" => __("Link for Portfolio item",'theme_admin'),
+						"desc" => __("<p>Select whether you wish to link to a page, post, category, or link manually -> where one manually designates the url to be linked.  &nbsp;Upon making a selection another field will appear allowing one to choose the specific page, post or category in a dropdown list.  &nbsp;If manually is selected, a field will appear in which to enter the full url (including http://) for linking.</p>",'theme_admin'),
 						"id" => "_link",
 						"default" => "",
-						"shows" => array('page','cat','post','manually'),
+						"shows" => array('page','post','cat','manually'),
 						"type" => "superlink"	
 					),
 					array(
-						"name" => __("Link Target",'striking_admin'),
+						"name" => __("Link Target",'theme_admin'),
 						"id" => "_link_target",
 						"default" => '_self',
 						"options" => array(
-							"_blank" => __('Load in a new window','striking_admin'),
-							"_self" => __('Load in the same frame as it was clicked','striking_admin'),
-							"_parent" => __('Load in the parent frameset','striking_admin'),
-							"_top" => __('Load in the full body of the window','striking_admin'),
+							"_blank" => __('Load in a new window','theme_admin'),
+							"_self" => __('Load in the same frame as it was clicked','theme_admin'),
+							"_parent" => __('Load in the parent frameset','theme_admin'),
+							"_top" => __('Load in the full body of the window','theme_admin'),
 						),
 						"type" => "select",
 					),
 				),
 			),
 			array(
-				"name" => __("Portfolio Type: Gallery",'striking_admin'),
+				"name" => __("Portfolio Type: Gallery",'theme_admin'),
 				'id' => 'portfolio_type_gallery',
 				"options" => array(
 					array(

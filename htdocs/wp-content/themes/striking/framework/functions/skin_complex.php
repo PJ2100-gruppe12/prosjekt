@@ -35,11 +35,23 @@
 							}
 						}
 					}
+					
 				}else{
 					$font_info = explode("|", $font_str);
 					$font_name = $font_info[1];
 					$stylesheet = THEME_FONTFACE_DIR.'/'.$font_info[0].'/stylesheet.css';
 					if(file_exists($stylesheet)){
+						$file_content = file_get_contents($stylesheet);
+						if( preg_match("/@font-face\s*{[^}]*?font-family\s*:\s*('|\")$font_info[1]\\1.*?}/is", $file_content, $match) ){
+							if(defined('THEME_CHILD_NAME')){
+								$template = get_template();
+								$fontface_css .= preg_replace("/url\s*\(\s*['|\"]\s*/is","\\0../../".$template."/fontfaces/$font_info[0]/",$match[0])."\n";
+							}else{
+								$fontface_css .= preg_replace("/url\s*\(\s*['|\"]\s*/is","\\0../fontfaces/$font_info[0]/",$match[0])."\n";
+							}
+						}
+					}elseif(defined('THEME_CHILD_FONTFACE_DIR') && file_exists(THEME_CHILD_FONTFACE_DIR.'/'.$font_info[0].'/stylesheet.css')){
+						$stylesheet = THEME_CHILD_FONTFACE_DIR.'/'.$font_info[0].'/stylesheet.css';
 						$file_content = file_get_contents($stylesheet);
 						if( preg_match("/@font-face\s*{[^}]*?font-family\s*:\s*('|\")$font_info[1]\\1.*?}/is", $file_content, $match) ){
 							$fontface_css .= preg_replace("/url\s*\(\s*['|\"]\s*/is","\\0../fontfaces/$font_info[0]/",$match[0])."\n";
@@ -49,6 +61,8 @@
 					if($fontface_default == $font_str){
 						$fontface_default_name = $font_name;
 					}
+
+
 				}
 			}
 		}
@@ -80,6 +94,20 @@ CSS;
 		$custom_code = stripslashes(theme_get_option('font','gfont_code'));
 		$default = theme_get_option('font','gfont_default');
 		if(in_array($default,$used_gfont)){
+			$pos = strpos($default, ':');
+			$font_weight = '';
+			$font_style = '';
+			if($pos !== false){
+				$font_family = substr($default, 0, $pos);
+				$font_variant = substr($default, $pos+1);
+				$font_weight = "font-weight: ".str_replace('italic', '', $font_variant).";";
+			}else{
+				$font_family = $default;
+			}
+			
+			if(strpos($default, 'italic') !== false ){
+				$font_style = "font-style: italic;";
+			}
 			$gfont_css .=  <<<CSS
 #site_name, #site_description, 
 .kwick_title, .kwick_detail h3, 
@@ -89,7 +117,9 @@ CSS;
 h1,h2,h3,h4,h5,h6,
 #feature h1, #introduce, 
 #footer h3, #copyright{
-	font-family: '{$default}';
+	font-family: '{$font_family}';
+	{$font_weight}
+	{$font_style}
 }
 CSS;
 		}
@@ -619,7 +649,10 @@ h6 {
 	background-color: {$color['nivo_caption_bg']};
 	color: {$color['nivo_caption_text']};
 }
-#kwicks li {
+.slider_control_bg {
+	background-color: {$color['nivo_caption_bg']};
+}
+#kwicks, #kwicks li {
 	height: {$kwicks_height}px;
 }
 .kwick_frame,.kwick_last_frame {
@@ -731,11 +764,15 @@ ul.theme_mini_tabs li a.current {
 }
 .theme_accordion .theme_tab {
 	background-color: {$color['accordion_bg']};
-	color: {$color['accordion_text']};
+}
+.theme_accordion .theme_tab a {
+	color: {$color['accordion_text']} !important;
 }
 .theme_accordion .theme_tab.current {
 	background-color: {$color['accordion_current_bg']};
-	color: {$color['accordion_current_text']};
+}
+.theme_accordion .theme_tab.current a {
+	color: {$color['accordion_current_text']} !important;
 }
 #page input[type="text"],
 #page input[type="password"],

@@ -34,6 +34,29 @@ function theme_save_skin_style() {
 	}
 	return false;
 }
+
+function theme_check_image_folder(){
+	if(is_multisite()){
+		if(!is_dir(THEME_CACHE_IMAGES_DIR)){
+			mkdir(THEME_CACHE_IMAGES_DIR);
+		}
+	}
+}
+function theme_get_image_size(){
+	$customs =  theme_get_option('image','customs');
+	$sizes = array(
+		"small" => __("Small",'theme_admin'),
+		"medium" => __("Medium",'theme_admin'),
+		"large" => __("Large",'theme_admin'),
+	);
+	if(!empty($customs)){
+		$customs = explode(',',$customs);
+		foreach($customs as $custom){
+			$sizes[$custom] = ucfirst(strtolower($custom));
+		}
+	}
+	return $sizes;
+}
 /**
  * Whether the current request is in theme options pages
  * 
@@ -248,3 +271,15 @@ function theme_slidershow_source_prepare($option) {
 	$option['value'] = $value;
 	return $option;
 }
+
+
+function theme_ajax_do_shortcode() {
+	if(isset($_POST['content'])){
+
+		$content = $_POST['content'];
+		echo do_shortcode(stripslashes($content));
+	}
+
+	die();
+}
+add_action('wp_ajax_theme-do-shortcode', 'theme_ajax_do_shortcode');
