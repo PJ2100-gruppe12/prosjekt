@@ -1,9 +1,6 @@
 <?php
 /**
  * The default template for displaying blog meta in the pages
- *
- * @package Striking
- * @since Striking 5.2
  */
 function theme_section_blog_meta($single = false){
 	global $post;
@@ -24,11 +21,11 @@ function theme_section_blog_meta($single = false){
 				case 'category':
 					$content = get_the_category_list(', ');
 					if(!empty($content)){
-						$outputs[] = '<span class="categories">'.__('Posted in: ', 'striking_front').$content.'</span>';
+						$outputs[] = '<span class="categories">'.__('Posted in: ', 'theme_front').$content.'</span>';
 					}
 					break;
 				case 'tags':
-					$content = get_the_tag_list(__('Tags: ', 'striking_front'),', ','');
+					$content = get_the_tag_list(__('Tags: ', 'theme_front'),', ','');
 					if(!empty($content)){
 						$outputs[] = '<span class="tags">'.$content.'</span>';
 					}
@@ -39,9 +36,9 @@ function theme_section_blog_meta($single = false){
 						$authordata = get_userdata($post->post_author);
 					}
 					if(theme_get_option('blog','author_link_to_website')){
-						$outputs[] = '<span class="author">'.__('By: ', 'striking_front').  get_the_author_link().'</span>';
+						$outputs[] = '<span class="author">'.__('By: ', 'theme_front').  get_the_author_link().'</span>';
 					}else{
-						$outputs[] = '<span class="author">'.__('By: ', 'striking_front').  get_the_author_posts_link().'</span>';
+						$outputs[] = '<span class="author">'.__('By: ', 'theme_front').  get_the_author_posts_link().'</span>';
 					}
 					
 					break;
@@ -52,7 +49,7 @@ function theme_section_blog_meta($single = false){
 				case 'comment':
 					if(($post->comment_count > 0 || comments_open())){
 						ob_start();
-						comments_popup_link(__('No Comments','striking_front'), __('1 Comment','striking_front'), __('% Comments','striking_front'),'');
+						comments_popup_link(__('No Comments','theme_front'), __('1 Comment','theme_front'), __('% Comments','theme_front'),'');
 						$outputs[] = '<span class="comments">'.ob_get_clean().'</span>';
 					}
 					break;
@@ -60,10 +57,10 @@ function theme_section_blog_meta($single = false){
 			}
 		}
 		$output = implode('<span class="separater">|</span>',$outputs);
-		$output .= get_edit_post_link( __( 'Edit', 'striking_front' ), '<span class="separater">|</span> <span class="edit-link">', '</span>' );
+		$output .= get_edit_post_link( __( 'Edit', 'theme_front' ), '<span class="separater">|</span> <span class="edit-link">', '</span>' );
 		if(in_array('comment',$meta_items) && ($post->comment_count > 0 || comments_open())){
 			ob_start();
-			comments_popup_link(__('No Comments','striking_front'), __('1 Comment','striking_front'), __('% Comments','striking_front'),'');
+			comments_popup_link(__('No Comments','theme_front'), __('1 Comment','theme_front'), __('% Comments','theme_front'),'');
 			$output .= '<span class="comments">'.ob_get_clean().'</span>';
 		}
 	}		

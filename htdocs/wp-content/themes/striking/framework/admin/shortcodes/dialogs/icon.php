@@ -1,11 +1,11 @@
 <?php
 return array(
-	"title" => __("Icon Text", "striking_admin"),
+	"title" => __("Icon Text", "theme_admin"),
 	"shortcode" => 'icon',
 	"type" => 'enclosing',
 	"options" => array(
 		array(
-			"name" => __("Style",'striking_admin'),
+			"name" => __("Style",'theme_admin'),
 			"id" => "style",
 			"default" => '',
 			"options" => array(
@@ -28,10 +28,10 @@ return array(
 			"type" => "select",
 		),
 		array(
-			"name" => __("Color (optional)",'striking_admin'),
+			"name" => __("Color (optional)",'theme_admin'),
 			"id" => "color",
 			"default" => "",
-			"prompt" => __("Choose one..",'striking_admin'),
+			"prompt" => __("Choose one..",'theme_admin'),
 			"options" => array(
 				"black" => 'Black',
 				"gray" => 'Gray',
@@ -47,7 +47,7 @@ return array(
 			"type" => "select",
 		),
 		array(
-			"name" => __("Text",'striking_admin'),
+			"name" => __("Text",'theme_admin'),
 			"id" => "content",
 			"default" => "",
 			"type" => "textarea"

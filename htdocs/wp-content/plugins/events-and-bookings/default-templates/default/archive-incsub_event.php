@@ -19,7 +19,7 @@ get_header( 'event' );
                                 <a href="<?php the_permalink(); ?>" class="wpmudevevents-viewevent"><?php _e('View event', Eab_EventsHub::TEXT_DOMAIN); ?></a>
                             </div>
                             <?php
-                                echo Eab_Template::get_event_details($post);
+                                echo Eab_Template::get_event_details($post);	 		  	  	 		 	  	
                             ?>
                             <?php
                                 echo Eab_Template::get_rsvp_form($post);

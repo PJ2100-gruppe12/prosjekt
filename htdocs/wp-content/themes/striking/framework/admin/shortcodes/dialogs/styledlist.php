@@ -1,11 +1,11 @@
 <?php
 return array(
-	"title" => __("Styled List", "striking_admin"),
+	"title" => __("Styled List", "theme_admin"),
 	"shortcode" => 'list',
 	"type" => 'enclosing',
 	"options" => array(
 		array(
-			"name" => __("Style",'striking_admin'),
+			"name" => __("Style",'theme_admin'),
 			"id" => "style",
 			"default" => '',
 			"options" => array(
@@ -25,10 +25,10 @@ return array(
 			"type" => "select",
 		),
 		array(
-			"name" => __("Color (optional)",'striking_admin'),
+			"name" => __("Color (optional)",'theme_admin'),
 			"id" => "color",
 			"default" => "",
-			"prompt" => __("Choose one..",'striking_admin'),
+			"prompt" => __("Choose one..",'theme_admin'),
 			"options" => array(
 				"black" => 'Black',
 				"gray" => 'Gray',
@@ -44,13 +44,13 @@ return array(
 			"type" => "select",
 		),
 		array(
-			"name" => __("Content",'striking_admin'),
+			"name" => __("Content",'theme_admin'),
 			"id" => "content",
 			"desc"=> __("Sample: <pre><code>&lt;ul&gt;
 &lt;li&gt;List item 1&lt;/li&gt;
 &lt;li&gt;List item 2&lt;/li&gt;
 &lt;li&gt;List item 3&lt;/li&gt;
-&lt;/ul&gt;</code></pre>",'striking_admin'),
+&lt;/ul&gt;</code></pre>",'theme_admin'),
 			"default" => "",
 			"type" => "textarea"
 		),

@@ -1,11 +1,11 @@
 <?php
 return array(
-	"title" => __("Portfolio list",'striking_admin'),
+	"title" => __("Portfolio list",'theme_admin'),
 	"shortcode" => 'portfolio_list',
 	"type" => 'self-closing',
 	"options" => array(
 		array(
-			"name" => __("Count",'striking_admin'),
+			"name" => __("Count",'theme_admin'),
 			"desc" => "",
 			"id" => "count",
 			"default" => '4',
@@ -15,13 +15,13 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("Thumbnail",'striking_admin'),
+			"name" => __("Thumbnail",'theme_admin'),
 			"id" => "thumbnail",
 			"default" => true,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("Length of Title",'striking_admin'),
+			"name" => __("Length of Title",'theme_admin'),
 			"desc" => "if set to 0, it will use the full length of the title.",
 			"id" => "title_length",
 			"default" => 0,
@@ -31,19 +31,19 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("Extra infomation type",'striking_admin'),
+			"name" => __("Extra infomation type",'theme_admin'),
 			"id" => "extra",
 			"default" => 'desc',
 			"options" => array(
-				"time" => __('Time','striking_admin'),
-				"desc" => __('Description','striking_admin'),
-				"both" => __('Time and Description','striking_admin'),
-				"none" => __('None','striking_admin'),
+				"time" => __('Time','theme_admin'),
+				"desc" => __('Description','theme_admin'),
+				"both" => __('Time and Description','theme_admin'),
+				"none" => __('None','theme_admin'),
 			),
 			"type" => "select",
 		),
 		array(
-			"name" => __("Length of Description",'striking_admin'),
+			"name" => __("Length of Description",'theme_admin'),
 			"desc" => "",
 			"id" => "desc_length",
 			"default" => '80',
@@ -53,41 +53,41 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("Category (optional)",'striking_admin'),
+			"name" => __("Category (optional)",'theme_admin'),
 			"id" => "cat",
 			"default" => array(),
 			"target" => 'portfolio_category',
 			"chosen" => true,
-			"prompt" => __("Select Categories..",'striking_admin'),
+			"prompt" => __("Select Categories..",'theme_admin'),
 			"type" => "multiselect",
 		),
 		array(
-			"name" => __("Type (optional)",'striking_admin'),
+			"name" => __("Type (optional)",'theme_admin'),
 			"id" => "type",
 			"default" => '',
 			"options" => array(
-				"image" => __('Image','striking_admin'),
-				"gallery" => __('Gallery','striking_admin'),
-				"video" => __('Video','striking_admin'),
-				"doc" => __('Document','striking_admin'),
-				"link" => __('Link','striking_admin'),
-				"lightbox" => __('Lightbox','striking_admin'),
+				"image" => __('Image','theme_admin'),
+				"gallery" => __('Gallery','theme_admin'),
+				"video" => __('Video','theme_admin'),
+				"doc" => __('Document','theme_admin'),
+				"link" => __('Link','theme_admin'),
+				"lightbox" => __('Lightbox','theme_admin'),
 			),
-			"prompt" => __("Select Type..",'striking_admin'),
+			"prompt" => __("Select Type..",'theme_admin'),
 			"type" => "select",
 		),
 		array(
-			"name" => __("Author (optional)",'striking_admin'),
+			"name" => __("Author (optional)",'theme_admin'),
 			"id" => "author",
 			"default" => array(),
 			"target" => 'author',
 			"chosen" => true,
-			"prompt" => __("Select Authors..",'striking_admin'),
+			"prompt" => __("Select Authors..",'theme_admin'),
 			"type" => "multiselect",
 		),
 		array(
-			"name" => __("Offset",'striking_admin'),
-			"desc" => __("Number of post to displace or pass over.",'striking_admin'),
+			"name" => __("Offset",'theme_admin'),
+			"desc" => __("Number of post to displace or pass over.",'theme_admin'),
 			"id" => "offset",
 			"default" => '0',
 			"min" => 0,

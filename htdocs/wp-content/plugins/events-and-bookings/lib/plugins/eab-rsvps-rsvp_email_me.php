@@ -24,7 +24,7 @@ class Eab_Events_RsvpEmailMe_Codec extends Eab_Macro_Codec {
 		if (!$this->_event->is_premium()) return '';
 
 		$has_paid = apply_filters('eab-events-rsvp_email_me-codec-message-has_paid', __('The user paid for the event.', Eab_EventsHub::TEXT_DOMAIN));
-		$not_paid = apply_filters('eab-events-rsvp_email_me-codec-message-not_paid', __('The user did not pay for the event.', Eab_EventsHub::TEXT_DOMAIN));	 		  	  	 		 	  	
+		$not_paid = apply_filters('eab-events-rsvp_email_me-codec-message-not_paid', __('The user did not pay for the event.', Eab_EventsHub::TEXT_DOMAIN));
 
 		return $this->_event->user_paid($this->_user->ID)
 			? $has_paid

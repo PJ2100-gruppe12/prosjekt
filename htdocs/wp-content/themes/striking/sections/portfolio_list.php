@@ -1,9 +1,6 @@
 <?php
 /**
  * The default template for displaying portfolio lists in the pages
- *
- * @package Striking
- * @since Striking 5.2
  */
 function theme_section_portfolio_list($options){
 	global $wp_filter;
@@ -18,8 +15,9 @@ function theme_section_portfolio_list($options){
 		'titlelinkable' => 'false',
 		'desc' => '',
 		'desc_length'=>'default',
-		'more' => '',
+		'more' => 'default',
 		'moretext' => '',
+		'morebutton' => 'default',
 		'height' => '',
 		"ajax" => 'false',
 		'current' => '',
@@ -32,14 +30,22 @@ function theme_section_portfolio_list($options){
 		'ids' => '',
 		'order'=> 'ASC',
 		'orderby'=> 'menu_order', //none, id, author, title, date, modified, parent, rand, comment_count, menu_order
-		'paged' => null
+		'paged' => null,
+		'rel_group' => 'portfolio_'.rand(1,1000)
 	), $options);
 
 	extract($options);
+	
 	if($desc_length != 'default'){
 		$excerpt_constructor = new Theme_The_Excerpt_Length_Constructor($desc_length);
 		add_filter( 'excerpt_length', array($excerpt_constructor,'get_length'));
+		add_filter( 'get_the_excerpt', array($excerpt_constructor,'trim'));
 	}
+	if(!isset($_POST['portfolioAjax'])){
+		wp_print_styles('mediaelementjs-styles');
+		wp_print_scripts('mediaelementjs-scripts');
+	}
+	
 	$output = '<div class="portfolio_wrap">';
 	$size = array();
 	switch($column){
@@ -119,7 +125,6 @@ function theme_section_portfolio_list($options){
 	if($height){
 		$size[1] = $height;
 	}
-	$rel_group = 'portfolio_'.rand(1,1000); //for lightbox group
 
 	if($layout=='sidebar'){
 		$output .= '<ul class="portfolio_' . $column_class . ' with_sidebar portfolio_container">';
@@ -192,23 +197,21 @@ function theme_section_portfolio_list($options){
 			$desc = 'true';
 		}
 	}
-
-	switch($more){
-		case '':
-			if( theme_get_option('portfolio','display_more_button') ){
-				$more = true;
-			}else{
-				$more = false;
-			}
-			break;
-		case 'false':
-			$more = false;
-			break;
-		case 'true':
-		default:
-			$more = true;
-			break;
+	if($more == 'default'){
+		$more =  theme_get_option('portfolio','display_more_button');
+	}elseif($more == 'true'){
+		$more = true;
+	}else{
+		$more = false;
 	}
+	if($morebutton == 'default'){
+		$morebutton =  theme_get_option('portfolio','read_more_button');
+	}elseif($morebutton == 'true'){
+		$morebutton = true;
+	}else{
+		$morebutton = false;
+	}
+	
 	while($r->have_posts()) {
 		$r->the_post();
 		$terms = get_the_terms(get_the_id(), 'portfolio_category');
@@ -263,14 +266,10 @@ function theme_section_portfolio_list($options){
 				if(empty($href)){
 					$href = theme_get_image_src($image_source);
 				}
-				$video_width = get_post_meta(get_the_id(), '_video_width', true);
-				$video_height = get_post_meta(get_the_id(), '_video_height', true);
-				if($video_width==''){
-					$video_width = theme_get_option('portfolio','video_width');
-				}
-				if($video_height==''){
-					$video_height = theme_get_option('portfolio','video_height');
-				}
+
+				$video_width = theme_get_inherit_option(get_the_id(), '_video_width', 'portfolio','video_width');
+				$video_height = theme_get_inherit_option(get_the_id(), '_video_height', 'portfolio','video_height');
+
 				$width = ' data-width="'.$video_width.'"';
 				$height = ' data-height="'.$video_height.'"';
 				
@@ -293,14 +292,10 @@ function theme_section_portfolio_list($options){
 				}else{
 					$iframe = ' data-iframe="true"';
 				}
-				$lightbox_width = get_post_meta(get_the_id(), '_lightbox_width', true);
-				$lightbox_height = get_post_meta(get_the_id(), '_lightbox_height', true);
-				if($lightbox_width==''){
-					$lightbox_width = theme_get_option('portfolio','lightbox_width');
-				}
-				if($lightbox_height==''){
-					$lightbox_height = theme_get_option('portfolio','lightbox_height');
-				}
+				
+				$lightbox_width = theme_get_inherit_option(get_the_id(), '_lightbox_width', 'portfolio','lightbox_width');
+				$lightbox_height = theme_get_inherit_option(get_the_id(), '_lightbox_height', 'portfolio','lightbox_height');
+				
 				$width = ' data-width="'.$lightbox_width.'"';
 				$height = ' data-height="'.$lightbox_height.'"';
 				
@@ -417,10 +412,12 @@ function theme_section_portfolio_list($options){
 				remove_filter('get_the_excerpt', 'wp_trim_excerpt');
 				$output .= '<div class="portfolio_desc">' . do_shortcode(wpautop(get_the_excerpt())) . '</div>';
 			}else{
+				add_filter('get_the_excerpt', 'wp_trim_excerpt');
 				$output .= '<div class="portfolio_desc">' . get_the_excerpt() . '</div>';
 			}
 		}
 		
+
 		if(theme_is_enabled(get_post_meta(get_the_id(), '_more', true), $more)){
 			$more_link = theme_get_superlink(get_post_meta(get_the_id(), '_more_link', true), get_permalink());
 			$more_link_target = get_post_meta(get_the_ID(), '_more_link_target', true);
@@ -428,7 +425,7 @@ function theme_section_portfolio_list($options){
 			if($moretext == ''){
 				$moretext = wpml_t(THEME_NAME , 'Portfolio More Button Text',theme_get_option('portfolio','more_button_text'));
 			}
-			if(theme_get_option('portfolio','read_more_button')){
+			if($morebutton){
 				$output .= '<div class="portfolio_more_button"><a href="'.$more_link.'" class="'.apply_filters( 'theme_css_class', 'button' ).'" target="'.$more_link_target.'"><span>'.$moretext.'</span></a></div>';
 			}else{
 				$output .= '<div class="portfolio_more_button"><a href="'.$more_link.'" target="'.$more_link_target.'"><span>'.$moretext.'</span></a></div>';
@@ -468,8 +465,162 @@ function theme_section_portfolio_list($options){
 	$output .= '</div>';
 	if($desc_length != 'default'){
 		remove_filter( 'excerpt_length', array($excerpt_constructor,'get_length'));
+		remove_filter( 'get_the_excerpt', array($excerpt_constructor,'trim'));
 	}
+
 	wp_reset_postdata();
 	$wp_filter['the_content'] = $the_content_filter_backup;
 	return $output;
+}
+
+function theme_portfolio_pagenavi($before = '', $after = '',$portfolio_query, $paged) {
+	global $wpdb, $wp_query;
+	
+	// if (is_single())
+	// 	return;
+	
+	$pagenavi_options = array(
+		//'pages_text' => __('Page %CURRENT_PAGE% of %TOTAL_PAGES%','theme_front'),
+		'pages_text' => '',
+		'current_text' => '%PAGE_NUMBER%',
+		'page_text' => '%PAGE_NUMBER%',
+		'first_text' => __('&laquo; First','theme_front'),
+		'last_text' => __('Last &raquo;','theme_front'),
+		'next_text' => __('&raquo;','theme_front'),
+		'prev_text' => __('&laquo;','theme_front'),
+		'dotright_text' => __('...','theme_front'),
+		'dotleft_text' => __('...','theme_front'),
+		'style' => 1,
+		'num_pages' => 4,
+		'always_show' => 0,
+		'num_larger_page_numbers' => 3,
+		'larger_page_numbers_multiple' => 10,
+		'use_pagenavi_css' => 0,
+	);
+	
+	$request = $portfolio_query->request;
+	$posts_per_page = intval(get_query_var('posts_per_page'));
+	
+	$numposts = $portfolio_query->found_posts;
+	$max_page = intval($portfolio_query->max_num_pages);
+	
+	if (empty($paged) || $paged == 0)
+		$paged = 1;
+	$pages_to_show = intval($pagenavi_options['num_pages']);
+	$larger_page_to_show = intval($pagenavi_options['num_larger_page_numbers']);
+	$larger_page_multiple = intval($pagenavi_options['larger_page_numbers_multiple']);
+	$pages_to_show_minus_1 = $pages_to_show - 1;
+	$half_page_start = floor($pages_to_show_minus_1 / 2);
+	$half_page_end = ceil($pages_to_show_minus_1 / 2);
+	$start_page = $paged - $half_page_start;
+	
+	if ($start_page <= 0)
+		$start_page = 1;
+	
+	$end_page = $paged + $half_page_end;
+	if (($end_page - $start_page) != $pages_to_show_minus_1) {
+		$end_page = $start_page + $pages_to_show_minus_1;
+	}
+	
+	if ($end_page > $max_page) {
+		$start_page = $max_page - $pages_to_show_minus_1;
+		$end_page = $max_page;
+	}
+	
+	if ($start_page <= 0)
+		$start_page = 1;
+	
+	$larger_pages_array = array();
+	if ($larger_page_multiple)
+		for($i = $larger_page_multiple; $i <= $max_page; $i += $larger_page_multiple)
+			$larger_pages_array[] = $i;
+	
+	if ($max_page > 1 || intval($pagenavi_options['always_show'])) {
+		$pages_text = str_replace("%CURRENT_PAGE%", number_format_i18n($paged), $pagenavi_options['pages_text']);
+		$pages_text = str_replace("%TOTAL_PAGES%", number_format_i18n($max_page), $pages_text);
+		echo $before . '<div class="wp-pagenavi">' . "\n";
+		switch(intval($pagenavi_options['style'])){
+			// Normal
+			case 1:
+				if (! empty($pages_text)) {
+					echo '<span class="pages">' . $pages_text . '</span>';
+				}
+				if ($start_page >= 2 && $pages_to_show < $max_page) {
+					$first_page_text = str_replace("%TOTAL_PAGES%", number_format_i18n($max_page), $pagenavi_options['first_text']);
+					echo '<a href="' . esc_url(get_pagenum_link()) . '" class="first" data-page="1" title="' . $first_page_text . '">' . $first_page_text . '</a>';
+					if (! empty($pagenavi_options['dotleft_text'])) {
+						echo '<span class="extend">' . $pagenavi_options['dotleft_text'] . '</span>';
+					}
+				}
+				$larger_page_start = 0;
+				foreach($larger_pages_array as $larger_page) {
+					if ($larger_page < $start_page && $larger_page_start < $larger_page_to_show) {
+						$page_text = str_replace("%PAGE_NUMBER%", number_format_i18n($larger_page), $pagenavi_options['page_text']);
+						echo '<a href="' . esc_url(get_pagenum_link($larger_page)) . '" data-page="'.$larger_page.'" class="page" title="' . $page_text . '">' . $page_text . '</a>';
+						$larger_page_start++;
+					}
+				}
+				if ( $paged > 1 ) {
+					$prevpage = intval($paged) - 1;
+					if ( $prevpage < 1 ){
+						$prevpage = 1;
+					}
+					echo '<a class="previouspostslink" href="' . esc_url(get_pagenum_link($prevpage)) . '" data-page="'.$prevpage.'" title="' . $pagenavi_options['prev_text'] . '">'.$pagenavi_options['prev_text'].'</a>';
+				}
+				
+				for($i = $start_page; $i <= $end_page; $i++) {
+					if ($i == $paged) {
+						$current_page_text = str_replace("%PAGE_NUMBER%", number_format_i18n($i), $pagenavi_options['current_text']);
+						echo '<span class="current">' . $current_page_text . '</span>';
+					} else {
+						$page_text = str_replace("%PAGE_NUMBER%", number_format_i18n($i), $pagenavi_options['page_text']);
+						echo '<a href="' . esc_url(get_pagenum_link($i)) . '" data-page="'.$i.'" class="page" title="' . $page_text . '">' . $page_text . '</a>';
+					}
+				}
+
+				$nextpage = intval($paged) + 1;
+
+				if ( $nextpage <= $max_page ) {
+					echo '<a class="nextpostslink" href="' . esc_url(get_pagenum_link($nextpage)) . '" data-page="'.$nextpage.'" title="' . $pagenavi_options['next_text'] . '">'.$pagenavi_options['next_text'].'</a>';
+				}
+				
+				$larger_page_end = 0;
+				foreach($larger_pages_array as $larger_page) {
+					if ($larger_page > $end_page && $larger_page_end < $larger_page_to_show) {
+						$page_text = str_replace("%PAGE_NUMBER%", number_format_i18n($larger_page), $pagenavi_options['page_text']);
+						echo '<a href="' . esc_url(get_pagenum_link($larger_page)) . '" data-page="'.$larger_page.'" class="page" title="' . $page_text . '">' . $page_text . '</a>';
+						$larger_page_end++;
+					}
+				}
+				if ($end_page < $max_page) {
+					if (! empty($pagenavi_options['dotright_text'])) {
+						echo '<span class="extend">' . $pagenavi_options['dotright_text'] . '</span>';
+					}
+					$last_page_text = str_replace("%TOTAL_PAGES%", number_format_i18n($max_page), $pagenavi_options['last_text']);
+					echo '<a href="' . esc_url(get_pagenum_link($max_page)) . '" data-page="'.$max_page.'" class="last" title="' . $last_page_text . '">' . $last_page_text . '</a>';
+				}
+				break;
+			// Dropdown
+			case 2:
+				echo '<form action="' . htmlspecialchars($_SERVER['PHP_SELF']) . '" method="get">' . "\n";
+				echo '<select size="1" onchange="document.location.href = this.options[this.selectedIndex].value;">' . "\n";
+				for($i = 1; $i <= $max_page; $i++) {
+					$page_num = $i;
+					if ($page_num == 1) {
+						$page_num = 0;
+					}
+					if ($i == $paged) {
+						$current_page_text = str_replace("%PAGE_NUMBER%", number_format_i18n($i), $pagenavi_options['current_text']);
+						echo '<option value="' . esc_url(get_pagenum_link($page_num)) . '" selected="selected" class="current">' . $current_page_text . "</option>\n";
+					} else {
+						$page_text = str_replace("%PAGE_NUMBER%", number_format_i18n($i), $pagenavi_options['page_text']);
+						echo '<option value="' . esc_url(get_pagenum_link($page_num)) . '">' . $page_text . "</option>\n";
+					}
+				}
+				echo "</select>\n";
+				echo "</form>\n";
+				break;
+		}
+		echo '</div>' . $after . "\n";
+	}
 }

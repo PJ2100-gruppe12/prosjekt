@@ -1,6 +1,6 @@
 <?php
 $init_script = <<<HTML
-	jQuery('[name="number"]').live("change",function(){
+	jQuery('[name="number"]').on("change",function(){
 		var accordion_number = jQuery(this).val();
 		jQuery('.shortcode-item').each(function(i){
 			if(i>(1+accordion_number*2)){
@@ -34,12 +34,12 @@ $custom_script = <<<HTML
 	return ret;
 HTML;
 return array(
-	"title" => __("Accordion",'striking_admin'),
+	"title" => __("Accordion",'theme_admin'),
 	"type" => 'custom',
 	'contentOption' => 'content_1',
 	"options" => array(
 		array(
-			"name" => __("Number of pans",'striking_admin'),
+			"name" => __("Number of pans",'theme_admin'),
 			"id" => "number",
 			"min" => "1",
 			"max" => "8",
@@ -48,105 +48,105 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("Initial Tab",'striking_admin'),
+			"name" => __("Initial Tab",'theme_admin'),
 			"id" => "initialTab",
-			"desc" => __("Specifies the tab that is initially opened when the page loads.",'striking_admin'),
+			"desc" => __("Specifies the tab that is initially opened when the page loads.",'theme_admin'),
 			"options" => array(),
 			"default" => "1",
 			"type" => "select"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Title",'striking_admin'),1),
+			"name" => sprintf(__("Accordion %d Title",'theme_admin'),1),
 			"id" => "title_1",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Content",'striking_admin'),1),
+			"name" => sprintf(__("Accordion %d Content",'theme_admin'),1),
 			"id" => "content_1",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Title",'striking_admin'),2),
+			"name" => sprintf(__("Accordion %d Title",'theme_admin'),2),
 			"id" => "title_2",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Content",'striking_admin'),2),
+			"name" => sprintf(__("Accordion %d Content",'theme_admin'),2),
 			"id" => "content_2",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Title",'striking_admin'),3),
+			"name" => sprintf(__("Accordion %d Title",'theme_admin'),3),
 			"id" => "title_3",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Content",'striking_admin'),3),
+			"name" => sprintf(__("Accordion %d Content",'theme_admin'),3),
 			"id" => "content_3",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Title",'striking_admin'),4),
+			"name" => sprintf(__("Accordion %d Title",'theme_admin'),4),
 			"id" => "title_4",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Content",'striking_admin'),4),
+			"name" => sprintf(__("Accordion %d Content",'theme_admin'),4),
 			"id" => "content_4",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Title",'striking_admin'),5),
+			"name" => sprintf(__("Accordion %d Title",'theme_admin'),5),
 			"id" => "title_5",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Content",'striking_admin'),5),
+			"name" => sprintf(__("Accordion %d Content",'theme_admin'),5),
 			"id" => "content_5",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Title",'striking_admin'),6),
+			"name" => sprintf(__("Accordion %d Title",'theme_admin'),6),
 			"id" => "title_6",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Content",'striking_admin'),6),
+			"name" => sprintf(__("Accordion %d Content",'theme_admin'),6),
 			"id" => "content_6",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Title",'striking_admin'),7),
+			"name" => sprintf(__("Accordion %d Title",'theme_admin'),7),
 			"id" => "title_7",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Content",'striking_admin'),7),
+			"name" => sprintf(__("Accordion %d Content",'theme_admin'),7),
 			"id" => "content_7",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Title",'striking_admin'),8),
+			"name" => sprintf(__("Accordion %d Title",'theme_admin'),8),
 			"id" => "title_8",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Accordion %d Content",'striking_admin'),8),
+			"name" => sprintf(__("Accordion %d Content",'theme_admin'),8),
 			"id" => "content_8",
 			"default" => "",
 			"type" => "textarea"

@@ -28,6 +28,9 @@ var dialog;
 			event.preventDefault();
 		});
 		theme.init();
+		if(typeof s.insert != 'undefined'){
+			api.button.insert = s.insert;
+		}
 		api.button.init();
 		if(typeof s.init != 'undefined'){
 			s.init.call(this);

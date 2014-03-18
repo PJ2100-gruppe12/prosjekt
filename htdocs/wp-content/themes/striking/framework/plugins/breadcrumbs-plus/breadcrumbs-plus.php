@@ -31,7 +31,7 @@
  * @link http://poedit.net
  * @since 0.1
  */
-//load_plugin_textdomain( 'striking_front', false, 'breadcrumbs-plus/languages' );
+//load_plugin_textdomain( 'theme_front', false, 'breadcrumbs-plus/languages' );
 
 /**
  * Shows a breadcrumb for all types of pages.
@@ -46,8 +46,8 @@ function breadcrumbs_plus( $args = '' ) {
 	$defaults = array(
 		'prefix' => '<p>',
 		'suffix' => '</p>',
-		'title' => __( 'You are here: ', 'striking_front' ),
-		'home' => __( 'Home', 'striking_front' ),
+		'title' => __( 'You are here: ', 'theme_front' ),
+		'home' => __( 'Home', 'theme_front' ),
 		'separator' => '&raquo;',
 		'front_page' => false,
 		'show_blog' => true,
@@ -191,26 +191,26 @@ function breadcrumbs_plus_get_items( $args ) {
 		else if ( is_date() ) {
 
 			if(is_numeric(get_query_var('w') && 0 !== get_query_var('w') ))
-				$item['last'] =  sprintf( __('Weekly Archive for: ‘%s’','striking_front'),get_the_time('W'));
+				$item['last'] =  sprintf( __('Weekly Archive for: ‘%s’','theme_front'),get_the_time('W'));
 			elseif ( is_day() )
-				$item['last'] = sprintf( __('Daily Archive for: ‘%s’','striking_front'),get_the_time('F jS, Y'));
+				$item['last'] = sprintf( __('Daily Archive for: ‘%s’','theme_front'),get_the_time('F jS, Y'));
 			elseif ( is_month() )
-				$item['last'] =  sprintf( __('Monthly Archive for: ‘%s’','striking_front'),get_the_time('F jS, Y'));
+				$item['last'] =  sprintf( __('Monthly Archive for: ‘%s’','theme_front'),get_the_time('F jS, Y'));
 			elseif ( is_year() )
-				$item['last'] =  sprintf(__('Yearly Archive for: ‘%s’','striking_front'),get_the_time('Y'));
+				$item['last'] =  sprintf(__('Yearly Archive for: ‘%s’','theme_front'),get_the_time('Y'));
 		}
 
 		else if ( is_author() )
-			$item['last'] =  sprintf(__('Author Archive for: ‘%s’','striking_front'),get_the_author_meta( 'display_name', $wp_query->post->post_author ));
+			$item['last'] =  sprintf(__('Author Archive for: ‘%s’','theme_front'),get_the_author_meta( 'display_name', $wp_query->post->post_author ));
 	}
 
 	/* If viewing search results. */
 	else if ( is_search() )
-		$item['last'] =  sprintf(__('Search Results for: ‘%s’','striking_front'),stripslashes( strip_tags( get_search_query() ) ));
+		$item['last'] =  sprintf(__('Search Results for: ‘%s’','theme_front'),stripslashes( strip_tags( get_search_query() ) ));
 
 	/* If viewing a 404 error page. */
 	else if ( is_404() )
-		$item['last'] = __( 'Page Not Found', 'striking_front' );
+		$item['last'] = __( 'Page Not Found', 'theme_front' );
 
 	return apply_filters( 'breadcrumbs_plus_items', $item );
 }
@@ -253,13 +253,13 @@ function breadcrumbs_plus_get_bbpress_items( $args = array() ) {
 			$item[] = bbp_get_topic_title( $topic_id );
 
 		if ( bbp_is_topic_split() )
-			$item[] = __( 'Split', 'striking_front' );
+			$item[] = __( 'Split', 'theme_front' );
 
 		elseif ( bbp_is_topic_merge() )
-			$item[] = __( 'Merge', 'striking_front' );
+			$item[] = __( 'Merge', 'theme_front' );
 
 		elseif ( bbp_is_topic_edit() )
-			$item[] = __( 'Edit', 'striking_front' );
+			$item[] = __( 'Edit', 'theme_front' );
 	}
 
 	elseif ( bbp_is_single_reply() ) {
@@ -273,7 +273,7 @@ function breadcrumbs_plus_get_bbpress_items( $args = array() ) {
 
 		} else {
 			$item[] = '<a href="' . bbp_get_reply_url( $reply_id ) . '">' . bbp_get_reply_title( $reply_id ) . '</a>';
-			$item[] = __( 'Edit', 'striking_front' );
+			$item[] = __( 'Edit', 'theme_front' );
 		}
 
 	}
@@ -281,7 +281,11 @@ function breadcrumbs_plus_get_bbpress_items( $args = array() ) {
 	elseif ( bbp_is_single_forum() ) {
 
 		$forum_id = get_queried_object_id();
-		$forum_parent_id = bbp_get_forum_parent( $forum_id );
+		if(function_exists('bbp_get_forum_parent')){
+			$forum_parent_id = bbp_get_forum_parent( $forum_id );
+		} else{
+			$forum_parent_id = bbp_get_forum_parent_id( $forum_id );
+		}
 
 		if ( 0 !== $forum_parent_id)
 			$item = array_merge( $item, breadcrumbs_plus_get_parents( $forum_parent_id ) );
@@ -293,7 +297,7 @@ function breadcrumbs_plus_get_bbpress_items( $args = array() ) {
 
 		if ( bbp_is_single_user_edit() ) {
 			$item[] = '<a href="' . bbp_get_user_profile_url() . '">' . bbp_get_displayed_user_field( 'display_name' ) . '</a>';
-			$item[] = __('Edit','striking_front');
+			$item[] = __('Edit','theme_front');
 		} else {
 			$item[] = bbp_get_displayed_user_field( 'display_name' );
 		}

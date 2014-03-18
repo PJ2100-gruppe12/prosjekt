@@ -1,0 +1,9 @@
+<?php
+/**
+ * The template for displaying search forms
+ */
+?>
+<form method="get" id="searchform" action="<?php echo home_url(); ?>">
+	<input type="text" class="text_input" value="<?php _e('Search..', 'theme_front');?>" name="s" id="s" onfocus="if(this.value == '<?php _e('Search..', 'theme_front');?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php _e('Search..', 'theme_front');?>';}" />
+	<button type="submit" class="<?php echo apply_filters( 'theme_css_class', 'button' );?> gray"><span><?php _e('Search', 'theme_front');?></span></button>
+</form>

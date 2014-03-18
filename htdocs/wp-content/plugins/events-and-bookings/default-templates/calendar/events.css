@@ -11,14 +11,15 @@
 }
 .wpmudevevents-list table th {
 	width: 14.285%;
-	background: #333;
-	color: #ddd;
+	background: #009245;
+	color: #ffffff;
 	padding: .4em;
 	cursor: default;
 }
 .wpmudevevents-list table td {
 	border: 1px solid #ddd;
-	height: 120px;
+	height: 90px;
+	vertical-align: top;
 }
 .wpmudevevents-list table td .eab-date-full {
 	display: none;
@@ -35,19 +36,26 @@
 .wpmudevevents-list table td.today {
 	background: #ddd;
 }
-
+.eab-date-ordinal {
+	background-color: #009245;
+	color: #fff;
+	padding: 3px;
+	vertical-align: middle;
+}
 a.wpmudevevents-calendar-event {
 	display: block;
 	margin: .2em;
 	padding: .1em .4em;
-	background: #75AB24;
-	color: #fff;
+	background: #009245;
+	color: #fff!important;
 	text-decoration: none;
 	border: 1px solid #558B04;
 	border-radius: 5px;
 }
 a.wpmudevevents-calendar-event:hover {
-	background: #659B14;
+	background: #ffffff;
+	color: #009245!important;
+	border: 1px solid #558B04;
 	text-decoration: none;
 }
 
@@ -77,6 +85,7 @@ a.wpmudevevents-calendar-event:hover {
 	height: auto;
 	border: none;
 	text-align: center;
+	vertical-align: middle;
 }
 .eab-shortcode_calendar .eab-shortcode_calendar-title-top td a,
 .eab-shortcode_calendar .eab-shortcode_calendar-title-bottom td a
@@ -153,4 +162,4 @@ a.wpmudevevents-calendar-event:hover {
 } /* end 768px break */
 
 
-/* 182384-1394637978 */
+/* 182384-1394637533-ai */

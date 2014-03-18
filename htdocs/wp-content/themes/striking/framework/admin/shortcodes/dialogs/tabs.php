@@ -1,6 +1,6 @@
 <?php
 $init_script = <<<HTML
-	jQuery('[name="number"]').live("change",function(){
+	jQuery('[name="number"]').on("change",function(){
 		var tabs_number = jQuery(this).val();
 		jQuery('.shortcode-item').each(function(i){
 			if(i>(3+tabs_number*2)){
@@ -44,29 +44,29 @@ $custom_script = <<<HTML
 	return ret;
 HTML;
 return array(
-	"title" => __("Tabs",'striking_admin'),
+	"title" => __("Tabs",'theme_admin'),
 	"type" => 'custom',
 	'contentOption' => 'content_1',
 	"options" => array(
 		array(
-			"name" => __("Type",'striking_admin'),
+			"name" => __("Type",'theme_admin'),
 			"id" => "type",
 			"default" => 'tabs',
 			"options" => array(
-				"tabs" => __("Framed Tabs",'striking_admin'),
-				"mini_tabs" => __("Mini Tabs",'striking_admin'),
+				"tabs" => __("Framed Tabs",'theme_admin'),
+				"mini_tabs" => __("Mini Tabs",'theme_admin'),
 			),
 			"type" => "select",
 		),
 		array (
-			"name" => __("History (optional)",'striking_admin'),
-			"desc" => __("Enable this to get browser's back and forward buttons support.",'striking_admin'),
+			"name" => __("History (optional)",'theme_admin'),
+			"desc" => __("Enable this to get browser's back and forward buttons support.",'theme_admin'),
 			"id" => "history",
 			"default" => false,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("Number of tabs",'striking_admin'),
+			"name" => __("Number of tabs",'theme_admin'),
 			"id" => "number",
 			"min" => "1",
 			"max" => "8",
@@ -75,105 +75,105 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("Initial Tab",'striking_admin'),
+			"name" => __("Initial Tab",'theme_admin'),
 			"id" => "initialTab",
-			"desc" => __("Specifies the tab that is initially opened when the page loads.</br>When the history feature is enabled, this will not take effect.",'striking_admin'),
+			"desc" => __("Specifies the tab that is initially opened when the page loads.</br>When the history feature is enabled, this will not take effect.",'theme_admin'),
 			"options" => array(),
 			"default" => "1",
 			"type" => "select"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Title",'striking_admin'),1),
+			"name" => sprintf(__("Tab %d Title",'theme_admin'),1),
 			"id" => "title_1",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Content",'striking_admin'),1),
+			"name" => sprintf(__("Tab %d Content",'theme_admin'),1),
 			"id" => "content_1",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" =>  sprintf(__("Tab %d Title",'striking_admin'),2),
+			"name" =>  sprintf(__("Tab %d Title",'theme_admin'),2),
 			"id" => "title_2",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Content",'striking_admin'),2),
+			"name" => sprintf(__("Tab %d Content",'theme_admin'),2),
 			"id" => "content_2",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" =>  sprintf(__("Tab %d Title",'striking_admin'),3),
+			"name" =>  sprintf(__("Tab %d Title",'theme_admin'),3),
 			"id" => "title_3",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Content",'striking_admin'),3),
+			"name" => sprintf(__("Tab %d Content",'theme_admin'),3),
 			"id" => "content_3",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" =>  sprintf(__("Tab %d Title",'striking_admin'),4),
+			"name" =>  sprintf(__("Tab %d Title",'theme_admin'),4),
 			"id" => "title_4",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Content",'striking_admin'),4),
+			"name" => sprintf(__("Tab %d Content",'theme_admin'),4),
 			"id" => "content_4",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" =>  sprintf(__("Tab %d Title",'striking_admin'),5),
+			"name" =>  sprintf(__("Tab %d Title",'theme_admin'),5),
 			"id" => "title_5",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Content",'striking_admin'),5),
+			"name" => sprintf(__("Tab %d Content",'theme_admin'),5),
 			"id" => "content_5",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Title",'striking_admin'),6),
+			"name" => sprintf(__("Tab %d Title",'theme_admin'),6),
 			"id" => "title_6",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Content",'striking_admin'),6),
+			"name" => sprintf(__("Tab %d Content",'theme_admin'),6),
 			"id" => "content_6",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" =>  sprintf(__("Tab %d Title",'striking_admin'),7),
+			"name" =>  sprintf(__("Tab %d Title",'theme_admin'),7),
 			"id" => "title_7",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Content",'striking_admin'),7),
+			"name" => sprintf(__("Tab %d Content",'theme_admin'),7),
 			"id" => "content_7",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" =>  sprintf(__("Tab %d Title",'striking_admin'),8),
+			"name" =>  sprintf(__("Tab %d Title",'theme_admin'),8),
 			"id" => "title_8",
 			"default" => "",
 			"type" => "text"
 		),
 		array(
-			"name" => sprintf(__("Tab %d Content",'striking_admin'),8),
+			"name" => sprintf(__("Tab %d Content",'theme_admin'),8),
 			"id" => "content_8",
 			"default" => "",
 			"type" => "textarea"

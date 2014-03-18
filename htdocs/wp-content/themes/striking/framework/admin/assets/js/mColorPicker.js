@@ -100,9 +100,9 @@
 
   $.fn.mColorPicker.events = function() {
 
-    $("#mColorPickerBg").live('click', $.fn.mColorPicker.closePicker);
+    $(document).on('click', "#mColorPickerBg", $.fn.mColorPicker.closePicker);
 
-    $('.mColorPicker').live('keyup', function () {
+    $(document).on('keyup', '.mColorPicker', function () {
 
       try {
   
@@ -114,9 +114,9 @@
       } catch (r) {}
     });
 
-    $('.mColorPickerTrigger').live('click', $.fn.mColorPicker.colorShow);
+    $(document).on('click', '.mColorPickerTrigger', $.fn.mColorPicker.colorShow);
   
-    $('.mColor, .mPastColor').live('mousemove', function(e) {
+    $(document).on('mousemove', '.mColor, .mPastColor', function(e) {
 
       if (!$o.changeColor) return false;
   
@@ -132,9 +132,11 @@
       else if (!$t.hasClass('mPastColor')) $o.color = $.fn.mColorPicker.whichColor(e.pageX - offset.left, e.pageY - offset.top, hex);
 
       $o.currentInput.mSetInputColor($o.color);
-    }).live('click', $.fn.mColorPicker.colorPicked);
+    });
+
+    $(document).on('click', '.mColor, .mPastColor',$.fn.mColorPicker.colorPicked);
   
-    $('#mColorPickerInput').live('keyup', function (e) {
+    $(document).on('keyup','#mColorPickerInput', function (e) {
   
       try {
   
@@ -144,12 +146,13 @@
         if (e.which == 13) $.fn.mColorPicker.colorPicked();
       } catch (r) {}
 
-    }).live('blur', function () {
+    });
+    $(document).on('blur','#mColorPickerInput', function (e) {
   
       $o.currentInput.mSetInputColor($o.color);
     });
   
-    $('#mColorPickerWrapper').live('mouseleave', function () {
+    $(document).on('mouseleave', '#mColorPickerWrapper', function () {
   
       if (!$o.changeColor) return false;
 
@@ -603,7 +606,7 @@
       $.fn.mColorPicker.start();
 
       if (typeof $.fn.livequery == "function") $($i.replace).livequery($.fn.mColorPicker.start);
-      else $(document).live('ajaxSuccess.mColorPicker', $.fn.mColorPicker.start);
+      else $(document).on('ajaxSuccess.mColorPicker', $.fn.mColorPicker.start);
     }
   });
 })(jQuery);

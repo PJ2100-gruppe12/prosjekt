@@ -2,7 +2,7 @@
 <html <?php language_attributes(); ?>>
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
-<title><?php _e('Preview','striking_admin'); ?></title>
+<title><?php _e('Preview','theme_admin'); ?></title>
 <?php wp_head(); ?>
 <!--[if IE 6 ]>
 	<link href="<?php echo THEME_CSS;?>/ie6.css" media="screen" rel="stylesheet" type="text/css">
@@ -16,7 +16,7 @@
 <link href="<?php echo THEME_CSS;?>/ie8.css" media="screen" rel="stylesheet" type="text/css">
 <![endif]-->
 <!--[if IE]>
-	<script type="text/javascript" src="<?php echo THEME_JS;?>/html5.js"></script>
+	<script type="text/javascript" src="<?php echo THEME_JS;?>/html5shiv.js"></script>
 <![endif]-->
 <script type="text/javascript">
 var image_url='<?php echo THEME_IMAGES;?>';

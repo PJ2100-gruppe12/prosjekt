@@ -1,16 +1,13 @@
 <?php
 /**
  * The default template for displaying introduce in the pages
- *
- * @package Striking
- * @since Striking 5.2
  */
-function theme_section_introduce($post_id = NULL){
+function theme_section_introduce($post_id = NULL, $show_any_way = false, $show_by_id = false){
 	if (is_blog()){
 		$blog_page_id = theme_get_option('blog','blog_page');
 		$post_id = wpml_get_object_id($blog_page_id,'page');
 	}
-	if (is_single() || is_page() || (is_front_page() && $post_id != NULL) || (is_home() && $post_id != NULL)){
+	if (is_single() || is_page() || (is_front_page() && $post_id != NULL) || (is_home() && $post_id != NULL) || (!empty($post_id) && $show_by_id)){
 		$type = get_post_meta($post_id, '_introduce_text_type', true);
 		
 		if (empty($type))
@@ -23,6 +20,7 @@ function theme_section_introduce($post_id = NULL){
 		if ($type == 'disable') {
 			return;
 		}
+
 		if (in_array($type, array('default', 'title', 'title_custom','title_slideshow'))) {
 			$custom_title = get_post_meta($post_id, '_custom_title', true);
 			if(!empty($custom_title)){
@@ -52,37 +50,14 @@ function theme_section_introduce($post_id = NULL){
 		
 		$blog_page_id = theme_get_option('blog','blog_page');
 		$blog_page_id = wpml_get_object_id($blog_page_id,'page');
-		if ($type == 'default' && is_singular('post') && $post_id!=$blog_page_id) {
+		if (in_array($type,array('default','title')) && is_singular('post') && $post_id!=$blog_page_id) {
 			$show_in_header = theme_get_inherit_option($post_id, '_show_in_header', 'blog','show_in_header');
+
 			if($show_in_header){
 				$title = get_the_title($post_id);
 				$text = '<div class="entry_meta">';
 				$text .= theme_generator('blog_meta',true);
 				$text .= '</div>';
-				/*$outputs = array();
-				if (theme_get_option('blog','single_meta_date')){
-					$outputs[]='<time datetime="'.get_the_time('Y-m-d').'">'.get_the_date().'</time>';
-				}
-				if (theme_get_option('blog','single_meta_category')){
-					$outputs[]= '<span class="categories">'.get_the_category_list(',').'</span>'; 
-				}
-				if (theme_get_option('blog','single_meta_tags')){
-					$content =  '<span class="tags">'.get_the_tag_list('',',').'</span>'; 
-					if(!empty($content)){
-						$outputs[] = $content;
-					}
-				}
-				$text.= implode('<span class="separater">|</span>',$outputs);
-				ob_start();
-					edit_post_link( __( 'Edit', 'striking_front' ), '<span class="separater">|</span> <span class="edit-link">', '</span>' );
-					global $post;
-					if(theme_get_option('blog','single_meta_comment') && ($post->comment_count > 0 || comments_open())):
-						echo '<span class="comments">';
-						comments_popup_link(__('No Comments','striking_front'), __('1 Comment','striking_front'), __('% Comments','striking_front'));
-						echo '</span>';
-					endif;
-				$text .= ob_get_clean();
-				*/
 			}else{
 				return theme_generator('introduce',$blog_page_id);
 			}
@@ -91,12 +66,12 @@ function theme_section_introduce($post_id = NULL){
 		if (in_array($type, array('custom', 'title_custom'))) {
 			$text = str_replace(array('[raw]','[/raw]','</div> <div'),array('','','</div><div'),do_shortcode(get_post_meta($post_id, '_custom_introduce_text', true)));
 		}
-	}elseif(!theme_get_option('general','introduce')){
+	}elseif(!theme_get_option('general','introduce') && !$show_any_way){
 		return;
 	}
 
-	if (is_archive()){
-		$title = __('Archives','striking_front');
+	if (is_archive() && !$show_by_id){
+		$title = __('Archives','theme_front');
 		if(function_exists('is_post_type_archive')){
 			if(is_post_type_archive()){
 				$title = wpml_t(THEME_NAME, get_query_var( 'post_type' ) . ' Post Type Archive Title',theme_get_option('advanced','archive_'.get_query_var( 'post_type' ).'_title'));
@@ -176,14 +151,14 @@ function theme_section_introduce($post_id = NULL){
 			$text = sprintf($text,$term->name);
 		}
 		$title = stripslashes($title);
-		$text = stripslashes($text);
+		$text = do_shortcode(stripslashes($text));
 	}
 
 	if (is_404()) {
 		$title = wpml_t(THEME_NAME, '404 Page Title',theme_get_option('advanced','404_title'));
 		$text = wpml_t(THEME_NAME, '404 Page Text',theme_get_option('advanced','404_text'));
 		$title = stripslashes($title);
-		$text = stripslashes($text);
+		$text = do_shortcode(stripslashes($text));
 	}
 
 	if (is_search()) {
@@ -191,9 +166,24 @@ function theme_section_introduce($post_id = NULL){
 		$text = wpml_t(THEME_NAME, 'Search Page Text',theme_get_option('advanced','search_text'));
 		$text = sprintf($text,stripslashes( strip_tags( get_search_query() ) ));
 		$title = stripslashes($title);
-		$text = stripslashes($text);
+		$text = do_shortcode(stripslashes($text));
 	}
-
+	if( function_exists('is_woocommerce') && is_woocommerce()){
+		if(!is_shop() && is_archive() && !theme_is_enabled(theme_get_option('advanced','woocommerce_introduce'), theme_get_option('general','introduce'))){
+			return;
+		}
+		if(function_exists('is_shop') && is_shop() && !$show_by_id){
+			$shop_id = woocommerce_get_page_id( 'shop' );
+				$type = get_post_meta($shop_id, '_introduce_text_type', true);
+				
+				if (empty($type)){
+					$type = 'default';
+				}
+				if($type !== 'default'){
+					return theme_generator('introduce', $shop_id, false, true);
+				}
+		}
+	}
 	$color = get_post_meta($post_id, '_introduce_background_color', true);
 	if(!empty($color) && $color != "transparent"){
 		$color = ' style="background-color:'.$color.'"';
@@ -204,10 +194,10 @@ function theme_section_introduce($post_id = NULL){
 	$output .= '<div id="feature"'.$color.'>';
 	$output .= '<div class="top_shadow"></div>';
 	$output .= '<div class="inner">';
-	if (isset($title)) {
+	if (isset($title) && !empty($title)) {
 		$output .= '<h1>' . $title . '</h1>';
 	}
-	if (isset($text)) {
+	if (isset($text) && !empty($text)) {
 		$output .= '<div id="introduce">';
 		$output .= $text;
 		$output .= '</div>';

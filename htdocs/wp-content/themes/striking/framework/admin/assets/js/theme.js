@@ -15,89 +15,79 @@ var theme;
 	api.option = {};
 	
 	api.option.init = function(){
-		api.option.select();
-		api.option.multiDropdown();
-		api.option.ddMultiSelect();
-		api.option.superLink();
-		api.option.uploader();
-		api.option.range();
-		api.option.measurement();
-		api.option.validator();
-		api.option.color();
-		api.option.toggle();
-		api.option.triToggle();
-		api.option.switchDesc();
-		api.option.fontchosen();
+		var $scope = $(document);
+
+		api.option.select($scope);
+		api.option.multiDropdown($scope);
+		api.option.ddMultiSelect($scope);
+		api.option.superLink($scope);
+		api.option.uploader($scope);
+		api.option.range($scope);
+		api.option.measurement($scope);
+		api.option.validator($scope);
+		api.option.color($scope);
+		api.option.toggle($scope);
+		api.option.triToggle($scope);
+		api.option.switchDesc($scope);
+		api.option.fontchosen($scope);
 	};
-	api.option.fontchosen = function(){
+	api.option.fontchosen = function($scope){
 		var initFontChosen = function(element){
-			var $placeholder = $(element).attr('data-placeholder');
-			if($placeholder!=undefined){
-				$(element).data("placeholder", $placeholder);
+			var $element = $(element);
+
+			if($element.data('select2') !== undefined){
+				return;
 			}
-			$(element).chosen();
-			var chosen = $(element).data('chosen');
-			var $preview = $(element).parent().find('.theme-font-preview');
+			var $placeholder = $element.attr('data-placeholder');
+			if($placeholder!=undefined){
+				$element.data("placeholder", $placeholder);
+			}
+
+			$element.select2();
+			
+			var $preview = $element.parent().find('.theme-font-preview');
 			var $preview_name = $preview.find('.theme-font-preview-name');
 			var $preview_callback = eval($preview.data('callback'));
-			chosen.old_do_highlight = chosen.result_do_highlight;
-			chosen.result_do_highlight = function(el){
-				if (el.length) {
-					var high_id = $(el).attr("id");
-					var position = high_id.substr(high_id.lastIndexOf("_") + 1);
-					var font = chosen.results_data[position];
-					$preview_callback($preview, font);
-					$preview_name.text(font.text);
-					$preview.show();
-				}
 
-				return chosen.old_do_highlight(el);
-			}
-
-			
-			chosen.search_field.on('blur',function(){
+			$element.on('select2-highlight',function(data){
+				var font = data.choice;
+				$preview_callback($preview, font);
+				$preview_name.text(font.text);
+				$preview.show();
+			}).on('select2-close',function(){
 				$preview.hide();
 			});
 		}
-		$("select.fontchosen").each(function(){
+		$scope.find("select.fontchosen").each(function(){
 			api.option._initInvisibleElement(this,function(){
 				initFontChosen(this);
 			});
 		});
 	};
-	api.option.select = function(){
+	api.option.select = function($scope){
 		var initChosen = function(element){
-			var $placeholder = $(element).attr('data-placeholder');
-			if($placeholder!=undefined){
-				$(element).data("placeholder", $placeholder);
+			var $element = $(element);
+
+			if($element.data('select2') !== undefined){
+				return;
 			}
-			if($(element).data("order")==true){
-				$(element).val('');
-				$(element).chosen();
-				var $ordered = $('[name="_'+$(element).attr('id')+'"]');
-				
+
+			var $placeholder = $element.attr('data-placeholder');
+			if($placeholder!=undefined){
+				$element.data("placeholder", $placeholder);
+			}
+
+			if($element.data("order")==true){
+				$element.val('');
+				$element.select2();
+				var $ordered = $('[name="_'+$element.attr('id')+'"]');
 				var selected = $ordered.val().split(',');
-				var chosen_object = $(element).data('chosen');
 
-				/**
-				 * 1, 2, 3 fix mouseup focus issue
-				 */
-				chosen_object.search_field.unbind('focus');/* 1 */
-				$.each(selected, function(index, item){
-					$.each(chosen_object.results_data, function(i, data){
-						if(data.value === item){
-							$("#"+data.dom_id).trigger('mouseup');
-						}
-					});
-				});
-				chosen_object.search_field.focus(function(evt) { /* 2 */
-					return chosen_object.input_focus(evt);
-				});
-				chosen_object.search_field.trigger('blur'); /* 3 */
+				$element.select2('val',selected);
 
 				
-				$(element).data("backupVal",$(element).val());
-				$(element).change(function(){
+				$element.data("backupVal",$element.val());
+				$element.change(function(){
 					var backup = $(this).data("backupVal");
 					var current = $(this).val();
 					if(backup == null){
@@ -127,18 +117,18 @@ var theme;
 					$(this).data("backupVal",current);
 				});
 			}else{
-				$(element).chosen();
+				$element.select2();
 			}
 		}
-		$("select.chosen").each(function(){
+		$scope.find("select.chosen:not(.fontchosen)").each(function(){
 			api.option._initInvisibleElement(this,function(){
 				initChosen(this);
 			});
 		});
 		
 	};
-	api.option.multiDropdown = function(){
-		var wrap = $(".multidropdown-wrap");
+	api.option.multiDropdown = function($scope){
+		var wrap = $scope.find(".multidropdown-wrap");
 
 		wrap.each(function() {
 			var selects = $(this).children('select');
@@ -168,8 +158,8 @@ var theme;
 			})
 		});
 	};
-	api.option.ddMultiSelect = function(){
-		var wrap = $(".ddmultiselect-wrap");
+	api.option.ddMultiSelect = function($scope){
+		var wrap = $scope.find(".ddmultiselect-wrap");
 
 		wrap.each(function() {
 			var field = $(this).siblings('input:hidden');
@@ -195,8 +185,8 @@ var theme;
 			}).disableSelection();
 		});
 	};
-	api.option.superLink = function() {
-		var wrap = $(".superlink-wrap");
+	api.option.superLink = function($scope) {
+		var wrap = $scope.find(".superlink-wrap");
 		wrap.each(function(){
 			var field = $(this).siblings('input:hidden');
 			var selector = $(this).siblings('select');
@@ -213,23 +203,23 @@ var theme;
 		});
 	};
 	
-	api.option.uploader = function(){
-		if($('.theme-add-media-button').length > 0){
+	api.option.uploader = function($scope){
+		if($scope.find('.theme-add-media-button').length > 0){
 			// thank to http://mikejolley.com/2012/12/using-the-new-wordpress-3-5-media-uploader-in-plugins/
 			var file_frame;
 
 			jQuery('.theme-add-media-button').on('click', function( event ){
 				var button = $(this);
     			var target = button.data('target');
-
+    			
     			button.blur();
 				event.preventDefault();
 
 				// If the media frame already exists, reopen it.
-				if ( file_frame ) {
-				  file_frame.open();
-				  return;
-				}
+				//if ( file_frame ) {
+				  //file_frame.open();
+				  //return;
+				//}
 
 				// Create the media frame.
 				file_frame = wp.media.frames.file_frame = wp.media({
@@ -246,7 +236,7 @@ var theme;
 					if(parseInt(attachment.width,10)<parseInt(imagewidth,10)){
 						imagewidth = attachment.width;
 					}
-					if($("#"+target).size()>0){
+					if($("#"+target).length>0){
 						$("#"+target).val('{"type":"attachment_id","value":"'+attachment.id+'"}');
 						$("#"+target+"_preview").html('<a class="thickbox" href="'+attachment.url+'?"><img  width="'+imagewidth+'" src="'+attachment.url+'"/></a>');
 					}
@@ -256,7 +246,7 @@ var theme;
 			});
 		}
 		
-		$(".theme-upload-remove").click(function(){
+		$scope.find(".theme-upload-remove").click(function(){
 			$content = $(this).parent().parent();
 			$content.find('.upload-value').val('');
 			$content.find('.theme-option-image-preview').html('');
@@ -272,7 +262,7 @@ var theme;
 			if ( src == '0' ) {
 				alert( 'Could not use this image. Try a different attachment.' );
 			} else {
-				if($("#"+target).size()>0){
+				if($("#"+target).length>0){
 					$("#"+target).val(src);
 					$("#"+target+"_preview").html('<a class="thickbox" href="'+src+'?"><img src="'+src+'"/></a>');
 				}
@@ -294,8 +284,8 @@ var theme;
 					imagewidth = data.width;
 				}
 
-				if($("#"+target).size()>0){
-					$("#"+target).val('{"type":"attachment_id","value":"'+attachment_id+'"}');
+				if($("#"+target).length>0){
+					$("#"+target).val('{"type":"attachment_id","value":"'+attachment_id+'"}').trigger('change');
 					$("#"+target+"_preview").html('<a class="thickbox" href="'+data.src+'?"><img  width="'+imagewidth+'" src="'+data.src+'"/></a>');
 				}
 			}
@@ -314,11 +304,11 @@ var theme;
 				var data = $.parseJSON(data);
 				imagewidth = $('#'+target+'_preview').attr('data-imagewidth');
 
-				if($("#"+target).size()>0){
+				if($("#"+target).length>0){
 					if(title != ''){
-						$("#"+target).val('{"type":"url","title":"'+title+'","value":"'+src+'"}');
+						$("#"+target).val('{"type":"url","title":"'+title+'","value":"'+src+'"}').trigger('change');
 					}else{
-						$("#"+target).val('{"type":"url","value":"'+src+'"}');
+						$("#"+target).val('{"type":"url","value":"'+src+'"}').trigger('change');
 					}
 					
 					$("#"+target+"_preview").html('<a class="thickbox" href="'+src+'?"><img  width="'+imagewidth+'" src="'+src+'"/></a>');
@@ -327,36 +317,56 @@ var theme;
 		});
 	};
 
-	api.option.range = function(){
-		$(".range-input-wrap :range").rangeinput();
+	api.option.range = function($scope){
+		$scope.find(".range-input-wrap").each(function(){
+			var input = $(this).find('input');
+			var min = input.prop("min");
+			var max = input.prop("max");
+			var step = input.prop("step");
+			
+			var range = $('<div>').addClass('range-slider').insertBefore(input).slider({
+				value: input.val(),
+				min: parseFloat(min,10),
+				max: parseFloat(max,10),
+				step: parseFloat(step,10),
+				slide: function(e, ui){
+					input.val(ui.value);
+					input.trigger('change');
+				}
+			});
+			input.change(function(){
+				range.slider('value',this.value);
+			});
+		});
 	};
-	api.option.measurement = function(){
-		var wrap = $(".measurement-wrap");
+	api.option.measurement = function($scope){
+		var wrap = $scope.find(".measurement-wrap");
 		wrap.each(function(){
 			var field = $(this).find('input:hidden');
-			var range = $(this).find('input:range');
+			var range = $(this).find('.range-slider');
 			var unit = $(this).find('select');
 			var name = field.attr('name');
 			var items = $(this).children();
-			range.change(function(){
-				if($(this).val() != 0){
-					field.val($(this).val()+unit.val());
+			range.on('slidechange',function(e,ui){
+				if(ui.value != 0){
+					field.val(ui.value+unit.val());
 				}else{
 					field.val('');
 				}
 			});
 			unit.change(function(){
-				if(range.val() != 0){
-					field.val(range.val()+$(this).val());
+				if(range.slider( "value" ) !== 0){
+					field.val(range.slider( "value" )+$(this).val());
 				}else{
 					field.val('');
 				}
-			})
+			}).trigger('change');
+
 		});
 	};
 	
 	
-	api.option.validator = function(){
+	api.option.validator = function($scope){
 		$.tools.validator.addEffect("option", function(errors, event) {
 			// add new ones
 			$.each(errors, function(index, error) {
@@ -374,32 +384,32 @@ var theme;
 				$(this).next('.validator-error').empty();
 			});
 		});
-		$(".validator-wrap :input").validator({effect:'option'});
+		$scope.find(".validator-wrap :input").validator({effect:'option'});
 	};
 	
-	api.option.color = function(){
+	api.option.color = function($scope){
 		$.fn.mColorPicker.init.showLogo = false;
 		$.fn.mColorPicker.defaults.imageFolder = theme_admin_assets_uri + "/images/mColorPicker/";
 	};
 	
-	api.option.toggle = function(){
-		$('.toggle-button:checkbox').each(function(){
+	api.option.toggle = function($scope){
+		$scope.find('.toggle-button:checkbox').each(function(){
 			api.option._initInvisibleElement(this,function(){
 				$(this).iphoneStyle();
 			});
 		});
 	};
 	
-	api.option.triToggle = function(){
-		$('select.tri-toggle-button').each(function(){
+	api.option.triToggle = function($scope){
+		$scope.find('select.tri-toggle-button').each(function(){
 			api.option._initInvisibleElement(this,function(){
 				$(this).iphoneStyleTriToggle();
 			});
 		});
 	};
 	
-	api.option.switchDesc = function(){
-		$('.meta-box-item-switch,.theme-page-option-switch').click(function(event){
+	api.option.switchDesc = function($scope){
+		$scope.find('.meta-box-item-switch,.theme-page-option-switch').click(function(event){
 			$(this).parent().siblings('.description').toggle();
 			event.preventDefault();
 		});
@@ -407,7 +417,7 @@ var theme;
 
 	api.option.getVal = function(name){
 		var target = $('[name="'+name+'"]');
-		if(target.size() == 0){
+		if(target.length == 0){
 			target = $('[name="'+name+'[]"]');
 		}
 		if(target.is('.toggle-button')){
@@ -455,6 +465,7 @@ var theme;
 				callback.call(element);
 			}
 		}else if($element.parents('.theme-page-container').is('.with-subtabs')){
+			
 			if( !$element.parents('.theme-page-pane').hasClass('active')){
 				if($element.parents('.theme-page-subpane').hasClass('active')){
 					$element.parents('.theme-page-container').find('.theme-page-tabs li').eq($element.parents('.theme-page-pane').index()).bind('click',function(e){
@@ -466,7 +477,7 @@ var theme;
 					});
 				}
 			}else{
-				if(! $element.parents('.theme-page-subpane').hasClass('active')){
+				if($element.parents('.theme-page-subpane').length >0 && !$element.parents('.theme-page-subpane').hasClass('active')){
 					$element.parents('.theme-page-pane').find('.theme-page-subtabs li').eq($element.parents('.theme-page-subpane').index()).bind('click',function(e){
 						callback.call(element);
 					});
@@ -474,6 +485,12 @@ var theme;
 					callback.call(element);
 				}
 			}
+		}else if($element.parents('.layer-pane').length>0 && !$element.parents('.layer-pane').hasClass('active')){
+			$element.parents('.layer-item').find('.layer-nav li').eq($element.parents('.layer-pane').index()).bind('click',function(e){
+				setTimeout(function(){
+					callback.call(element);
+				},100);
+			});
 		}else{
 			if($element.parents('.postbox').is('.closed')){
 				$element.parents('.postbox').children('.hndle,.handlediv').bind('clickoutside',function(e){

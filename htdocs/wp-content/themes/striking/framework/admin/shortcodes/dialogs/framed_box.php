@@ -1,17 +1,17 @@
 <?php
 return array(
-	"title" => __("Framed Box", "striking_admin"),
+	"title" => __("Framed Box", "theme_admin"),
 	"shortcode" => 'framed_box',
 	"type" => 'enclosing',
 	"options" => array(
 		array(
-			"name" => __("Content",'striking_admin'),
+			"name" => __("Content",'theme_admin'),
 			"id" => "content",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array (
-			"name" => __("Width (optional)",'striking_admin'),
+			"name" => __("Width (optional)",'theme_admin'),
 			"id" => "width",
 			"default" => '',
 			"min" => 0,
@@ -22,7 +22,7 @@ return array(
 			"type" => "measurement",
 		),
 		array (
-			"name" => __("Height (optional)",'striking_admin'),
+			"name" => __("Height (optional)",'theme_admin'),
 			"id" => "height",
 			"default" => '0',
 			"min" => 0,
@@ -32,32 +32,32 @@ return array(
 			"type" => "range",
 		),
 		array(
-			"name" => __("Background Color (optional)",'striking_admin'),
+			"name" => __("Background Color (optional)",'theme_admin'),
 			"id" => "bgColor",
 			"default" => "",
 			"type" => "color"
 		),
 		array(
-			"name" => __("Text Color (optional)",'striking_admin'),
+			"name" => __("Text Color (optional)",'theme_admin'),
 			"id" => "textColor",
 			"default" => "",
 			"type" => "color"
 		),
 		array (
-			"name" => __("Rounded",'striking_admin'),
+			"name" => __("Rounded",'theme_admin'),
 			"id" => "rounded",
 			"default" => false,
 			"type" => "toggle"
 		),
 		array(
-			"name" =>  __("Align (optional)",'striking_admin'),
+			"name" =>  __("Align (optional)",'theme_admin'),
 			"id" => "align",
 			"default" => '',
-			"prompt" => __("None",'striking_admin'),
+			"prompt" => __("None",'theme_admin'),
 			"options" => array(
-				"left" => __('left','striking_admin'),
-				"right" => __('right','striking_admin'),
-				"center" => __('center','striking_admin'),
+				"left" => __('left','theme_admin'),
+				"right" => __('right','theme_admin'),
+				"center" => __('center','theme_admin'),
 			),
 			"type" => "select",
 		),

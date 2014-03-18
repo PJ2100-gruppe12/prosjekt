@@ -3,9 +3,9 @@
 /* Manage slideshow's columns */
 /*-----------------------------------------------------------------------------------*/
 function edit_slideshow_columns($columns) {
-	$columns['slideshow_category'] = __('Categories', 'striking_admin' );
-	$columns['author'] = __('Author', 'striking_admin' );
-	$columns['thumbnail'] = __('Thumbnail', 'striking_admin' );
+	$columns['slideshow_category'] = __('Categories', 'theme_admin' );
+	$columns['author'] = __('Author', 'theme_admin' );
+	$columns['thumbnail'] = __('Thumbnail', 'theme_admin' );
 	
 	return $columns;
 }

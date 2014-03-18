@@ -1,9 +1,6 @@
 <?php
 /**
  * The default template for displaying portfolio_featured_image in the pages
- *
- * @package Striking
- * @since Striking 5.2
  */
 function theme_section_portfolio_featured_image($layout='',$effect= '', $single = false){
 	if (!has_post_thumbnail()){

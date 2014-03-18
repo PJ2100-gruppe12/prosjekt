@@ -24,13 +24,13 @@ var shortcodeMenu;
 	api.loadMenuData = function(){
 		var url = ajaxurl + '?action=theme-shortcode-menu';
 		$.getJSON(url, function (menu_data) {
-			$("#qt_content_theme_shortcode,#qt_page_content_theme_shortcode").buttonMenu({
+			$(".ed_button[value='Shortcodes']").buttonMenu({
 				data: menu_data,
 				item: {
 					click: api.menu.onclick
 				}
 			});
-			$("#wp2_fs_shortcode").buttonMenu({
+			$("#wp2_fs_shortcode,#wp_fs_shortcode").buttonMenu({
 				item: {
 					click: api.menu.onclick
 				},

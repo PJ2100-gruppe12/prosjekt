@@ -1,51 +1,53 @@
 <?php
 /**
  * The default template for displaying blog featured image in the pages
- *
- * @package Striking
- * @since Striking 5.2
  */
-function theme_section_blog_featured_image($type='full',$layout='',$height='',$frame = false,$effect= '',$single = false){
+function theme_section_blog_featured_image($type='full',$width = '',$height='',$frame = false,$effect= '',$single = false){
 	if (!has_post_thumbnail()){
 		return '';
 	}
+	
 	$image_src_array = wp_get_attachment_image_src(get_post_thumbnail_id(),'full', true);
-	if($layout == 'full'){
-		$width = 958;
-	}elseif(is_numeric($layout)){
-		$width = $layout-2;
-	}else{
-		$width = 628;
+
+	switch($type){
+		case 'full':
+		case 'below':
+			$width = $width - 2;
+
+			if($frame && isset($width)){
+				if($frame === true){
+					$width = $width - 32;
+				}else{
+					$width = $width - $frame;
+				}
+			}
+			if(empty($height)){
+				$adaptive_height = theme_get_option('blog', 'adaptive_height');
+				if($adaptive_height && !empty($image_src_array[1])){
+					$height = floor($width*($image_src_array[2]/$image_src_array[1]));
+				}else{
+					$height = theme_get_option('blog', 'single_fixed_height');
+					if(!$single || empty($height)){
+						$height = theme_get_option('blog', 'fixed_height');
+					}
+				}
+			}
+			break;
+		case 'right':
+		case 'left':
+			if($width !== ''){
+				$width = $width-2;
+			} else {
+				$width = theme_get_option('blog', 'left_width');
+			}
+			if($height == ''){
+				$height = theme_get_option('blog', 'left_height');
+			}
+			break;
 	}
+	
 	if(empty($effect)){
 		$effect = theme_get_option('blog','effect');
-	}
-	if($frame && isset($width)){
-		if($frame === true){
-			$width = $width - 32;
-		}else{
-			$width = $width - $frame;
-		}
-		
-	}
-	if($type=='left' || $type=='right'){
-		if(is_numeric($layout)){
-			$width = $layout-2;
-		}else{
-			$width = theme_get_option('blog', 'left_width');
-		}
-		if($height == ''){
-			$height = theme_get_option('blog', 'left_height');
-		}
-	}else{
-		if(empty($height)){
-			$adaptive_height = theme_get_option('blog', 'adaptive_height');
-			if($adaptive_height && !empty($image_src_array[1])){
-				$height = floor($width*($image_src_array[2]/$image_src_array[1]));
-			}else{
-				$height = theme_get_option('blog', 'fixed_height');
-			}
-		}
 	}
 	$image_src = theme_get_image_src(array('type'=>'attachment_id','value'=>get_post_thumbnail_id()), array($width, $height));
 	$output = '';

@@ -1,6 +1,6 @@
 <?php
 $init_script = <<<HTML
-	jQuery('[name="_source[]"]').live("change",function(){
+	jQuery('[name="_source[]"]').on("change",function(){
 		var __val = jQuery(this).val();
 		var _val={};
 		jQuery.each(__val, function(key, value) { 
@@ -37,36 +37,36 @@ function theme_dialog_slideshow_source($option){
 }
 }
 return array(
-	"title" => __("Anything Slideshow", "striking_admin"),
+	"title" => __("Anything Slideshow", "theme_admin"),
 	"shortcode" => 'slideshow',
 	"attributes" => 'type="anything"',
 	"type" => 'enclosing',
 	"init" => $init_script,
 	"options" => array(
 		array(
-			"name" => __("Images Srcs (optional)",'striking_admin'),
-			"desc" => __("separated by linebreak",'striking_admin'),
+			"name" => __("Images Srcs (optional)",'theme_admin'),
+			"desc" => __("separated by linebreak",'theme_admin'),
 			"id" => "content",
 			"default" => "",
 			"type" => "textarea"
 		),
 		array(
-			"name" => __("SlideShow Source (optional)",'striking_admin'),
-			"desc" => __("Select which SlideShow Source to show.",'striking_admin'),
+			"name" => __("SlideShow Source (optional)",'theme_admin'),
+			"desc" => __("Select which SlideShow Source to show.",'theme_admin'),
 			"id" => "source",
 			"options" => array(
-				"g" => __('Self Gallery','striking_admin'),
+				"g" => __('Self Gallery','theme_admin'),
 			),
 			"default" => "",
 			"chosen" => true,
-			"prompt" => __("Select Source..",'striking_admin'),
+			"prompt" => __("Select Source..",'theme_admin'),
 			'target' => 'slideshow_source',
 			'function' => 'theme_dialog_slideshow_source',
 			"type" => "custom"
 		),
 		array(
-			"name" => __("Number (optional)",'striking_admin'),
-			"desc" => __("Sets the number of images to display.<br> 0: Display all images.",'striking_admin'),
+			"name" => __("Number (optional)",'theme_admin'),
+			"desc" => __("Sets the number of images to display.<br> 0: Display all images.",'theme_admin'),
 			"id" => "number",
 			"default" => '0',
 			"min" => 0,
@@ -75,8 +75,8 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("Width",'striking_admin'),
-			"desc" => __("Width of slider.",'striking_admin'),
+			"name" => __("Width",'theme_admin'),
+			"desc" => __("Width of slider.",'theme_admin'),
 			"id" => "width",
 			"min" => "10",
 			"max" => "960",
@@ -86,8 +86,8 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("Height",'striking_admin'),
-			"desc" => __("Height of slider.",'striking_admin'),
+			"name" => __("Height",'theme_admin'),
+			"desc" => __("Height of slider.",'theme_admin'),
 			"id" => "height",
 			"min" => "10",
 			"max" => "1000",
@@ -97,8 +97,8 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("Easing Animations",'striking_admin'),
-			"desc" => __("Select which easing effect to use.",'striking_admin'),
+			"name" => __("Easing Animations",'theme_admin'),
+			"desc" => __("Select which easing effect to use.",'theme_admin'),
 			"id" => "easing",
 			"default" => 'swing',
 			"options" => array(
@@ -138,100 +138,100 @@ return array(
 			"type" => "select",
 		),
 		array(
-			"name" => __("buildArrows",'striking_admin'),
-			"desc" => __("If true, builds the forwards and backwards buttons",'striking_admin'),
+			"name" => __("buildArrows",'theme_admin'),
+			"desc" => __("If true, builds the forwards and backwards buttons",'theme_admin'),
 			"id" => "buildArrows",
 			"default" => true,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("toggleArrows",'striking_admin'),
-			"desc" => __("if true, side navigation arrows will slide out on hovering & hide @ other times",'striking_admin'),
+			"name" => __("toggleArrows",'theme_admin'),
+			"desc" => __("if true, side navigation arrows will slide out on hovering & hide @ other times",'theme_admin'),
 			"id" => "toggleArrows",
 			"default" => false,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("buildNavigation",'striking_admin'),
-			"desc" => __("If true, builds a list of anchor links to link to each panel",'striking_admin'),
+			"name" => __("buildNavigation",'theme_admin'),
+			"desc" => __("If true, builds a list of anchor links to link to each panel",'theme_admin'),
 			"id" => "buildNavigation",
 			"default" => true,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("toggleControls",'striking_admin'),
-			"desc" => __("if true, slide in controls (navigation + play/stop button) on hover and slide change, hide @ other times",'striking_admin'),
+			"name" => __("toggleControls",'theme_admin'),
+			"desc" => __("if true, slide in controls (navigation + play/stop button) on hover and slide change, hide @ other times",'theme_admin'),
 			"id" => "toggleControls",
 			"default" => false,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("enableArrows",'striking_admin'),
-			"desc" => __("if false, arrows will be visible, but not clickable.",'striking_admin'),
+			"name" => __("enableArrows",'theme_admin'),
+			"desc" => __("if false, arrows will be visible, but not clickable.",'theme_admin'),
 			"id" => "enableArrows",
 			"default" => true,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("enableNavigation",'striking_admin'),
-			"desc" => __("if false, navigation links will still be visible, but not clickable.",'striking_admin'),
+			"name" => __("enableNavigation",'theme_admin'),
+			"desc" => __("if false, navigation links will still be visible, but not clickable.",'theme_admin'),
 			"id" => "enableNavigation",
 			"default" => true,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("enableKeyboard",'striking_admin'),
-			"desc" => __("if false, keyboard arrow keys will not work for this slider.",'striking_admin'),
+			"name" => __("enableKeyboard",'theme_admin'),
+			"desc" => __("if false, keyboard arrow keys will not work for this slider.",'theme_admin'),
 			"id" => "enableKeyboard",
 			"default" => true,
 			"type" => "toggle"
 		),
 		
 		array(
-			"name" => __("autoPlay",'striking_admin'),
-			"desc" => __("If true, the slideshow will starts running automatically.",'striking_admin'),
+			"name" => __("autoPlay",'theme_admin'),
+			"desc" => __("If true, the slideshow will starts running automatically.",'theme_admin'),
 			"id" => "autoPlay",
 			"default" => true,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("autoPlayLocked",'striking_admin'),
-			"desc" => __("If true, user changing slides will not stop the slideshow.",'striking_admin'),
+			"name" => __("autoPlayLocked",'theme_admin'),
+			"desc" => __("If true, user changing slides will not stop the slideshow.",'theme_admin'),
 			"id" => "autoPlayLocked",
 			"default" => true,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("autoPlayDelayed",'striking_admin'),
-			"desc" => __("If true, starting a slideshow will delay advancing slides; if false, the slider will immediately advance to the next slide when slideshow starts.",'striking_admin'),
+			"name" => __("autoPlayDelayed",'theme_admin'),
+			"desc" => __("If true, starting a slideshow will delay advancing slides; if false, the slider will immediately advance to the next slide when slideshow starts.",'theme_admin'),
 			"id" => "autoPlayDelayed",
 			"default" => false,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("pauseOnHover",'striking_admin'),
-			"desc" => __("If true & the slideshow is active, the slideshow will pause on hover",'striking_admin'),
+			"name" => __("pauseOnHover",'theme_admin'),
+			"desc" => __("If true & the slideshow is active, the slideshow will pause on hover",'theme_admin'),
 			"id" => "pauseOnHover",
 			"default" => true,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("stopAtEnd",'striking_admin'),
-			"desc" => __("If true & the slideshow is active, the slideshow will stop on the last page",'striking_admin'),
+			"name" => __("stopAtEnd",'theme_admin'),
+			"desc" => __("If true & the slideshow is active, the slideshow will stop on the last page",'theme_admin'),
 			"id" => "stopAtEnd",
 			"default" => false,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("playRtl",'striking_admin'),
-			"desc" => __("If true, the slideshow will move right-to-left",'striking_admin'),
+			"name" => __("playRtl",'theme_admin'),
+			"desc" => __("If true, the slideshow will move right-to-left",'theme_admin'),
 			"id" => "playRtl",
 			"default" => false,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("delay",'striking_admin'),
-			"desc" => __("How long between slideshow transitions in AutoPlay mode",'striking_admin'),
+			"name" => __("delay",'theme_admin'),
+			"desc" => __("How long between slideshow transitions in AutoPlay mode",'theme_admin'),
 			"id" => "delay",
 			"min" => "1000",
 			"max" => "30000",
@@ -241,8 +241,8 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("resumeDelay",'striking_admin'),
-			"desc" => __("Resume slideshow after user interaction, only if autoplayLocked is true",'striking_admin'),
+			"name" => __("resumeDelay",'theme_admin'),
+			"desc" => __("Resume slideshow after user interaction, only if autoplayLocked is true",'theme_admin'),
 			"id" => "resumeDelay",
 			"min" => "1000",
 			"max" => "80000",
@@ -252,8 +252,8 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("animationTime",'striking_admin'),
-			"desc" => __("How long the slideshow transition takes",'striking_admin'),
+			"name" => __("animationTime",'theme_admin'),
+			"desc" => __("How long the slideshow transition takes",'theme_admin'),
 			"id" => "animationTime",
 			"min" => "200",
 			"max" => "3000",
@@ -263,15 +263,15 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" => __("resumeOnVideoEnd",'striking_admin'),
-			"desc" => __("If true & the slideshow is active & a youtube video is playing, the autoplay will pause until the video completes",'striking_admin'),
+			"name" => __("resumeOnVideoEnd",'theme_admin'),
+			"desc" => __("If true & the slideshow is active & a youtube video is playing, the autoplay will pause until the video completes",'theme_admin'),
 			"id" => "resumeOnVideoEnd",
 			"default" => true,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("Caption Opacity",'striking_admin'),
-			"desc" => __("The Opacity of Caption with it's background.",'striking_admin'),
+			"name" => __("Caption Opacity",'theme_admin'),
+			"desc" => __("The Opacity of Caption with it's background.",'theme_admin'),
 			"id" => "captionOpacity",
 			"min" => "0",
 			"max" => "1",
@@ -280,14 +280,14 @@ return array(
 			"type" => "range"
 		),
 		array(
-			"name" =>  __("Align (optional)",'striking_admin'),
+			"name" =>  __("Align (optional)",'theme_admin'),
 			"id" => "align",
 			"default" => '',
-			"prompt" => __("Default",'striking_admin'),
+			"prompt" => __("Default",'theme_admin'),
 			"options" => array(
-				"left" => __('left','striking_admin'),
-				"right" => __('right','striking_admin'),
-				"center" => __('center','striking_admin'),
+				"left" => __('left','theme_admin'),
+				"right" => __('right','theme_admin'),
+				"center" => __('center','theme_admin'),
 			),
 			"type" => "select",
 		),

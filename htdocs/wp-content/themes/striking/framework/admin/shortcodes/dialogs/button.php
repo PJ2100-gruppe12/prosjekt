@@ -1,74 +1,74 @@
 <?php
 return array(
-	"title" => __("Button", "striking_admin"),
+	"title" => __("Button", "theme_admin"),
 	"shortcode" => 'button',
 	"type" => 'enclosing',
 	"options" => array(
 		array(
-			"name" => __("Id (optional)",'striking_admin'),
+			"name" => __("Id (optional)",'theme_admin'),
 			"id" => "id",
 			"default" => "",
 			"type" => "text",
 		),
 		array(
-			"name" => __("Class (optional)",'striking_admin'),
+			"name" => __("Class (optional)",'theme_admin'),
 			"id" => "class",
 			"default" => "",
 			"type" => "text",
 		),
 		array(
-			"name" => __("Size",'striking_admin'),
+			"name" => __("Size",'theme_admin'),
 			"id" => "size",
 			"default" => 'small',
 			"options" => array(
-				"small" => __("Small",'striking_admin'),
-				"medium" => __("Medium",'striking_admin'),
-				"large" => __("Large",'striking_admin'),
+				"small" => __("Small",'theme_admin'),
+				"medium" => __("Medium",'theme_admin'),
+				"large" => __("Large",'theme_admin'),
 			),
 			"type" => "select",
 		),
 		array(
-			"name" => __("Align (optional)",'striking_admin'),
+			"name" => __("Align (optional)",'theme_admin'),
 			"id" => "align",
 			"default" => '',
-			"prompt" => __("Choose one..",'striking_admin'),
+			"prompt" => __("Choose one..",'theme_admin'),
 			"options" => array(
-				"left" => __('Left','striking_admin'),
-				"right" => __('Right','striking_admin'),
-				"center" => __('Center','striking_admin'),
+				"left" => __('Left','theme_admin'),
+				"right" => __('Right','theme_admin'),
+				"center" => __('Center','theme_admin'),
 			),
 			"type" => "select",
 		),
 		array (
-			"name" => __("Full",'striking_admin'),
+			"name" => __("Full",'theme_admin'),
 			"id" => "full",
 			"default" => false,
 			"type" => "toggle"
 		),
 		array(
-			"name" => __("Link (optional)",'striking_admin'),
+			"name" => __("Link (optional)",'theme_admin'),
 			"id" => "link",
 			"default" => "",
 			"type" => "text",
 		),
 		array(
-			"name" => __("Link Target (optional)",'striking_admin'),
+			"name" => __("Link Target (optional)",'theme_admin'),
 			"id" => "linkTarget",
 			"default" => '',
-			"prompt" => __("Choose one..",'striking_admin'),
+			"prompt" => __("Choose one..",'theme_admin'),
 			"options" => array(
-				"_blank" => __('Load in a new window','striking_admin'),
-				"_self" => __('Load in the same frame as it was clicked','striking_admin'),
-				"_parent" => __('Load in the parent frameset','striking_admin'),
-				"_top" => __('Load in the full body of the window','striking_admin'),
+				"_blank" => __('Load in a new window','theme_admin'),
+				"_self" => __('Load in the same frame as it was clicked','theme_admin'),
+				"_parent" => __('Load in the parent frameset','theme_admin'),
+				"_top" => __('Load in the full body of the window','theme_admin'),
 			),
 			"type" => "select",
 		),
 		array(
-			"name" => __("Color (optional)",'striking_admin'),
+			"name" => __("Color (optional)",'theme_admin'),
 			"id" => "color",
 			"default" => "",
-			"prompt" => __("Choose one..",'striking_admin'),
+			"prompt" => __("Choose one..",'theme_admin'),
 			"options" => array(
 				"black" => 'Black',
 				"gray" => 'Gray',
@@ -85,37 +85,37 @@ return array(
 			"type" => "select",
 		),
 		array(
-			"name" => __("Background Color (optional)",'striking_admin'),
+			"name" => __("Background Color (optional)",'theme_admin'),
 			"id" => "bgColor",
 			"default" => "",
 			"type" => "color"
 		),
 		array(
-			"name" => __("Text Color (optional)",'striking_admin'),
+			"name" => __("Text Color (optional)",'theme_admin'),
 			"id" => "textColor",
 			"default" => "",
 			"type" => "color"
 		),
 		array(
-			"name" => __("Hover Background Color (optional)",'striking_admin'),
+			"name" => __("Hover Background Color (optional)",'theme_admin'),
 			"id" => "hoverBgColor",
 			"default" => "",
 			"type" => "color"
 		),
 		array(
-			"name" => __("Hover Text Color (optional)",'striking_admin'),
+			"name" => __("Hover Text Color (optional)",'theme_admin'),
 			"id" => "hoverTextColor",
 			"default" => "",
 			"type" => "color"
 		),
 		array(
-			"name" => __("Text",'striking_admin'),
+			"name" => __("Text",'theme_admin'),
 			"id" => "content",
 			"default" => "",
 			"type" => "text",
 		),
 		array (
-			"name" => __("Width (optional)",'striking_admin'),
+			"name" => __("Width (optional)",'theme_admin'),
 			"id" => "width",
 			"default" => '0',
 			"min" => 0,
@@ -124,7 +124,7 @@ return array(
 			"type" => "range"
 		),
 		array (
-			"name" => __("Nofollow",'striking_admin'),
+			"name" => __("Nofollow",'theme_admin'),
 			"id" => "nofollow",
 			"default" => false,
 			"type" => "toggle"
